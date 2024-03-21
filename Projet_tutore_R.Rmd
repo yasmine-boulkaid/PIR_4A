@@ -1802,6 +1802,56 @@ legend("bottom", legend = categories, fill = colors_pastels_data_ETH, title = "D
 text(0, 0, paste("Total:", sum(data1_ETH_table)), cex = 0.8, pos = 2)
 ```
 
+```{r}
+options(repr.plot.width = 20, repr.plot.height = 15)
+par(mfrow = c(1, 3))
+
+# Camembert pour Traitement Hormonal x Phyto
+data1_PTH <- data1$Douleur_Phyto_TH[data1$Phyto_TH == 1]
+colors_pastels_data_PTH <- brewer.pal(length(levels(data1_PTH)), "Pastel1")
+
+data1_PTH_table <- table(data1_PTH)
+data1_PTH_table <- data1_PTH_table[data1_PTH_table != 0]  # Filtrer les zéros
+
+percentage_labels_PTH <- paste0(round(100 * prop.table(data1_PTH_table), 1), "%")
+percentage_labels_PTH <- percentage_labels_PTH[percentage_labels_PTH != "0%"]  # Filtrer les 0%
+
+pie(data1_PTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Phyto", labels = percentage_labels_PTH, col = colors_pastels_data_PTH)
+legend("bottom", legend = names(data1_PTH_table), fill = colors_pastels_data_PTH, title = "Douleur TH x Phyto")
+
+text(0, 0, paste("Total:", sum(data1_PTH_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x Acup
+data1_ATH <- data1$Douleur_Acup_TH[data1$Acup_TH == 1]
+colors_pastels_data_ATH <- brewer.pal(length(levels(data1_ATH)), "Pastel1")
+
+data1_ATH_table <- table(data1_ATH)
+data1_ATH_table <- data1_ATH_table[data1_ATH_table != 0]  # Filtrer les zéros
+
+percentage_labels_ATH <- paste0(round(100 * prop.table(data1_ATH_table), 1), "%")
+percentage_labels_ATH <- percentage_labels_ATH[percentage_labels_ATH != "0%"]  # Filtrer les 0%
+
+pie(data1_ATH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Acup", labels = percentage_labels_ATH, col = colors_pastels_data_ATH)
+legend("bottom", legend = names(data1_ATH_table), fill = colors_pastels_data_ATH, title = "Douleur TH x Acup")
+
+text(0, 0, paste("Total:", sum(data1_ATH_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x Hypnose
+data1_HTH <- data1$Douleur_Hypnose_TH[data1$Hypnose_TH == 1]
+colors_pastels_data_HTH <- brewer.pal(length(levels(data1_HTH)), "Pastel1")
+
+data1_HTH_table <- table(data1_HTH)
+data1_HTH_table <- data1_HTH_table[data1_HTH_table != 0]  # Filtrer les zéros
+
+percentage_labels_HTH <- paste0(round(100 * prop.table(data1_HTH_table), 1), "%")
+percentage_labels_HTH <- percentage_labels_HTH[percentage_labels_HTH != "0%"]  # Filtrer les 0%
+
+pie(data1_HTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Hypnose", labels = percentage_labels_HTH, col = colors_pastels_data_HTH)
+legend("bottom", legend = names(data1_HTH_table), fill = colors_pastels_data_HTH, title = "Douleur TH x Hypnose")
+
+text(0, 0, paste("Total:", sum(data1_HTH_table)), cex = 0.8, pos = 2)
+
+```
 
 ```{r}
 options(repr.plot.width = 20, repr.plot.height = 15)
@@ -1887,7 +1937,10 @@ bp <- barplot(resultats1$Pourcentage, names.arg = resultats1$Variable,
         xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
         main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux associé à TH",
         col = brewer.pal(length(noms_variables), "Pastel1"),
-        ylim=c(0,100))
+        ylim=c(0,100),
+        cex.main = 0.75,
+        cex.lab = 0.75,
+        cex.names = 0.75)
 
 # Ajouter les totaux sur chaque bâton
 text(x = bp, y = 1, labels = resultats1$Total, pos = 3)
@@ -2084,12 +2137,6 @@ Attention niveau interpretation : acupunture à 100% car peu de cas relevé
 
 
 ```{r}
-data3_MNM <- data3$Douleur_Mobilite_NM[data3$Mobilite_NM == 1]
-head(data3$Mobilite_NM)
-```
-
-
-```{r}
 # Traitements non médicamenteux seuls : Pie chart
 
 #install.packages("RColorBrewer")
@@ -2111,7 +2158,7 @@ percentage_labels_MNM <- paste0(round(100 * prop.table(data3_MNM_table), 1), "%"
 percentage_labels_MNM <- percentage_labels_MNM[percentage_labels_MNM != "0%"]  # Filtrer les 0%
 
 pie(data3_MNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Mobilite", labels = percentage_labels_MNM, col = colors_pastels_data_MNM)
-legend("bottom", legend = categoriesDNM, fill = colors_pastels_data_MNM, title = "Douleur NM x Mobilite")
+legend("bottom", legend = names(data3_MNM_table), fill = colors_pastels_data_MNM, title = "Douleur NM x Mobilite")
 
 text(0, 0, paste("Total:", sum(data3_MNM_table)), cex = 0.8, pos = 2)
 
@@ -2128,7 +2175,7 @@ percentage_labels_NNM <- paste0(round(100 * prop.table(data3_NNM_table), 1), "%"
 percentage_labels_NNM <- percentage_labels_NNM[percentage_labels_NNM != "0%"]  # Filtrer les 0%
 
 pie(data3_NNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Nutrition", labels = percentage_labels_NNM, col = colors_pastels_data_NNM)
-legend("bottom", legend = categoriesDNM, fill = colors_pastels_data_NNM, title = "Douleur NM x Nutrition")
+legend("bottom", legend = names(data3_NNM_table), fill = colors_pastels_data_NNM, title = "Douleur NM x Nutrition")
 
 text(0, 0, paste("Total:", sum(data3_NNM_table)), cex = 0.8, pos = 2)
 
@@ -2143,46 +2190,145 @@ percentage_labels_SNM <- paste0(round(100 * prop.table(data3_SNM_table), 1), "%"
 percentage_labels_SNM <- percentage_labels_SNM[percentage_labels_SNM != "0%"]  # Filtrer les 0%
 
 pie(data3_SNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Stress", labels = percentage_labels_SNM, col = colors_pastels_data_SNM)
-legend("bottom", legend = categoriesDNM, fill = colors_pastels_data_SNM, title = "Douleur NM x Stress")
+legend("bottom", legend = names(data3_SNM_table), fill = colors_pastels_data_SNM, title = "Douleur NM x Stress")
 
 text(0, 0, paste("Total:", sum(data3_SNM_table)), cex = 0.8, pos = 2)
 ```
+```{r}
+options(repr.plot.width = 20, repr.plot.height = 15)
+par(mfrow = c(1, 3))
 
+# Camembert pour Traitement Non Médicamenteux x Phyto
+data3_PNM <- data3$Douleur_Phyto_NM[data3$Phyto_NM == 1]
+colors_pastels_data_PNM <- brewer.pal(length(levels(data3_PNM)), "Pastel1")
+
+data3_PNM_table <- table(data3_PNM)
+data3_PNM_table <- data3_PNM_table[data3_PNM_table != 0]  # Filtrer les zéros
+
+percentage_labels_PNM <- paste0(round(100 * prop.table(data3_PNM_table), 1), "%")
+percentage_labels_PNM <- percentage_labels_PNM[percentage_labels_PNM != "0%"]  # Filtrer les 0%
+
+pie(data3_PNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Phyto", labels = percentage_labels_PNM, col = colors_pastels_data_PNM)
+legend("bottom", legend = names(data3_PNM_table), fill = colors_pastels_data_PNM, title = "Douleur NM x Phyto")
+
+text(0, 0, paste("Total:", sum(data3_PNM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Non Médicamenteux x Acup
+data3_ANM <- data3$Douleur_Acup_NM[data3$Acup_NM == 1]
+colors_pastels_data_ANM <- brewer.pal(length(levels(data3_ANM)), "Pastel1")
+
+data3_ANM_table <- table(data3_ANM)
+data3_ANM_table <- data3_ANM_table[data3_ANM_table != 0]  # Filtrer les zéros
+
+percentage_labels_ANM <- paste0(round(100 * prop.table(data3_ANM_table), 1), "%")
+percentage_labels_ANM <- percentage_labels_ANM[percentage_labels_ANM != "0%"]  # Filtrer les 0%
+
+pie(data3_ANM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Acup", labels = percentage_labels_ANM, col = colors_pastels_data_ANM)
+legend("bottom", legend = names(data3_ANM_table), fill = colors_pastels_data_ANM, title = "Douleur NM x Acup")
+
+text(0, 0, paste("Total:", sum(data3_ANM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Non Médicamenteux x Hypnose
+data3_HNM <- data3$Douleur_Hypnose_NM[data3$Hypnose_NM == 1]
+colors_pastels_data_HNM <- brewer.pal(length(levels(data3_HNM)), "Pastel1")
+
+data3_HNM_table <- table(data3_HNM)
+data3_HNM_table <- data3_HNM_table[data3_HNM_table != 0]  # Filtrer les zéros
+
+percentage_labels_HNM <- paste0(round(100 * prop.table(data3_HNM_table), 1), "%")
+percentage_labels_HNM <- percentage_labels_HNM[percentage_labels_HNM != "0%"]  # Filtrer les 0%
+
+pie(data3_HNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Hypnose", labels = percentage_labels_HNM, col = colors_pastels_data_HNM)
+legend("bottom", legend = names(data3_HNM_table), fill = colors_pastels_data_HNM, title = "Douleur NM x Hypnose")
+
+text(0, 0, paste("Total:", sum(data3_HNM_table)), cex = 0.8, pos = 2)
+
+```
+```{r}
+options(repr.plot.width = 20, repr.plot.height = 15)
+par(mfrow = c(1, 3))
+
+# Camembert pour Traitement Non Médicamenteux x Bouillotte
+data3_BNM <- data3$Douleur_Bouillotte_NM[data3$Bouillotte_NM == 1]
+colors_pastels_data_BNM <- brewer.pal(length(levels(data3_BNM)), "Pastel1")
+
+data3_BNM_table <- table(data3_BNM)
+data3_BNM_table <- data3_BNM_table[data3_BNM_table != 0]  # Filtrer les zéros
+
+percentage_labels_BNM <- paste0(round(100 * prop.table(data3_BNM_table), 1), "%")
+percentage_labels_BNM <- percentage_labels_BNM[percentage_labels_BNM != "0%"]  # Filtrer les 0%
+
+pie(data3_BNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Bouillotte", labels = percentage_labels_BNM, col = colors_pastels_data_BNM)
+legend("bottom", legend = names(data3_BNM_table), fill = colors_pastels_data_BNM, title = "Douleur NM x Bouillotte")
+
+text(0, 0, paste("Total:", sum(data3_BNM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Non Médicamenteux x CBD
+data3_CNM <- data3$Douleur_CBD_NM[data3$CBD_NM == 1]
+colors_pastels_data_CNM <- brewer.pal(length(levels(data3_CNM)), "Pastel1")
+
+data3_CNM_table <- table(data3_CNM)
+data3_CNM_table <- data3_CNM_table[data3_CNM_table != 0]  # Filtrer les zéros
+
+percentage_labels_CNM <- paste0(round(100 * prop.table(data3_CNM_table), 1), "%")
+percentage_labels_CNM <- percentage_labels_CNM[percentage_labels_CNM != "0%"]  # Filtrer les 0%
+
+pie(data3_CNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x CBD", labels = percentage_labels_CNM, col = colors_pastels_data_CNM)
+legend("bottom", legend = names(data3_CNM_table), fill = colors_pastels_data_CNM, title = "Douleur NM x CBD")
+
+text(0, 0, paste("Total:", sum(data3_CNM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Non Médicamenteux x Tens
+data3_TNM <- data3$Douleur_Tens_NM[data3$Tens_NM == 1]
+colors_pastels_data_TNM <- brewer.pal(length(levels(data3_TNM)), "Pastel1")
+
+data3_TNM_table <- table(data3_TNM)
+data3_TNM_table <- data3_TNM_table[data3_TNM_table != 0]  # Filtrer les zéros
+
+percentage_labels_TNM <- paste0(round(100 * prop.table(data3_TNM_table), 1), "%")
+percentage_labels_TNM <- percentage_labels_TNM[percentage_labels_TNM != "0%"]  # Filtrer les 0%
+
+pie(data3_TNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Tens", labels = percentage_labels_TNM, col = colors_pastels_data_TNM)
+legend("bottom", legend = names(data3_TNM_table), fill = colors_pastels_data_TNM, title = "Douleur NM x Tens")
+
+text(0, 0, paste("Total:", sum(data3_TNM_table)), cex = 0.8, pos = 2)
+```
 
 ```{r}
 options(repr.plot.width = 15, repr.plot.height = 8)
 
-# Créer un vecteur contenant les noms des variables Douleur_qqch_NM
-noms_variables <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Hypnose", "Bouillotte", "CBD", "Tens")
+# Créer un vecteur contenant les noms des variables Douleur_qqch_TH
+noms_variables3 <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Hypnose", "Bouillotte", "CBD", "Tens")
 
 # Initialiser une liste pour stocker les pourcentages
-pourcentages <- numeric(length(noms_variables))
+pourcentages3 <- numeric(length(noms_variables3))
 
 # Calculer les pourcentages de "Diminution de la douleur" pour chaque variable
-for (i in seq_along(noms_variables)) {
-  variable <- paste0("Douleur_", noms_variables[i], "_NM")
-  filtered_data <- data3[data3[[paste0(noms_variables[i], "_NM")]] == 1, ]
-  pourcentages[i] <- sum(filtered_data[[variable]] == "Diminution de la douleur") / nrow(filtered_data) * 100
+for (i in seq_along(noms_variables3)) {
+  variable3 <- paste0("Douleur_", noms_variables3[i], "_NM")
+  filtered_data3 <- data3[data3[[paste0(noms_variables3[i], "_NM")]] == 1, ]
+  pourcentages3[i] <- (sum(filtered_data3[[variable3]] == "Réduction légère de la douleur") + sum(filtered_data3[[variable3]] == "Réduction importante de la douleur")) / nrow(filtered_data3) * 100
 }
 
-total3 = c(sum(data3_MNM_table), sum(data3_NNM_table), sum(data3_SNM_table), sum(data3_PNM_table), sum(data3_ANM_table), sum(data3_HNM_table), sum(data3_BNM_table), sum(data3_CNM_table), sum(data3_TNM_table))
+total3 = c(sum(data3_MNM_table), sum(data3_NNM_table), sum(data3_SNM_table), sum(data3_PNM_table), sum(data3_ANM_table), sum(data3_HNM_table),sum(data3_BNM_table), sum(data3_CNM_table), sum(data3_TNM_table))
 
 # Créer un dataframe pour stocker les résultats
-resultats3 <- data.frame(Variable = noms_variables, Pourcentage = pourcentages, Total = total3)
+resultats3 <- data.frame(Variable = noms_variables3, Pourcentage = pourcentages3, Total = total3)
 
 # Trier le dataframe par ordre décroissant des pourcentages
 resultats3 <- resultats3[order(resultats3$Pourcentage, decreasing = TRUE), ]
 
 # Afficher les résultats
-#print(resultats)
+#print(resultats3)
 
 # Afficher les pourcentages avec les noms des variables
 bp <- barplot(resultats3$Pourcentage, names.arg = resultats3$Variable,
-        xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
-        main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux associé à NM",
-        col = brewer.pal(length(noms_variables), "Pastel1"),
-        ylim=c(0,100))
+              xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
+              main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux seul",
+              col = brewer.pal(length(noms_variables3), "Pastel1"),
+              ylim=c(0,100))
 
 # Ajouter les totaux sur chaque bâton
-text(x = bp, y = 1, labels = resultats1$Total, pos = 3)
+text(x = bp, y = 1, labels = resultats3$Total, pos = 3)
+
 ```
