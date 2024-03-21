@@ -1747,7 +1747,7 @@ mosaicplot(table_contingence_alcool_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Graph
 Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
 
 ```{r}
-install.packages("RColorBrewer")
+#install.packages("RColorBrewer")
 library(RColorBrewer)
 
 options(repr.plot.width = 16, repr.plot.height = 10)
@@ -1764,10 +1764,12 @@ data1_table <- data1_table[data1_table != 0]  # Filtrer les zéros
 percentage_labels1 <- paste0(round(100 * prop.table(data1_table), 1), "%")
 percentage_labels1 <- percentage_labels1[percentage_labels1 != "0%"]  # Filtrer les 0%
 
-categories <- c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur")
+categories <- factor(c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"))
+ordered_data1_table <- data1_table[order(categories)]
+ordered_percentage_labels1 <- percentage_labels1[order(categories)]
 
-pie(data1_table, main = "Distribution des échelles de douleur sous Traitement Hormonal", labels = percentage_labels1, col = colors_pastels_data1)
-legend("bottom", legend = categories, fill = colors_pastels_data1, title = "Douleur_TH")
+pie(ordered_data1_table, main = "Échelles de douleur sous Traitement Hormonal", labels = ordered_percentage_labels1, col = colors_pastels_data1, cex.main = 0.75)
+legend("bottom", legend = categories, fill = colors_pastels_data1, title = "Douleur_TH", cex = 0.75, xpd = TRUE, inset = c(0, -0.3))
 
 pie_table_TH <- table(data1$Douleur_TH)
 text(0, 0, paste("Total:", sum(pie_table_TH)), cex = 0.8, pos = 2)
@@ -1779,11 +1781,61 @@ data2_table <- data2_table[data2_table != 0]  # Filtrer les zéros
 percentage_labels2 <- paste0(round(100 * prop.table(data2_table), 1), "%")
 percentage_labels2 <- percentage_labels2[percentage_labels2 != "0%"]  # Filtrer les 0%
 
-pie(data2_table, main = "Distribution des échelles de douleur sous Cure de Ménopause", labels = percentage_labels2, col = colors_pastels_data2)
-legend("bottom", legend = categories, fill = colors_pastels_data2, title = "Douleur_CM")
+ordered_data2_table <- data2_table[order(categories)]
+ordered_percentage_labels2 <- percentage_labels2[order(categories)]
+
+pie(ordered_data2_table, main = "Échelles de douleur sous Cure de Ménopause", labels = ordered_percentage_labels2, col = colors_pastels_data2, cex.main = 0.75)
+legend("bottom", legend = categories, fill = colors_pastels_data2, title = "Douleur_CM", cex = 0.75, xpd = TRUE, inset = c(0, -0.3))
 
 pie_table_CM <- table(data2$Douleur_CM)
 text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
+```
+
+```{r}
+#install.packages("RColorBrewer")
+library(RColorBrewer)
+
+options(repr.plot.width = 16, repr.plot.height = 10)
+par(mfrow = c(1, 2))
+
+# Choix des couleurs
+colors_pastels_data1 <- brewer.pal(length(levels(data1$Evolution_TH)), "Pastel1")
+colors_pastels_data2 <- brewer.pal(length(levels(data2$Evolution_CM)), "Pastel1")
+
+# Pie chart pour data1$Evolution_TH
+data1_table <- table(data1$Evolution_TH)
+data1_table <- data1_table[data1_table != 0]  # Filtrer les zéros
+
+percentage_labels1 <- paste0(round(100 * prop.table(data1_table), 1), "%")
+percentage_labels1 <- percentage_labels1[percentage_labels1 != "0%"]  # Filtrer les 0%
+
+categoriesE <- factor(c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"))
+
+ordered_data1_table <- data1_table[order(categoriesE)]
+ordered_percentage_labels1 <- percentage_labels1[order(categoriesE)]
+
+pie(ordered_data1_table, main = "Échelles d'évolution sous Traitement Hormonal", labels = ordered_percentage_labels1, col = colors_pastels_data1, cex.main = 0.75)
+legend("bottom", legend = names(ordered_data1_table), fill = colors_pastels_data1, title = "Evolution_TH", cex = 0.7, xpd = TRUE, inset = c(0, -0.37))
+
+pie_table_TH <- table(data1$Evolution_TH)
+text(0, 0, paste("Total:", sum(pie_table_TH)), cex = 0.8, pos = 2)
+
+# Pie chart pour data2$Evolution_CM
+data2_table <- table(data2$Evolution_CM)
+data2_table <- data2_table[data2_table != 0]  # Filtrer les zéros
+
+percentage_labels2 <- paste0(round(100 * prop.table(data2_table), 1), "%")
+percentage_labels2 <- percentage_labels2[percentage_labels2 != "0%"]  # Filtrer les 0%
+
+ordered_data2_table <- data2_table[order(categoriesE)]
+ordered_percentage_labels2 <- percentage_labels2[order(categoriesE)]
+
+pie(ordered_data2_table, main = "Échelles d'évolution sous Cure de Ménopause", labels = ordered_percentage_labels2, col = colors_pastels_data2, cex.main = 0.75)
+legend("bottom", legend = names(ordered_data2_table), fill = colors_pastels_data2, title = "Evolution_CM", cex = 0.7, xpd = TRUE, inset = c(0, -0.37))
+
+pie_table_CM <- table(data2$Evolution_CM)
+text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
+
 ```
 
 
@@ -1808,8 +1860,8 @@ data1_MTH_table <- data1_MTH_table[data1_MTH_table != 0]
 percentage_labels_MTH <- paste0(round(100 * prop.table(data1_MTH_table), 1), "%")
 percentage_labels_MTH <- percentage_labels_MTH[percentage_labels_MTH != "0%"]  # Filtrer les 0%
 
-pie(data1_MTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Mobilite", labels = percentage_labels_MTH, col = colors_pastels_data_MTH)
-legend("bottom", legend = categoriesD, fill = colors_pastels_data_MTH, title = "Douleur TH x Mobilite")
+pie(data1_MTH_table, main = "Échelles de douleur sous\nTraitement Hormonal x Mobilite", labels = percentage_labels_MTH, col = colors_pastels_data_MTH)
+legend("bottom", legend = categoriesD, fill = colors_pastels_data_MTH, title = "Douleur TH x Mobilite", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_MTH_table)), cex = 0.8, pos = 2)
 
@@ -1825,8 +1877,8 @@ data1_NTH_table <- data1_NTH_table[data1_NTH_table != 0]
 percentage_labels_NTH <- paste0(round(100 * prop.table(data1_NTH_table), 1), "%")
 percentage_labels_NTH <- percentage_labels_NTH[percentage_labels_NTH != "0%"]  # Filtrer les 0%
 
-pie(data1_NTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Nutrition", labels = percentage_labels_NTH, col = colors_pastels_data_NTH)
-legend("bottom", legend = categoriesD, fill = colors_pastels_data_NTH, title = "Douleur TH x Nutrition")
+pie(data1_NTH_table, main = "Échelles de douleur sous\nTraitement Hormonal x Nutrition", labels = percentage_labels_NTH, col = colors_pastels_data_NTH)
+legend("bottom", legend = categoriesD, fill = colors_pastels_data_NTH, title = "Douleur TH x Nutrition", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_NTH_table)), cex = 0.8, pos = 2)
 
@@ -1840,35 +1892,10 @@ data1_STH_table <- data1_STH_table[data1_STH_table != 0]
 percentage_labels_STH <- paste0(round(100 * prop.table(data1_STH_table), 1), "%")
 percentage_labels_STH <- percentage_labels_STH[percentage_labels_STH != "0%"]  # Filtrer les 0%
 
-pie(data1_STH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Stress", labels = percentage_labels_STH, col = colors_pastels_data_STH)
-legend("bottom", legend = names(data1_STH_table), fill = colors_pastels_data_STH, title = "Douleur TH x Stress")
+pie(data1_STH_table, main = "Échelles de douleur sous\nTraitement Hormonal x Stress", labels = percentage_labels_STH, col = colors_pastels_data_STH)
+legend("bottom", legend = names(data1_STH_table), fill = colors_pastels_data_STH, title = "Douleur TH x Stress", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_STH_table)), cex = 0.8, pos = 2)
-```
-```{r}
-# Évolution TH
-
-options(repr.plot.width = 20, repr.plot.height = 12)
-par(mfrow = c(1, 3))
-
-### changer les légendes
-categories <- c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas")
-
-# Camembert  
-data1_ETH <- data1$Evolution_TH[data1$Evolution_TH == 1]
-colors_pastels_data_ETH <- brewer.pal(length(levels(data1_ETH)), "Pastel1")
-
-data1_ETH_table <- table(data1_ETH)
-data1_ETH_table <- data1_ETH_table[data1_ETH_table != 0]
-
-percentage_labels_ETH <- paste0(round(100 * prop.table(data1_ETH_table), 1), "%")
-percentage_labels_ETH <- percentage_labels_ETH[percentage_labels_ETH != "0%"]  # Filtrer les 0%
-
-### changer les titres
-pie(data1_ETH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Mobilite", labels = percentage_labels_ETH, col = colors_pastels_data_ETH)
-legend("bottom", legend = categories, fill = colors_pastels_data_ETH, title = "Douleur TH x Mobilite")
-
-text(0, 0, paste("Total:", sum(data1_ETH_table)), cex = 0.8, pos = 2)
 ```
 
 ```{r}
@@ -1885,8 +1912,8 @@ data1_PTH_table <- data1_PTH_table[data1_PTH_table != 0]  # Filtrer les zéros
 percentage_labels_PTH <- paste0(round(100 * prop.table(data1_PTH_table), 1), "%")
 percentage_labels_PTH <- percentage_labels_PTH[percentage_labels_PTH != "0%"]  # Filtrer les 0%
 
-pie(data1_PTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Phyto", labels = percentage_labels_PTH, col = colors_pastels_data_PTH)
-legend("bottom", legend = names(data1_PTH_table), fill = colors_pastels_data_PTH, title = "Douleur TH x Phyto")
+pie(data1_PTH_table, main = "Échelles de douleur sous\nTraitement Hormonal x Phyto", labels = percentage_labels_PTH, col = colors_pastels_data_PTH)
+legend("bottom", legend = names(data1_PTH_table), fill = colors_pastels_data_PTH, title = "Douleur TH x Phyto", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_PTH_table)), cex = 0.8, pos = 2)
 
@@ -1900,8 +1927,8 @@ data1_ATH_table <- data1_ATH_table[data1_ATH_table != 0]  # Filtrer les zéros
 percentage_labels_ATH <- paste0(round(100 * prop.table(data1_ATH_table), 1), "%")
 percentage_labels_ATH <- percentage_labels_ATH[percentage_labels_ATH != "0%"]  # Filtrer les 0%
 
-pie(data1_ATH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Acup", labels = percentage_labels_ATH, col = colors_pastels_data_ATH)
-legend("bottom", legend = names(data1_ATH_table), fill = colors_pastels_data_ATH, title = "Douleur TH x Acup")
+pie(data1_ATH_table, main = "Échelles de douleur sous\nTraitement Hormonal x Acup", labels = percentage_labels_ATH, col = colors_pastels_data_ATH)
+legend("bottom", legend = names(data1_ATH_table), fill = colors_pastels_data_ATH, title = "Douleur TH x Acup", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_ATH_table)), cex = 0.8, pos = 2)
 
@@ -1915,8 +1942,8 @@ data1_HTH_table <- data1_HTH_table[data1_HTH_table != 0]  # Filtrer les zéros
 percentage_labels_HTH <- paste0(round(100 * prop.table(data1_HTH_table), 1), "%")
 percentage_labels_HTH <- percentage_labels_HTH[percentage_labels_HTH != "0%"]  # Filtrer les 0%
 
-pie(data1_HTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Hypnose", labels = percentage_labels_HTH, col = colors_pastels_data_HTH)
-legend("bottom", legend = names(data1_HTH_table), fill = colors_pastels_data_HTH, title = "Douleur TH x Hypnose")
+pie(data1_HTH_table, main = "Échelles de douleur sous\nTraitement Hormonal x Hypnose", labels = percentage_labels_HTH, col = colors_pastels_data_HTH)
+legend("bottom", legend = names(data1_HTH_table), fill = colors_pastels_data_HTH, title = "Douleur TH x Hypnose", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_HTH_table)), cex = 0.8, pos = 2)
 
@@ -1936,8 +1963,8 @@ data1_BTH_table <- data1_BTH_table[data1_BTH_table != 0]  # Filtrer les zéros
 percentage_labels_BTH <- paste0(round(100 * prop.table(data1_BTH_table), 1), "%")
 percentage_labels_BTH <- percentage_labels_BTH[percentage_labels_BTH != "0%"]  # Filtrer les 0%
 
-pie(data1_BTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Bouillotte", labels = percentage_labels_BTH, col = colors_pastels_data_BTH)
-legend("bottom", legend = names(data1_BTH_table), fill = colors_pastels_data_BTH, title = "Douleur TH x Bouillotte")
+pie(data1_BTH_table, main = "Échelles de douleur sous\nTraitement Hormonal x Bouillotte", labels = percentage_labels_BTH, col = colors_pastels_data_BTH)
+legend("bottom", legend = names(data1_BTH_table), fill = colors_pastels_data_BTH, title = "Douleur TH x Bouillotte", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_BTH_table)), cex = 0.8, pos = 2)
 
@@ -1951,8 +1978,8 @@ data1_CTH_table <- data1_CTH_table[data1_CTH_table != 0]  # Filtrer les zéros
 percentage_labels_CTH <- paste0(round(100 * prop.table(data1_CTH_table), 1), "%")
 percentage_labels_CTH <- percentage_labels_CTH[percentage_labels_CTH != "0%"]  # Filtrer les 0%
 
-pie(data1_CTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x CBD", labels = percentage_labels_CTH, col = colors_pastels_data_CTH)
-legend("bottom", legend = names(data1_CTH_table), fill = colors_pastels_data_CTH, title = "Douleur TH x CBD")
+pie(data1_CTH_table, main = "Échelles de douleur sous\nTraitement Hormonal x CBD", labels = percentage_labels_CTH, col = colors_pastels_data_CTH)
+legend("bottom", legend = names(data1_CTH_table), fill = colors_pastels_data_CTH, title = "Douleur TH x CBD", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_CTH_table)), cex = 0.8, pos = 2)
 
@@ -1966,8 +1993,8 @@ data1_TTH_table <- data1_TTH_table[data1_TTH_table != 0]  # Filtrer les zéros
 percentage_labels_TTH <- paste0(round(100 * prop.table(data1_TTH_table), 1), "%")
 percentage_labels_TTH <- percentage_labels_TTH[percentage_labels_TTH != "0%"]  # Filtrer les 0%
 
-pie(data1_TTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Tens", labels = percentage_labels_TTH, col = colors_pastels_data_TTH)
-legend("bottom", legend = names(data1_TTH_table), fill = colors_pastels_data_TTH, title = "Douleur TH x Tens")
+pie(data1_TTH_table, main = "Échelles de douleur sous\nTraitement Hormonal x Tens", labels = percentage_labels_TTH, col = colors_pastels_data_TTH)
+legend("bottom", legend = names(data1_TTH_table), fill = colors_pastels_data_TTH, title = "Douleur TH x Tens", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data1_TTH_table)), cex = 0.8, pos = 2)
 
@@ -2004,11 +2031,11 @@ resultats1 <- resultats1[order(resultats1$Pourcentage, decreasing = TRUE), ]
 # Afficher les pourcentages avec les noms des variables
 bp <- barplot(resultats1$Pourcentage, names.arg = resultats1$Variable,
         xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
-        main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux associé à TH",
+        main = "Pourcentage de 'Diminution de la douleur' par variable\npour chaque traitement non médicamenteux associé à TH",
         col = brewer.pal(length(noms_variables), "Pastel1"),
         ylim=c(0,100),
-        cex.main = 0.75,
-        cex.lab = 0.75,
+        cex.main = 1,
+        cex.lab = 1,
         cex.names = 0.75)
 
 # Ajouter les totaux sur chaque bâton
@@ -2032,8 +2059,8 @@ data2_MCM_table <- data2_MCM_table[data2_MCM_table != 0]  # Filtrer les zéros
 percentage_labels_MCM <- paste0(round(100 * prop.table(data2_MCM_table), 1), "%")
 percentage_labels_MCM <- percentage_labels_MCM[percentage_labels_MCM != "0%"]  # Filtrer les 0%
 
-pie(data2_MCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Mobilite", labels = percentage_labels_MCM, col = colors_pastels_data_MCM)
-legend("bottom", legend = names(data2_MCM_table), fill = colors_pastels_data_MCM, title = "Douleur CM x Mobilite")
+pie(data2_MCM_table, main = "Échelles de douleur sous\nMénopause artificielle x Mobilite", labels = percentage_labels_MCM, col = colors_pastels_data_MCM)
+legend("bottom", legend = names(data2_MCM_table), fill = colors_pastels_data_MCM, title = "Douleur CM x Mobilite", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data2_MCM_table)), cex = 0.8, pos = 2)
 
@@ -2047,8 +2074,8 @@ data2_NCM_table <- data2_NCM_table[data2_NCM_table != 0]  # Filtrer les zéros
 percentage_labels_NCM <- paste0(round(100 * prop.table(data2_NCM_table), 1), "%")
 percentage_labels_NCM <- percentage_labels_NCM[percentage_labels_NCM != "0%"]  # Filtrer les 0%
 
-pie(data2_NCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Nutrition", labels = percentage_labels_NCM, col = colors_pastels_data_NCM)
-legend("bottom", legend = names(data2_NCM_table), fill = colors_pastels_data_NCM, title = "Douleur CM x Nutrition")
+pie(data2_NCM_table, main = "Échelles de douleur sous\nMénopause artificielle x Nutrition", labels = percentage_labels_NCM, col = colors_pastels_data_NCM)
+legend("bottom", legend = names(data2_NCM_table), fill = colors_pastels_data_NCM, title = "Douleur CM x Nutrition", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data2_NCM_table)), cex = 0.8, pos = 2)
 
@@ -2062,8 +2089,8 @@ data2_SCM_table <- data2_SCM_table[data2_SCM_table != 0]  # Filtrer les zéros
 percentage_labels_SCM <- paste0(round(100 * prop.table(data2_SCM_table), 1), "%")
 percentage_labels_SCM <- percentage_labels_SCM[percentage_labels_SCM != "0%"]  # Filtrer les 0%
 
-pie(data2_SCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Stress", labels = percentage_labels_SCM, col = colors_pastels_data_SCM)
-legend("bottom", legend = names(data2_SCM_table), fill = colors_pastels_data_SCM, title = "Douleur CM x Stress")
+pie(data2_SCM_table, main = "Échelles de douleur sous\nMénopause artificielle x Stress", labels = percentage_labels_SCM, col = colors_pastels_data_SCM)
+legend("bottom", legend = names(data2_SCM_table), fill = colors_pastels_data_SCM, title = "Douleur CM x Stress", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data2_SCM_table)), cex = 0.8, pos = 2)
 
@@ -2084,8 +2111,8 @@ data2_PCM_table <- data2_PCM_table[data2_PCM_table != 0]  # Filtrer les zéros
 percentage_labels_PCM <- paste0(round(100 * prop.table(data2_PCM_table), 1), "%")
 percentage_labels_PCM <- percentage_labels_PCM[percentage_labels_PCM != "0%"]  # Filtrer les 0%
 
-pie(data2_PCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Phyto", labels = percentage_labels_PCM, col = colors_pastels_data_PCM)
-legend("bottom", legend = names(data2_PCM_table), fill = colors_pastels_data_PCM, title = "Douleur CM x Phyto")
+pie(data2_PCM_table, main = "Échelles de douleur sous\nMénopause artificielle x Phyto", labels = percentage_labels_PCM, col = colors_pastels_data_PCM, cex.main = 0.9)
+legend("bottom", legend = names(data2_PCM_table), fill = colors_pastels_data_PCM, title = "Douleur CM x Phyto", cex = 0.75, xpd = TRUE, inset = c(0, -0.3))
 
 text(0, 0, paste("Total:", sum(data2_PCM_table)), cex = 0.8, pos = 2)
 
@@ -2099,8 +2126,8 @@ data2_ACM_table <- data2_ACM_table[data2_ACM_table != 0]  # Filtrer les zéros
 percentage_labels_ACM <- paste0(round(100 * prop.table(data2_ACM_table), 1), "%")
 percentage_labels_ACM <- percentage_labels_ACM[percentage_labels_ACM != "0%"]  # Filtrer les 0%
 
-pie(data2_ACM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Acup", labels = percentage_labels_ACM, col = colors_pastels_data_ACM)
-legend("bottom", legend = names(data2_ACM_table), fill = colors_pastels_data_ACM, title = "Douleur CM x Acup")
+pie(data2_ACM_table, main = "Échelles de douleur sous\nMénopause artificielle x Acup", labels = percentage_labels_ACM, col = colors_pastels_data_ACM, cex.main = 0.9)
+legend("bottom", legend = names(data2_ACM_table), fill = colors_pastels_data_ACM, title = "Douleur CM x Acup", cex = 0.75, xpd = TRUE, inset = c(0, -0.3))
 
 text(0, 0, paste("Total:", sum(data2_ACM_table)), cex = 0.8, pos = 2)
 
@@ -2121,8 +2148,8 @@ data2_BCM_table <- data2_BCM_table[data2_BCM_table != 0]
 percentage_labels_BCM <- paste0(round(100 * prop.table(data2_BCM_table), 1), "%")
 percentage_labels_BCM <- percentage_labels_BCM[percentage_labels_BCM != "0%"]
 
-pie(data2_BCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Bouillotte", labels = percentage_labels_BCM, col = colors_pastels_data_BCM)
-legend("bottom", legend = names(data2_BCM_table), fill = colors_pastels_data_BCM, title = "Douleur CM x Bouillotte")
+pie(data2_BCM_table, main = "Échelles de douleur sous\nMénopause artificielle x Bouillotte", labels = percentage_labels_BCM, col = colors_pastels_data_BCM)
+legend("bottom", legend = names(data2_BCM_table), fill = colors_pastels_data_BCM, title = "Douleur CM x Bouillotte", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data2_BCM_table)), cex = 0.8, pos = 2)
 
@@ -2136,8 +2163,8 @@ data2_CCM_table <- data2_CCM_table[data2_CCM_table != 0]
 percentage_labels_CCM <- paste0(round(100 * prop.table(data2_CCM_table), 1), "%")
 percentage_labels_CCM <- percentage_labels_CCM[percentage_labels_CCM != "0%"]
 
-pie(data2_CCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x CBD", labels = percentage_labels_CCM, col = colors_pastels_data_CCM)
-legend("bottom", legend = names(data2_CCM_table), fill = colors_pastels_data_CCM, title = "Douleur CM x CBD")
+pie(data2_CCM_table, main = "Échelles de douleur sous\nMénopause artificielle x CBD", labels = percentage_labels_CCM, col = colors_pastels_data_CCM)
+legend("bottom", legend = names(data2_CCM_table), fill = colors_pastels_data_CCM, title = "Douleur CM x CBD", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data2_CCM_table)), cex = 0.8, pos = 2)
 
@@ -2151,8 +2178,8 @@ data2_TCM_table <- data2_TCM_table[data2_TCM_table != 0]
 percentage_labels_TCM <- paste0(round(100 * prop.table(data2_TCM_table), 1), "%")
 percentage_labels_TCM <- percentage_labels_TCM[percentage_labels_TCM != "0%"]
 
-pie(data2_TCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Tens", labels = percentage_labels_TCM, col = colors_pastels_data_TCM)
-legend("bottom", legend = names(data2_TCM_table), fill = colors_pastels_data_TCM, title = "Douleur CM x Tens")
+pie(data2_TCM_table, main = "Échelles de douleur sous\nMénopause artificielle x Tens", labels = percentage_labels_TCM, col = colors_pastels_data_TCM)
+legend("bottom", legend = names(data2_TCM_table), fill = colors_pastels_data_TCM, title = "Douleur CM x Tens", cex = 0.9)
 
 text(0, 0, paste("Total:", sum(data2_TCM_table)), cex = 0.8, pos = 2)
 
@@ -2189,9 +2216,12 @@ resultats2 <- resultats2[order(resultats2$Pourcentage, decreasing = TRUE), ]
 # Afficher les pourcentages avec les noms des variables
 bp <- barplot(resultats2$Pourcentage, names.arg = resultats2$Variable,
               xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
-              main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux associé à CM",
+              main = "Pourcentage de 'Diminution de la douleur' par variable\npour chaque traitement non médicamenteux associé à CM",
               col = brewer.pal(length(noms_variables2), "Pastel1"),
-              ylim=c(0,100))
+              ylim=c(0,100),
+              cex.main = 1,
+              cex.lab = 1,
+              cex.names = 0.75)
 
 # Ajouter les totaux sur chaque bâton
 text(x = bp, y = 1, labels = resultats2$Total, pos = 3)
@@ -2226,8 +2256,8 @@ data3_MNM_table <- data3_MNM_table[data3_MNM_table != 0]
 percentage_labels_MNM <- paste0(round(100 * prop.table(data3_MNM_table), 1), "%")
 percentage_labels_MNM <- percentage_labels_MNM[percentage_labels_MNM != "0%"]  # Filtrer les 0%
 
-pie(data3_MNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Mobilite", labels = percentage_labels_MNM, col = colors_pastels_data_MNM)
-legend("bottom", legend = names(data3_MNM_table), fill = colors_pastels_data_MNM, title = "Douleur NM x Mobilite")
+pie(data3_MNM_table, main = "Échelles de douleur sous\nMobilite du corps", labels = percentage_labels_MNM, col = colors_pastels_data_MNM)
+legend("bottom", legend = names(data3_MNM_table), fill = colors_pastels_data_MNM, title = "Douleur sous Mobilite du corps", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_MNM_table)), cex = 0.8, pos = 2)
 
@@ -2243,8 +2273,8 @@ data3_NNM_table <- data3_NNM_table[data3_NNM_table != 0]
 percentage_labels_NNM <- paste0(round(100 * prop.table(data3_NNM_table), 1), "%")
 percentage_labels_NNM <- percentage_labels_NNM[percentage_labels_NNM != "0%"]  # Filtrer les 0%
 
-pie(data3_NNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Nutrition", labels = percentage_labels_NNM, col = colors_pastels_data_NNM)
-legend("bottom", legend = names(data3_NNM_table), fill = colors_pastels_data_NNM, title = "Douleur NM x Nutrition")
+pie(data3_NNM_table, main = "Échelles de douleur sous\nSuivi nutritionnel", labels = percentage_labels_NNM, col = colors_pastels_data_NNM)
+legend("bottom", legend = names(data3_NNM_table), fill = colors_pastels_data_NNM, title = "Douleur sous Suivi nutritionnel", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_NNM_table)), cex = 0.8, pos = 2)
 
@@ -2258,8 +2288,8 @@ data3_SNM_table <- data3_SNM_table[data3_SNM_table != 0]
 percentage_labels_SNM <- paste0(round(100 * prop.table(data3_SNM_table), 1), "%")
 percentage_labels_SNM <- percentage_labels_SNM[percentage_labels_SNM != "0%"]  # Filtrer les 0%
 
-pie(data3_SNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Stress", labels = percentage_labels_SNM, col = colors_pastels_data_SNM)
-legend("bottom", legend = names(data3_SNM_table), fill = colors_pastels_data_SNM, title = "Douleur NM x Stress")
+pie(data3_SNM_table, main = "Échelles de douleur sous\nGestion du stress", labels = percentage_labels_SNM, col = colors_pastels_data_SNM)
+legend("bottom", legend = names(data3_SNM_table), fill = colors_pastels_data_SNM, title = "Douleur sous Gestion du stress", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_SNM_table)), cex = 0.8, pos = 2)
 ```
@@ -2277,8 +2307,8 @@ data3_PNM_table <- data3_PNM_table[data3_PNM_table != 0]  # Filtrer les zéros
 percentage_labels_PNM <- paste0(round(100 * prop.table(data3_PNM_table), 1), "%")
 percentage_labels_PNM <- percentage_labels_PNM[percentage_labels_PNM != "0%"]  # Filtrer les 0%
 
-pie(data3_PNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Phyto", labels = percentage_labels_PNM, col = colors_pastels_data_PNM)
-legend("bottom", legend = names(data3_PNM_table), fill = colors_pastels_data_PNM, title = "Douleur NM x Phyto")
+pie(data3_PNM_table, main = "Échelles de douleur sous\nPhytothérapie", labels = percentage_labels_PNM, col = colors_pastels_data_PNM)
+legend("bottom", legend = names(data3_PNM_table), fill = colors_pastels_data_PNM, title = "Douleur sous Phytothérapie", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_PNM_table)), cex = 0.8, pos = 2)
 
@@ -2292,8 +2322,8 @@ data3_ANM_table <- data3_ANM_table[data3_ANM_table != 0]  # Filtrer les zéros
 percentage_labels_ANM <- paste0(round(100 * prop.table(data3_ANM_table), 1), "%")
 percentage_labels_ANM <- percentage_labels_ANM[percentage_labels_ANM != "0%"]  # Filtrer les 0%
 
-pie(data3_ANM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Acup", labels = percentage_labels_ANM, col = colors_pastels_data_ANM)
-legend("bottom", legend = names(data3_ANM_table), fill = colors_pastels_data_ANM, title = "Douleur NM x Acup")
+pie(data3_ANM_table, main = "Échelles de douleur sous\nAcupuncture", labels = percentage_labels_ANM, col = colors_pastels_data_ANM)
+legend("bottom", legend = names(data3_ANM_table), fill = colors_pastels_data_ANM, title = "Douleur sous Acupuncture", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_ANM_table)), cex = 0.8, pos = 2)
 
@@ -2307,8 +2337,8 @@ data3_HNM_table <- data3_HNM_table[data3_HNM_table != 0]  # Filtrer les zéros
 percentage_labels_HNM <- paste0(round(100 * prop.table(data3_HNM_table), 1), "%")
 percentage_labels_HNM <- percentage_labels_HNM[percentage_labels_HNM != "0%"]  # Filtrer les 0%
 
-pie(data3_HNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Hypnose", labels = percentage_labels_HNM, col = colors_pastels_data_HNM)
-legend("bottom", legend = names(data3_HNM_table), fill = colors_pastels_data_HNM, title = "Douleur NM x Hypnose")
+pie(data3_HNM_table, main = "Échelles de douleur sous\nHypnose", labels = percentage_labels_HNM, col = colors_pastels_data_HNM)
+legend("bottom", legend = names(data3_HNM_table), fill = colors_pastels_data_HNM, title = "Douleur sous Hypnose", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_HNM_table)), cex = 0.8, pos = 2)
 
@@ -2327,8 +2357,8 @@ data3_BNM_table <- data3_BNM_table[data3_BNM_table != 0]  # Filtrer les zéros
 percentage_labels_BNM <- paste0(round(100 * prop.table(data3_BNM_table), 1), "%")
 percentage_labels_BNM <- percentage_labels_BNM[percentage_labels_BNM != "0%"]  # Filtrer les 0%
 
-pie(data3_BNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Bouillotte", labels = percentage_labels_BNM, col = colors_pastels_data_BNM)
-legend("bottom", legend = names(data3_BNM_table), fill = colors_pastels_data_BNM, title = "Douleur NM x Bouillotte")
+pie(data3_BNM_table, main = "Échelles de douleur sous\nBouillotte", labels = percentage_labels_BNM, col = colors_pastels_data_BNM)
+legend("bottom", legend = names(data3_BNM_table), fill = colors_pastels_data_BNM, title = "Douleur sous Bouillotte", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_BNM_table)), cex = 0.8, pos = 2)
 
@@ -2342,8 +2372,8 @@ data3_CNM_table <- data3_CNM_table[data3_CNM_table != 0]  # Filtrer les zéros
 percentage_labels_CNM <- paste0(round(100 * prop.table(data3_CNM_table), 1), "%")
 percentage_labels_CNM <- percentage_labels_CNM[percentage_labels_CNM != "0%"]  # Filtrer les 0%
 
-pie(data3_CNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x CBD", labels = percentage_labels_CNM, col = colors_pastels_data_CNM)
-legend("bottom", legend = names(data3_CNM_table), fill = colors_pastels_data_CNM, title = "Douleur NM x CBD")
+pie(data3_CNM_table, main = "Échelles de douleur sous\nCBD", labels = percentage_labels_CNM, col = colors_pastels_data_CNM)
+legend("bottom", legend = names(data3_CNM_table), fill = colors_pastels_data_CNM, title = "Douleur sous CBD", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_CNM_table)), cex = 0.8, pos = 2)
 
@@ -2357,8 +2387,8 @@ data3_TNM_table <- data3_TNM_table[data3_TNM_table != 0]  # Filtrer les zéros
 percentage_labels_TNM <- paste0(round(100 * prop.table(data3_TNM_table), 1), "%")
 percentage_labels_TNM <- percentage_labels_TNM[percentage_labels_TNM != "0%"]  # Filtrer les 0%
 
-pie(data3_TNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Tens", labels = percentage_labels_TNM, col = colors_pastels_data_TNM)
-legend("bottom", legend = names(data3_TNM_table), fill = colors_pastels_data_TNM, title = "Douleur NM x Tens")
+pie(data3_TNM_table, main = "Échelles de douleur sous\nTens", labels = percentage_labels_TNM, col = colors_pastels_data_TNM)
+legend("bottom", legend = names(data3_TNM_table), fill = colors_pastels_data_TNM, title = "Douleur sous Tens", cex = 0.75)
 
 text(0, 0, paste("Total:", sum(data3_TNM_table)), cex = 0.8, pos = 2)
 ```
@@ -2395,7 +2425,10 @@ bp <- barplot(resultats3$Pourcentage, names.arg = resultats3$Variable,
               xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
               main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux seul",
               col = brewer.pal(length(noms_variables3), "Pastel1"),
-              ylim=c(0,100))
+              ylim=c(0,100),
+              cex.main = 0.75,
+              cex.lab = 0.75,
+              cex.names = 0.75)
 
 # Ajouter les totaux sur chaque bâton
 text(x = bp, y = 1, labels = resultats3$Total, pos = 3)
