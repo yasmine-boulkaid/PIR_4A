@@ -2,12 +2,18 @@
 title: "Projet_tutore_R"
 author: "Yasmine Boulkaid, Cassandra Jan & Illana Rabasquinho"
 date: "2024-03-21"
-output: html_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 # Librairies
 
 ```{r}
+# Définir un miroir CRAN
+options(repos = "https://cloud.r-project.org")
+
 install.packages("FactoMineR")
 install.packages("factoextra")
 install.packages("readxl")
@@ -1627,12 +1633,12 @@ grid.arrange(plot1, plot2, nrow = 1)
 # ggplot(df_age_counts, aes(x = age, y = count)) +
 # ggplot(df_age_counts_bis, aes(x = age, y = count))
 
-ggplot(df_age_counts, aes(x = age, y = count)) +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
-  theme_minimal() +
-  geom_bar() +
-  geom_line(data = df_age_counts_bis, color = "red")
+# ggplot(df_age_counts, aes(x = age, y = count)) +
+#   geom_bar(stat = "identity", fill = "skyblue") +
+#  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de # données") +
+#  theme_minimal() +
+#  geom_bar() +
+#  geom_line(data = df_age_counts_bis, color = "red")
 ```
 
 
