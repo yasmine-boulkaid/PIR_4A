@@ -10,14 +10,14 @@ output:
 
 # Librairies
 
-```{r}
+```{r, echo=FALSE}
 # Définir un miroir CRAN
 options(repos = "https://cloud.r-project.org")
 
-install.packages("FactoMineR")
-install.packages("factoextra")
-install.packages("readxl")
-install.packages("gridExtra")
+#install.packages("FactoMineR")
+#install.packages("factoextra")
+#install.packages("readxl")
+#install.packages("gridExtra")
 
 library(readxl)
 library(gridExtra)
@@ -31,7 +31,7 @@ library(tidyverse)
 
 # Mise en forme des données
 
-```{r}
+```{r, echo=FALSE}
 # Renommer toutes les variables
 
 data <- read.csv("etude_sur_les_traitements_de_lendometriose.csv")
@@ -1581,12 +1581,9 @@ grid.arrange(plot1, plot2, nrow = 1)
 ```{r}
 # Effectuer un test du khi-deux pour comparer les distributions d'âge
 
-test_khi_deux <- chisq.test(table(df_age_counts$age, df_age_counts_bis$age[19:54]))
+chisq.test(df_age_counts$age, df_age_counts_bis$age[19:54])
 
-# Afficher les résultats du test
-print(test_khi_deux)
-
-####### vous avez aussi un warning "Chi-squared approximation may be incorrect" ??
+####### "Chi-squared approximation may be incorrect" ????
 ```
 
 # p-value = 0.2376 > 0.05 (alpha=5%)
@@ -1779,57 +1776,30 @@ legend("bottom", legend = names(data1_STH_table), fill = colors_pastels_data_STH
 
 text(0, 0, paste("Total:", sum(data1_STH_table)), cex = 0.8, pos = 2)
 ```
-
-
 ```{r}
-options(repr.plot.width = 20, repr.plot.height = 15)
+# Évolution TH
+
+options(repr.plot.width = 20, repr.plot.height = 12)
 par(mfrow = c(1, 3))
 
-# Camembert pour Traitement Hormonal x Phyto
-data1_PTH <- data1$Douleur_Phyto_TH[data1$Phyto_TH == 1]
-colors_pastels_data_PTH <- brewer.pal(length(levels(data1_PTH)), "Pastel1")
+### changer les légendes
+categories <- c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas")
 
-data1_PTH_table <- table(data1_PTH)
-data1_PTH_table <- data1_PTH_table[data1_PTH_table != 0]  # Filtrer les zéros
+# Camembert  
+data1_ETH <- data1$Evolution_TH[data1$Evolution_TH == 1]
+colors_pastels_data_ETH <- brewer.pal(length(levels(data1_ETH)), "Pastel1")
 
-percentage_labels_PTH <- paste0(round(100 * prop.table(data1_PTH_table), 1), "%")
-percentage_labels_PTH <- percentage_labels_PTH[percentage_labels_PTH != "0%"]  # Filtrer les 0%
+data1_ETH_table <- table(data1_ETH)
+data1_ETH_table <- data1_ETH_table[data1_ETH_table != 0]
 
-pie(data1_PTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Phyto", labels = percentage_labels_PTH, col = colors_pastels_data_PTH)
-legend("bottom", legend = names(data1_PTH_table), fill = colors_pastels_data_PTH, title = "Douleur TH x Phyto")
+percentage_labels_ETH <- paste0(round(100 * prop.table(data1_ETH_table), 1), "%")
+percentage_labels_ETH <- percentage_labels_ETH[percentage_labels_ETH != "0%"]  # Filtrer les 0%
 
-text(0, 0, paste("Total:", sum(data1_PTH_table)), cex = 0.8, pos = 2)
+### changer les titres
+pie(data1_ETH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Mobilite", labels = percentage_labels_ETH, col = colors_pastels_data_ETH)
+legend("bottom", legend = categories, fill = colors_pastels_data_ETH, title = "Douleur TH x Mobilite")
 
-# Camembert pour Traitement Hormonal x Acup
-data1_ATH <- data1$Douleur_Acup_TH[data1$Acup_TH == 1]
-colors_pastels_data_ATH <- brewer.pal(length(levels(data1_ATH)), "Pastel1")
-
-data1_ATH_table <- table(data1_ATH)
-data1_ATH_table <- data1_ATH_table[data1_ATH_table != 0]  # Filtrer les zéros
-
-percentage_labels_ATH <- paste0(round(100 * prop.table(data1_ATH_table), 1), "%")
-percentage_labels_ATH <- percentage_labels_ATH[percentage_labels_ATH != "0%"]  # Filtrer les 0%
-
-pie(data1_ATH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Acup", labels = percentage_labels_ATH, col = colors_pastels_data_ATH)
-legend("bottom", legend = names(data1_ATH_table), fill = colors_pastels_data_ATH, title = "Douleur TH x Acup")
-
-text(0, 0, paste("Total:", sum(data1_ATH_table)), cex = 0.8, pos = 2)
-
-# Camembert pour Traitement Hormonal x Hypnose
-data1_HTH <- data1$Douleur_Hypnose_TH[data1$Hypnose_TH == 1]
-colors_pastels_data_HTH <- brewer.pal(length(levels(data1_HTH)), "Pastel1")
-
-data1_HTH_table <- table(data1_HTH)
-data1_HTH_table <- data1_HTH_table[data1_HTH_table != 0]  # Filtrer les zéros
-
-percentage_labels_HTH <- paste0(round(100 * prop.table(data1_HTH_table), 1), "%")
-percentage_labels_HTH <- percentage_labels_HTH[percentage_labels_HTH != "0%"]  # Filtrer les 0%
-
-pie(data1_HTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Hypnose", labels = percentage_labels_HTH, col = colors_pastels_data_HTH)
-legend("bottom", legend = names(data1_HTH_table), fill = colors_pastels_data_HTH, title = "Douleur TH x Hypnose")
-
-text(0, 0, paste("Total:", sum(data1_HTH_table)), cex = 0.8, pos = 2)
-
+text(0, 0, paste("Total:", sum(data1_ETH_table)), cex = 0.8, pos = 2)
 ```
 
 
