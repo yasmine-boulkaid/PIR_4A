@@ -1,0 +1,2172 @@
+---
+title: "Projet_tutore_R"
+author: "Yasmine Boulkaid, Cassandra Jan & Illana Rabasquinho"
+date: "2024-03-21"
+output: html_document
+---
+
+# Librairies
+
+```{r}
+install.packages("FactoMineR")
+install.packages("factoextra")
+install.packages("readxl")
+install.packages("gridExtra")
+
+library(readxl)
+library(gridExtra)
+library(ggplot2)
+library(FactoMineR)
+library(factoextra)
+library(conflicted)
+library(dplyr)
+library(tidyverse)
+```
+
+# Mise en forme des données
+
+```{r}
+# Renommer toutes les variables
+
+data <- read.csv("etude_sur_les_traitements_de_lendometriose.csv")
+n <- length(data)
+
+### Questions préliminaires ###
+names(data)[names(data) == "X"] <- "Age"
+names(data)[names(data) == "X.1"] <- "Stade"
+names(data)[names(data) == "X.2"] <- "Diagnostic"
+names(data)[names(data) == "X.3"] <- "Tabac"
+names(data)[names(data) == "X.4"] <- "Alcool"
+names(data)[names(data) == "X.5"] <- "TH"
+names(data)[names(data) == "X.6"] <- "CM"
+names(data)[names(data) == "X.7"] <- "Autre"
+names(data)[names(data) == "X.8"] <- "Aucun"
+names(data)[names(data) == "X.9"] <- "Lesquels_M"
+
+### Questions générales TH ###
+names(data)[names(data) == "X.10"] <- "Encore_TH"
+names(data)[names(data) == "X.11"] <- "Depuis_TH"
+names(data)[names(data) == "X.12"] <- "Debut_TH"
+names(data)[names(data) == "X.13"] <- "Combien_TH"
+names(data)[names(data) == "X.14"] <- "Pas_efficace_TH"
+names(data)[names(data) == "X.15"] <- "ES_TH"
+names(data)[names(data) == "X.16"] <- "Cout_TH"
+names(data)[names(data) == "X.17"] <- "Autre_Cause_Fin_TH"
+names(data)[names(data) == "X.18"] <- "Douleur_TH"
+names(data)[names(data) == "X.19"] <- "Evolution_TH"
+names(data)[names(data) == "X.20"] <- "Pre_op_TH"
+names(data)[names(data) == "X.21"] <- "Post_op_TH"
+names(data)[names(data) == "X.22"] <- "Pas_op_TH"
+names(data)[names(data) == "X.23"] <- "Prise_TH"
+
+### Effets secondaires TH ###
+names(data)[names(data) == "X.24"] <- "Subi_ES_TH"
+names(data)[names(data) == "X.25"] <- "Tete_TH"
+names(data)[names(data) == "X.26"] <- "Fatigue_TH"
+names(data)[names(data) == "X.27"] <- "Nausee_TH"
+names(data)[names(data) == "X.28"] <- "Humeur_TH"
+names(data)[names(data) == "X.29"] <- "Libido_TH"
+names(data)[names(data) == "X.30"] <- "Sang_TH"
+names(data)[names(data) == "X.31"] <- "Poids_TH"
+names(data)[names(data) == "X.32"] <- "Allergie_TH"
+names(data)[names(data) == "X.33"] <- "Thrombose_TH"
+names(data)[names(data) == "X.34"] <- "Autre_ES_TH"
+names(data)[names(data) == "X.35"] <- "Apparition_Tete_TH"
+names(data)[names(data) == "X.36"] <- "Frequence_Tete_TH"
+names(data)[names(data) == "X.37"] <- "Apparition_Fatigue_TH"
+names(data)[names(data) == "X.38"] <- "Frequence_Fatigue_TH"
+names(data)[names(data) == "X.39"] <- "Apparition_Nausee_TH"
+names(data)[names(data) == "X.40"] <- "Frequence_Nausee_TH"
+names(data)[names(data) == "X.41"] <- "Apparition_Humeur_TH"
+names(data)[names(data) == "X.42"] <- "Frequence_Humeur_TH"
+names(data)[names(data) == "X.43"] <- "Apparition_Libido_TH"
+names(data)[names(data) == "X.44"] <- "Frequence_Libido_TH"
+names(data)[names(data) == "X.45"] <- "Apparition_Sang_TH"
+names(data)[names(data) == "X.46"] <- "Frequence_Sang_TH"
+names(data)[names(data) == "X.47"] <- "Apparition_Thrombose_TH"
+
+### Traitements non médicamenteux TH ###
+names(data)[names(data) == "X.48"] <- "Mobilite_TH"
+names(data)[names(data) == "X.49"] <- "Nutrition_TH"
+names(data)[names(data) == "X.50"] <- "Stress_TH"
+names(data)[names(data) == "X.51"] <- "Phyto_TH"
+names(data)[names(data) == "X.52"] <- "Acup_TH"
+names(data)[names(data) == "X.53"] <- "Hypnose_TH"
+names(data)[names(data) == "X.54"] <- "Bouillotte_TH"
+names(data)[names(data) == "X.55"] <- "CBD_TH"
+names(data)[names(data) == "X.56"] <- "Tens_TH"
+names(data)[names(data) == "X.57"] <- "Aucun_TH"
+
+# Mobilité TH #
+names(data)[names(data) == "X.58"] <- "Combien_Mobilite_TH"
+names(data)[names(data) == "X.59"] <- "Douleur_Mobilite_TH"
+names(data)[names(data) == "X.60"] <- "Evolution_Mobilite_TH"
+names(data)[names(data) == "X.61"] <- "Prise_Mobilite_TH"
+
+# Nutrition TH #
+names(data)[names(data) == "X.62"] <- "Combien_Nutrition_TH"
+names(data)[names(data) == "X.63"] <- "Douleur_Nutrition_TH"
+names(data)[names(data) == "X.64"] <- "Evolution_Nutrition_TH"
+names(data)[names(data) == "X.65"] <- "Prise_Nutrition_TH"
+
+# Stress TH #
+names(data)[names(data) == "X.66"] <- "Combien_Stress_TH"
+names(data)[names(data) == "X.67"] <- "Douleur_Stress_TH"
+names(data)[names(data) == "X.68"] <- "Evolution_Stress_TH"
+names(data)[names(data) == "X.69"] <- "Prise_Stress_TH"
+
+# Phyto TH #
+names(data)[names(data) == "X.70"] <- "Combien_Phyto_TH"
+names(data)[names(data) == "X.71"] <- "Douleur_Phyto_TH"
+names(data)[names(data) == "X.72"] <- "Evolution_Phyto_TH"
+names(data)[names(data) == "X.73"] <- "Prise_Phyto_TH"
+
+# Acup TH #
+names(data)[names(data) == "X.74"] <- "Combien_Acup_TH"
+names(data)[names(data) == "X.75"] <- "Douleur_Acup_TH"
+names(data)[names(data) == "X.76"] <- "Evolution_Acup_TH"
+names(data)[names(data) == "X.77"] <- "Prise_Acup_TH"
+
+# Hypnose TH #
+names(data)[names(data) == "X.78"] <- "Combien_Hypnose_TH"
+names(data)[names(data) == "X.79"] <- "Douleur_Hypnose_TH"
+names(data)[names(data) == "X.80"] <- "Evolution_Hypnose_TH"
+names(data)[names(data) == "X.81"] <- "Prise_Hypnose_TH"
+
+# Bouillotte TH #
+names(data)[names(data) == "X.82"] <- "Combien_Bouillotte_TH"
+names(data)[names(data) == "X.83"] <- "Douleur_Bouillotte_TH"
+names(data)[names(data) == "X.84"] <- "Evolution_Bouillotte_TH"
+names(data)[names(data) == "X.85"] <- "Prise_Bouillotte_TH"
+
+# CBD TH #
+names(data)[names(data) == "X.86"] <- "Combien_CBD_TH"
+names(data)[names(data) == "X.87"] <- "Douleur_CBD_TH"
+names(data)[names(data) == "X.88"] <- "Evolution_CBD_TH"
+names(data)[names(data) == "X.89"] <- "Prise_CBD_TH"
+
+# Tens TH #
+names(data)[names(data) == "X.90"] <- "Combien_Tens_TH"
+names(data)[names(data) == "X.91"] <- "Douleur_Tens_TH"
+names(data)[names(data) == "X.92"] <- "Evolution_Tens_TH"
+names(data)[names(data) == "X.93"] <- "Prise_Tens_TH"
+
+### Questions générales CM ###
+names(data)[names(data) == "X.94"] <- "Encore_CM"
+names(data)[names(data) == "X.95"] <- "Depuis_CM"
+names(data)[names(data) == "X.96"] <- "Debut_CM"
+names(data)[names(data) == "X.97"] <- "Combien_CM"
+names(data)[names(data) == "X.98"] <- "Pas_efficace_CM"
+names(data)[names(data) == "X.99"] <- "ES_CM"
+names(data)[names(data) == "X.100"] <- "Cout_CM"
+names(data)[names(data) == "X.101"] <- "Autre_Cause_Fin_CM"
+names(data)[names(data) == "X.102"] <- "Douleur_CM"
+names(data)[names(data) == "X.103"] <- "Evolution_CM"
+names(data)[names(data) == "X.104"] <- "Pre_op_CM"
+names(data)[names(data) == "X.105"] <- "Post_op_CM"
+names(data)[names(data) == "X.106"] <- "Pas_op_CM"
+names(data)[names(data) == "X.107"] <- "Prise_CM"
+
+### Effets secondaires CM ###
+names(data)[names(data) == "X.108"] <- "Subi_ES_CM"
+names(data)[names(data) == "X.109"] <- "Tete_CM"
+names(data)[names(data) == "X.110"] <- "Fatigue_CM"
+names(data)[names(data) == "X.111"] <- "Nausee_CM"
+names(data)[names(data) == "X.112"] <- "Humeur_CM"
+names(data)[names(data) == "X.113"] <- "Libido_CM"
+names(data)[names(data) == "X.114"] <- "Sang_CM"
+names(data)[names(data) == "X.115"] <- "Poids_CM"
+names(data)[names(data) == "X.116"] <- "Allergie_CM"
+names(data)[names(data) == "X.117"] <- "Thrombose_CM"
+names(data)[names(data) == "X.118"] <- "Autre_ES_CM"
+names(data)[names(data) == "X.119"] <- "Apparition_Tete_CM"
+names(data)[names(data) == "X.120"] <- "Frequence_Tete_CM"
+names(data)[names(data) == "X.121"] <- "Apparition_Fatigue_CM"
+names(data)[names(data) == "X.122"] <- "Frequence_Fatigue_CM"
+names(data)[names(data) == "X.123"] <- "Apparition_Nausee_CM"
+names(data)[names(data) == "X.124"] <- "Frequence_Nausee_CM"
+names(data)[names(data) == "X.125"] <- "Apparition_Humeur_CM"
+names(data)[names(data) == "X.126"] <- "Frequence_Humeur_CM"
+names(data)[names(data) == "X.127"] <- "Apparition_Libido_CM"
+names(data)[names(data) == "X.128"] <- "Frequence_Libido_CM"
+names(data)[names(data) == "X.129"] <- "Apparition_Sang_CM"
+names(data)[names(data) == "X.130"] <- "Frequence_Sang_CM"
+names(data)[names(data) == "X.131"] <- "Apparition_Thrombose_CM"
+
+### Traitements non médicamenteux CM ###
+names(data)[names(data) == "X.132"] <- "Mobilite_CM"
+names(data)[names(data) == "X.133"] <- "Nutrition_CM"
+names(data)[names(data) == "X.134"] <- "Stress_CM"
+names(data)[names(data) == "X.135"] <- "Phyto_CM"
+names(data)[names(data) == "X.136"] <- "Acup_CM"
+names(data)[names(data) == "X.137"] <- "Hypnose_CM"
+names(data)[names(data) == "X.138"] <- "Bouillotte_CM"
+names(data)[names(data) == "X.139"] <- "CBD_CM"
+names(data)[names(data) == "X.140"] <- "Tens_CM"
+names(data)[names(data) == "X.141"] <- "Aucun_CM"
+
+# Mobilite CM #
+names(data)[names(data) == "X.142"] <- "Combien_Mobilite_CM"
+names(data)[names(data) == "X.143"] <- "Douleur_Mobilite_CM"
+names(data)[names(data) == "X.144"] <- "Evolution_Mobilite_CM"
+names(data)[names(data) == "X.145"] <- "Prise_Mobilite_CM"
+
+# Nutrition CM #
+names(data)[names(data) == "X.146"] <- "Combien_Nutrition_CM"
+names(data)[names(data) == "X.147"] <- "Douleur_Nutrition_CM"
+names(data)[names(data) == "X.148"] <- "Evolution_Nutrition_CM"
+names(data)[names(data) == "X.149"] <- "Prise_Nutrition_CM"
+
+# Stress CM #
+names(data)[names(data) == "X.150"] <- "Combien_Stress_CM"
+names(data)[names(data) == "X.151"] <- "Douleur_Stress_CM"
+names(data)[names(data) == "X.152"] <- "Evolution_Stress_CM"
+names(data)[names(data) == "X.153"] <- "Prise_Stress_CM"
+
+# Phyto CM #
+names(data)[names(data) == "X.154"] <- "Combien_Phyto_CM"
+names(data)[names(data) == "X.155"] <- "Douleur_Phyto_CM"
+names(data)[names(data) == "X.156"] <- "Evolution_Phyto_CM"
+names(data)[names(data) == "X.157"] <- "Prise_Phyto_CM"
+
+# Acup CM #
+names(data)[names(data) == "X.158"] <- "Combien_Acup_CM"
+names(data)[names(data) == "X.159"] <- "Douleur_Acup_CM"
+names(data)[names(data) == "X.160"] <- "Evolution_Acup_CM"
+names(data)[names(data) == "X.161"] <- "Prise_Acup_CM"
+
+# Hypnose CM #
+names(data)[names(data) == "X.162"] <- "Combien_Hypnose_CM"
+names(data)[names(data) == "X.163"] <- "Douleur_Hypnose_CM"
+names(data)[names(data) == "X.164"] <- "Evolution_Hypnose_CM"
+names(data)[names(data) == "X.165"] <- "Prise_Hypnose_CM"
+
+# Bouillotte CM #
+names(data)[names(data) == "X.166"] <- "Combien_Bouillotte_CM"
+names(data)[names(data) == "X.167"] <- "Douleur_Bouillotte_CM"
+names(data)[names(data) == "X.168"] <- "Evolution_Bouillotte_CM"
+names(data)[names(data) == "X.169"] <- "Prise_Bouillotte_CM"
+
+# CBD CM #
+names(data)[names(data) == "X.170"] <- "Combien_CBD_CM"
+names(data)[names(data) == "X.171"] <- "Douleur_CBD_CM"
+names(data)[names(data) == "X.172"] <- "Evolution_CBD_CM"
+names(data)[names(data) == "X.173"] <- "Prise_CBD_CM"
+
+# Tens CM #
+names(data)[names(data) == "X.174"] <- "Combien_Tens_CM"
+names(data)[names(data) == "X.175"] <- "Douleur_Tens_CM"
+names(data)[names(data) == "X.176"] <- "Evolution_Tens_CM"
+names(data)[names(data) == "X.177"] <- "Prise_Tens_CM"
+
+### Traitements non médicamenteux seuls ###
+names(data)[names(data) == "X.178"] <- "Mobilite_NM"
+names(data)[names(data) == "X.179"] <- "Nutrition_NM"
+names(data)[names(data) == "X.180"] <- "Stress_NM"
+names(data)[names(data) == "X.181"] <- "Phyto_NM"
+names(data)[names(data) == "X.182"] <- "Acup_NM"
+names(data)[names(data) == "X.183"] <- "Hypnose_NM"
+names(data)[names(data) == "X.184"] <- "Bouillotte_NM"
+names(data)[names(data) == "X.185"] <- "CBD_NM"
+names(data)[names(data) == "X.186"] <- "Tens_NM"
+names(data)[names(data) == "X.187"] <- "Aucun_NM"
+
+# Mobilite NM #
+names(data)[names(data) == "X.188"] <- "Encore_Mobilite_NM"
+names(data)[names(data) == "X.189"] <- "Depuis_Mobilite_NM"
+names(data)[names(data) == "X.190"] <- "Debut_Mobilite_NM"
+names(data)[names(data) == "X.191"] <- "Combien_Mobilite_NM"
+names(data)[names(data) == "X.192"] <- "Pas_efficace_Mobilite_NM"
+names(data)[names(data) == "X.193"] <- "ES_Mobilite_NM"
+names(data)[names(data) == "X.194"] <- "Cout_Mobilite_NM"
+names(data)[names(data) == "X.195"] <- "Autre_Cause_Fin_Mobilite_NM"
+names(data)[names(data) == "X.196"] <- "Douleur_Mobilite_NM"
+names(data)[names(data) == "X.197"] <- "Evolution_Mobilite_NM"
+names(data)[names(data) == "X.198"] <- "Pre_op_Mobilite_NM"
+names(data)[names(data) == "X.199"] <- "Post_op_Mobilite_NM"
+names(data)[names(data) == "X.200"] <- "Pas_op_Mobilite_NM"
+names(data)[names(data) == "X.201"] <- "Prise_Mobilite_NM"
+
+# Nutrition NM #
+names(data)[names(data) == "X.202"] <- "Encore_Nutrition_NM"
+names(data)[names(data) == "X.203"] <- "Depuis_Nutrition_NM"
+names(data)[names(data) == "X.204"] <- "Debut_Nutrition_NM"
+names(data)[names(data) == "X.205"] <- "Combien_Nutrition_NM"
+names(data)[names(data) == "X.206"] <- "Pas_efficace_Nutrition_NM"
+names(data)[names(data) == "X.207"] <- "ES_Nutrition_NM"
+names(data)[names(data) == "X.208"] <- "Cout_Nutrition_NM"
+names(data)[names(data) == "X.209"] <- "Autre_Cause_Fin_Nutrition_NM"
+names(data)[names(data) == "X.210"] <- "Douleur_Nutrition_NM"
+names(data)[names(data) == "X.211"] <- "Evolution_Nutrition_NM"
+names(data)[names(data) == "X.212"] <- "Pre_op_Nutrition_NM"
+names(data)[names(data) == "X.213"] <- "Post_op_Nutrition_NM"
+names(data)[names(data) == "X.214"] <- "Pas_op_Nutrition_NM"
+names(data)[names(data) == "X.215"] <- "Prise_Nutrition_NM"
+
+# Stress NM #
+names(data)[names(data) == "X.216"] <- "Encore_Stress_NM"
+names(data)[names(data) == "X.217"] <- "Depuis_Stress_NM"
+names(data)[names(data) == "X.218"] <- "Debut_Stress_NM"
+names(data)[names(data) == "X.219"] <- "Combien_Stress_NM"
+names(data)[names(data) == "X.220"] <- "Pas_efficace_Stress_NM"
+names(data)[names(data) == "X.221"] <- "ES_Stress_NM"
+names(data)[names(data) == "X.222"] <- "Cout_Stress_NM"
+names(data)[names(data) == "X.223"] <- "Autre_Cause_Fin_Stress_NM"
+names(data)[names(data) == "X.224"] <- "Douleur_Stress_NM"
+names(data)[names(data) == "X.225"] <- "Evolution_Stress_NM"
+names(data)[names(data) == "X.226"] <- "Pre_op_Stress_NM"
+names(data)[names(data) == "X.227"] <- "Post_op_Stress_NM"
+names(data)[names(data) == "X.228"] <- "Pas_op_Stress_NM"
+names(data)[names(data) == "X.229"] <- "Prise_Stress_NM"
+
+# Phyto NM #
+names(data)[names(data) == "X.230"] <- "Encore_Phyto_NM"
+names(data)[names(data) == "X.231"] <- "Depuis_Phyto_NM"
+names(data)[names(data) == "X.232"] <- "Debut_Phyto_NM"
+names(data)[names(data) == "X.233"] <- "Combien_Phyto_NM"
+names(data)[names(data) == "X.234"] <- "Pas_efficace_Phyto_NM"
+names(data)[names(data) == "X.235"] <- "ES_Phyto_NM"
+names(data)[names(data) == "X.236"] <- "Cout_Phyto_NM"
+names(data)[names(data) == "X.237"] <- "Autre_Cause_Fin_Phyto_NM"
+names(data)[names(data) == "X.238"] <- "Douleur_Phyto_NM"
+names(data)[names(data) == "X.239"] <- "Evolution_Phyto_NM"
+names(data)[names(data) == "X.240"] <- "Pre_op_Phyto_NM"
+names(data)[names(data) == "X.241"] <- "Post_op_Phyto_NM"
+names(data)[names(data) == "X.242"] <- "Pas_op_Phyto_NM"
+names(data)[names(data) == "X.243"] <- "Prise_Phyto_NM"
+
+# Acup NM #
+names(data)[names(data) == "X.244"] <- "Encore_Acup_NM"
+names(data)[names(data) == "X.245"] <- "Depuis_Acup_NM"
+names(data)[names(data) == "X.246"] <- "Debut_Acup_NM"
+names(data)[names(data) == "X.247"] <- "Combien_Acup_NM"
+names(data)[names(data) == "X.248"] <- "Pas_efficace_Acup_NM"
+names(data)[names(data) == "X.249"] <- "ES_Acup_NM"
+names(data)[names(data) == "X.250"] <- "Cout_Acup_NM"
+names(data)[names(data) == "X.251"] <- "Autre_Cause_Fin_Acup_NM"
+names(data)[names(data) == "X.252"] <- "Douleur_Acup_NM"
+names(data)[names(data) == "X.253"] <- "Evolution_Acup_NM"
+names(data)[names(data) == "X.254"] <- "Pre_op_Acup_NM"
+names(data)[names(data) == "X.255"] <- "Post_op_Acup_NM"
+names(data)[names(data) == "X.256"] <- "Pas_op_Acup_NM"
+names(data)[names(data) == "X.257"] <- "Prise_Acup_NM"
+
+# Hypnose NM #
+names(data)[names(data) == "X.258"] <- "Encore_Hypnose_NM"
+names(data)[names(data) == "X.259"] <- "Depuis_Hypnose_NM"
+names(data)[names(data) == "X.260"] <- "Debut_Hypnose_NM"
+names(data)[names(data) == "X.261"] <- "Combien_Hypnose_NM"
+names(data)[names(data) == "X.262"] <- "Pas_efficace_Hypnose_NM"
+names(data)[names(data) == "X.263"] <- "ES_Hypnose_NM"
+names(data)[names(data) == "X.264"] <- "Cout_Hypnose_NM"
+names(data)[names(data) == "X.265"] <- "Autre_Cause_Fin_Hypnose_NM"
+names(data)[names(data) == "X.266"] <- "Douleur_Hypnose_NM"
+names(data)[names(data) == "X.267"] <- "Evolution_Hypnose_NM"
+names(data)[names(data) == "X.268"] <- "Pre_op_Hypnose_NM"
+names(data)[names(data) == "X.269"] <- "Post_op_Hypnose_NM"
+names(data)[names(data) == "X.270"] <- "Pas_op_Hypnose_NM"
+names(data)[names(data) == "X.271"] <- "Prise_Hypnose_NM"
+
+# Bouillotte NM #
+names(data)[names(data) == "X.272"] <- "Encore_Bouillotte_NM"
+names(data)[names(data) == "X.273"] <- "Depuis_Bouillotte_NM"
+names(data)[names(data) == "X.274"] <- "Debut_Bouillotte_NM"
+names(data)[names(data) == "X.275"] <- "Combien_Bouillotte_NM"
+names(data)[names(data) == "X.276"] <- "Pas_efficace_Bouillotte_NM"
+names(data)[names(data) == "X.277"] <- "ES_Bouillotte_NM"
+names(data)[names(data) == "X.278"] <- "Cout_Bouillotte_NM"
+names(data)[names(data) == "X.279"] <- "Autre_Cause_Fin_Bouillotte_NM"
+names(data)[names(data) == "X.280"] <- "Douleur_Bouillotte_NM"
+names(data)[names(data) == "X.281"] <- "Evolution_Bouillotte_NM"
+names(data)[names(data) == "X.282"] <- "Pre_op_Bouillotte_NM"
+names(data)[names(data) == "X.283"] <- "Post_op_Bouillotte_NM"
+names(data)[names(data) == "X.284"] <- "Pas_op_Bouillotte_NM"
+names(data)[names(data) == "X.285"] <- "Prise_Bouillotte_NM"
+
+# CBD NM #
+names(data)[names(data) == "X.286"] <- "Encore_CBD_NM"
+names(data)[names(data) == "X.287"] <- "Depuis_CBD_NM"
+names(data)[names(data) == "X.288"] <- "Debut_CBD_NM"
+names(data)[names(data) == "X.289"] <- "Combien_CBD_NM"
+names(data)[names(data) == "X.290"] <- "Pas_efficace_CBD_NM"
+names(data)[names(data) == "X.291"] <- "ES_CBD_NM"
+names(data)[names(data) == "X.292"] <- "Cout_CBD_NM"
+names(data)[names(data) == "X.293"] <- "Autre_Cause_Fin_CBD_NM"
+names(data)[names(data) == "X.294"] <- "Douleur_CBD_NM"
+names(data)[names(data) == "X.295"] <- "Evolution_CBD_NM"
+names(data)[names(data) == "X.296"] <- "Pre_op_CBD_NM"
+names(data)[names(data) == "X.297"] <- "Post_op_CBD_NM"
+names(data)[names(data) == "X.298"] <- "Pas_op_CBD_NM"
+names(data)[names(data) == "X.299"] <- "Prise_CBD_NM"
+
+# Tens NM #
+names(data)[names(data) == "X.300"] <- "Encore_Tens_NM"
+names(data)[names(data) == "X.301"] <- "Depuis_Tens_NM"
+names(data)[names(data) == "X.302"] <- "Debut_Tens_NM"
+names(data)[names(data) == "X.303"] <- "Combien_Tens_NM"
+names(data)[names(data) == "X.304"] <- "Pas_efficace_Tens_NM"
+names(data)[names(data) == "X.305"] <- "ES_Tens_NM"
+names(data)[names(data) == "X.306"] <- "Cout_Tens_NM"
+names(data)[names(data) == "X.307"] <- "Autre_Cause_Fin_Tens_NM"
+names(data)[names(data) == "X.308"] <- "Douleur_Tens_NM"
+names(data)[names(data) == "X.309"] <- "Evolution_Tens_NM"
+names(data)[names(data) == "X.310"] <- "Pre_op_Tens_NM"
+names(data)[names(data) == "X.311"] <- "Post_op_Tens_NM"
+names(data)[names(data) == "X.312"] <- "Pas_op_Tens_NM"
+names(data)[names(data) == "X.313"] <- "Prise_Tens_NM"
+
+# Autres NM #
+names(data)[names(data) == "X.314"] <- "Autres_NM"
+names(data)[names(data) == "X.315"] <- "Lesquels_NM"
+
+### Questions finales ###
+names(data)[names(data) == "X.316"] <- "Remarques"
+names(data)[names(data) == "X.317"] <- "Email"
+
+head(data)
+```
+
+```{r}
+### Supression des deux premières lignes ###
+data <- data[-c(1:2), ]
+
+head(data)
+```
+
+```{r}
+### Questions préliminaires ###
+data$Age = as.integer(data$Age)
+data$Stade = as.factor(data$Stade)
+data$Diagnostic = as.factor(data$Diagnostic)
+data$Tabac = as.factor(data$Tabac)
+data$Alcool = as.factor(data$Alcool)
+
+TH <- ifelse(data$TH == "X", "1", "0")
+data$TH <- factor(TH, levels = c("1", "0"), labels = c("1", "0"))
+
+CM <- ifelse(data$CM == "X", "1", "0")
+data$CM <- factor(CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre <- ifelse(data$Autre == "X", "1", "0")
+data$Autre <- factor(Autre, levels = c("1", "0"), labels = c("1", "0"))
+
+Aucun <- ifelse(data$Aucun == "X", "1", "0")
+data$Aucun <- factor(Aucun, levels = c("1", "0"), labels = c("1", "0"))
+
+data$Lesquels_M <- ifelse(data$Lesquels_M == "", "0", data$Lesquels_M)
+#"Lesquels_M" à traiter dans un second temps
+
+head(data)
+print(data$TH)
+#str(Aucun)
+```
+
+```{r}
+### Questions générales TH ###
+Encore_TH <- ifelse(data$Encore_TH == "", "0", data$Encore_TH)
+data$Encore_TH = as.factor(Encore_TH)
+
+Debut_TH <- ifelse(data$Debut_TH == "", "0", data$Debut_TH)
+data$Debut_TH = as.integer(Debut_TH)
+
+Depuis_TH <- ifelse(data$Depuis_TH == "", "0", data$Depuis_TH)
+data$Depuis_TH = as.factor(Depuis_TH)
+
+Combien_TH <- ifelse(data$Combien_TH == "", "0", data$Combien_TH)
+data$Combien_TH = as.factor(Combien_TH)
+
+Pas_efficace_TH <- ifelse(data$Pas_efficace_TH == "X", "1", "0")
+data$Pas_efficace_TH <- factor(Pas_efficace_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_TH <- ifelse(data$ES_TH == "X", "1", "0")
+data$ES_TH <- factor(ES_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_TH <- ifelse(data$Cout_TH == "X", "1", "0")
+data$Cout_TH <- factor(Cout_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_TH <- ifelse(data$Autre_Cause_Fin_TH == "X", "1", "0")
+data$Autre_Cause_Fin_TH <- factor(Autre_Cause_Fin_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_TH <- ifelse(data$Douleur_TH == "", "0", data$Douleur_TH)
+data$Douleur_TH = as.factor(Douleur_TH)
+
+Evolution_TH <- ifelse(data$Evolution_TH == "", "0", data$Evolution_TH)
+data$Evolution_TH = as.factor(Evolution_TH)
+
+Pre_op_TH <- ifelse(data$Pre_op_TH == "X", "1", "0")
+data$Pre_op_TH <- factor(Pre_op_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_TH <- ifelse(data$Post_op_TH == "X", "1", "0")
+data$Post_op_TH <- factor(Post_op_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_TH <- ifelse(data$Pas_op_TH == "X", "1", "0")
+data$Pas_op_TH <- factor(Pas_op_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_TH <- ifelse(data$Prise_TH == "", "0", data$Prise_TH)
+data$Prise_TH = as.factor(Prise_TH)
+
+#str(Prise_TH)
+#print(Prise_TH)
+#print(Pre_op_TH)
+```
+
+```{r}
+### Effets secondaires TH ###
+Subi_ES_TH <- ifelse(data$Subi_ES_TH == "", "0", data$Subi_ES_TH)
+data$Subi_ES_TH = as.factor(Subi_ES_TH)
+
+Tete_TH <- ifelse(data$Tete_TH == "X", "1", "0")
+data$Tete_TH <- factor(Tete_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Fatigue_TH <- ifelse(data$Fatigue_TH == "X", "1", "0")
+data$Fatigue_TH <- factor(Fatigue_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Nausee_TH <- ifelse(data$Nausee_TH == "X", "1", "0")
+data$Nausee_TH <- factor(Nausee_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Humeur_TH <- ifelse(data$Humeur_TH == "X", "1", "0")
+data$Humeur_TH <- factor(Humeur_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Libido_TH <- ifelse(data$Libido_TH == "X", "1", "0")
+data$Libido_TH <- factor(Libido_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Sang_TH <- ifelse(data$Sang_TH == "X", "1", "0")
+data$Sang_TH <- factor(Sang_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Poids_TH <- ifelse(data$Poids_TH == "X", "1", "0")
+data$Poids_TH <- factor(Poids_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Allergie_TH <- ifelse(data$Allergie_TH == "X", "1", "0")
+data$Allergie_TH <- factor(Allergie_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Thrombose_TH <- ifelse(data$Thrombose_TH == "X", "1", "0")
+data$Thrombose_TH <- factor(Thrombose_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_ES_TH <- ifelse(data$Autre_ES_TH == "X", "1", "0")
+data$Autre_ES_TH <- factor(Autre_ES_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Apparition_Tete_TH <- ifelse(data$Apparition_Tete_TH == "", "0", data$Apparition_Tete_TH)
+data$Apparition_Tete_TH = as.factor(Apparition_Tete_TH)
+
+Frequence_Tete_TH <- ifelse(data$Frequence_Tete_TH == "", "0", data$Frequence_Tete_TH)
+data$Frequence_Tete_TH = as.factor(Frequence_Tete_TH)
+
+Apparition_Fatigue_TH <- ifelse(data$Apparition_Fatigue_TH == "", "0", data$Apparition_Fatigue_TH)
+data$Apparition_Fatigue_TH = as.factor(Apparition_Fatigue_TH)
+
+Frequence_Fatigue_TH <- ifelse(data$Frequence_Fatigue_TH == "", "0", data$Frequence_Fatigue_TH)
+data$Frequence_Fatigue_TH = as.factor(Frequence_Fatigue_TH)
+
+Apparition_Nausee_TH <- ifelse(data$Apparition_Nausee_TH == "", "0", data$Apparition_Nausee_TH)
+data$Apparition_Nausee_TH = as.factor(Apparition_Nausee_TH)
+
+Frequence_Nausee_TH <- ifelse(data$Frequence_Nausee_TH == "", "0", data$Frequence_Nausee_TH)
+data$Frequence_Nausee_TH = as.factor(Frequence_Nausee_TH)
+
+Apparition_Humeur_TH <- ifelse(data$Apparition_Humeur_TH == "", "0", data$Apparition_Humeur_TH)
+data$Apparition_Humeur_TH = as.factor(Apparition_Humeur_TH)
+
+Frequence_Humeur_TH <- ifelse(data$Frequence_Humeur_TH == "", "0", data$Frequence_Humeur_TH)
+data$Frequence_Humeur_TH = as.factor(Frequence_Humeur_TH)
+
+Apparition_Libido_TH <- ifelse(data$Apparition_Libido_TH == "", "0", data$Apparition_Libido_TH)
+data$Apparition_Libido_TH = as.factor(Apparition_Libido_TH)
+
+Frequence_Libido_TH <- ifelse(data$Frequence_Libido_TH == "", "0", data$Frequence_Libido_TH)
+data$Frequence_Libido_TH = as.factor(Frequence_Libido_TH)
+
+Apparition_Sang_TH <- ifelse(data$Apparition_Sang_TH == "", "0", data$Apparition_Sang_TH)
+data$Apparition_Sang_TH = as.factor(Apparition_Sang_TH)
+
+Frequence_Sang_TH <- ifelse(data$Frequence_Sang_TH == "", "0", data$Frequence_Sang_TH)
+data$Frequence_Sang_TH = as.factor(Frequence_Sang_TH)
+
+Apparition_Thrombose_TH <- ifelse(data$Apparition_Thrombose_TH == "", "0", data$Apparition_Thrombose_TH)
+data$Apparition_Thrombose_TH = as.factor(Apparition_Thrombose_TH)
+
+#str(Apparition_Thrombose_TH)
+#print(Apparition_Thrombose_TH)
+
+#print("---------------------")
+
+#str(Frequence_Sang_TH)
+#print(Frequence_Sang_TH)
+```
+
+
+```{r}
+### Traitements non médicamenteux TH ###
+Mobilite_TH <- ifelse(data$Mobilite_TH == "X", "1", "0")
+data$Mobilite_TH <- factor(Mobilite_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Nutrition_TH <- ifelse(data$Nutrition_TH == "X", "1", "0")
+data$Nutrition_TH <- factor(Nutrition_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Stress_TH <- ifelse(data$Stress_TH == "X", "1", "0")
+data$Stress_TH <- factor(Stress_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Phyto_TH <- ifelse(data$Phyto_TH == "X", "1", "0")
+data$Phyto_TH <- factor(Phyto_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Acup_TH <- ifelse(data$Acup_TH == "X", "1", "0")
+data$Acup_TH <- factor(Acup_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Hypnose_TH <- ifelse(data$Hypnose_TH == "X", "1", "0")
+data$Hypnose_TH <- factor(Hypnose_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Bouillotte_TH <- ifelse(data$Bouillotte_TH == "X", "1", "0")
+data$Bouillotte_TH <- factor(Bouillotte_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+CBD_TH <- ifelse(data$CBD_TH == "X", "1", "0")
+data$CBD_TH <- factor(CBD_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Tens_TH <- ifelse(data$Tens_TH == "X", "1", "0")
+data$Tens_TH <- factor(Tens_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+Aucun_TH <- ifelse(data$Aucun_TH == "X", "1", "0")
+data$Aucun_TH <- factor(Aucun_TH, levels = c("1", "0"), labels = c("1", "0"))
+
+# Mobilité TH #
+Combien_Mobilite_TH <- ifelse(data$Combien_Mobilite_TH == "", "0", data$Combien_Mobilite_TH)
+data$Combien_Mobilite_TH = as.factor(Combien_Mobilite_TH)
+
+Douleur_Mobilite_TH <- ifelse(data$Douleur_Mobilite_TH == "", "0", data$Douleur_Mobilite_TH)
+data$Douleur_Mobilite_TH = as.factor(Douleur_Mobilite_TH)
+
+Evolution_Mobilite_TH <- ifelse(data$Evolution_Mobilite_TH == "", "0", data$Evolution_Mobilite_TH)
+data$Evolution_Mobilite_TH = as.factor(Evolution_Mobilite_TH)
+
+Prise_Mobilite_TH <- ifelse(data$Prise_Mobilite_TH == "", "0", data$Prise_Mobilite_TH)
+data$Prise_Mobilite_TH = as.factor(Prise_Mobilite_TH)
+
+# Nutrition TH #
+Combien_Nutrition_TH <- ifelse(data$Combien_Nutrition_TH == "", "0", data$Combien_Nutrition_TH)
+data$Combien_Nutrition_TH = as.factor(Combien_Nutrition_TH)
+
+Douleur_Nutrition_TH <- ifelse(data$Douleur_Nutrition_TH == "", "0", data$Douleur_Nutrition_TH)
+data$Douleur_Nutrition_TH = as.factor(Douleur_Nutrition_TH)
+
+Evolution_Nutrition_TH <- ifelse(data$Evolution_Nutrition_TH == "", "0", data$Evolution_Nutrition_TH)
+data$Evolution_Nutrition_TH = as.factor(Evolution_Nutrition_TH)
+
+Prise_Nutrition_TH <- ifelse(data$Prise_Nutrition_TH == "", "0", data$Prise_Nutrition_TH)
+data$Prise_Nutrition_TH = as.factor(Prise_Nutrition_TH)
+
+# Stress TH #
+Combien_Stress_TH <- ifelse(data$Combien_Stress_TH == "", "0", data$Combien_Stress_TH)
+data$Combien_Stress_TH = as.factor(Combien_Stress_TH)
+
+Douleur_Stress_TH <- ifelse(data$Douleur_Stress_TH == "", "0", data$Douleur_Stress_TH)
+data$Douleur_Stress_TH = as.factor(Douleur_Stress_TH)
+
+Evolution_Stress_TH <- ifelse(data$Evolution_Stress_TH == "", "0", data$Evolution_Stress_TH)
+data$Evolution_Stress_TH = as.factor(Evolution_Stress_TH)
+
+Prise_Stress_TH <- ifelse(data$Prise_Stress_TH == "", "0", data$Prise_Stress_TH)
+data$Prise_Stress_TH = as.factor(Prise_Stress_TH)
+
+# Phyto TH #
+Combien_Phyto_TH <- ifelse(data$Combien_Phyto_TH == "", "0", data$Combien_Phyto_TH)
+data$Combien_Phyto_TH = as.factor(Combien_Phyto_TH)
+
+Douleur_Phyto_TH <- ifelse(data$Douleur_Phyto_TH == "", "0",
+ifelse(data$Douleur_Phyto_TH == "Réduction de la douleur", "Diminution de la douleur", data$Douleur_Phyto_TH))
+data$Douleur_Phyto_TH = as.factor(Douleur_Phyto_TH)
+
+Evolution_Phyto_TH <- ifelse(data$Evolution_Phyto_TH == "", "0", data$Evolution_Phyto_TH)
+data$Evolution_Phyto_TH = as.factor(Evolution_Phyto_TH)
+
+Prise_Phyto_TH <- ifelse(data$Prise_Phyto_TH == "", "0", data$Prise_Phyto_TH)
+data$Prise_Phyto_TH = as.factor(Prise_Phyto_TH)
+
+# Acup TH #
+Combien_Acup_TH <- ifelse(data$Combien_Acup_TH == "", "0", data$Combien_Acup_TH)
+data$Combien_Acup_TH = as.factor(Combien_Acup_TH)
+
+Douleur_Acup_TH <- ifelse(data$Douleur_Acup_TH == "", "0", data$Douleur_Acup_TH)
+data$Douleur_Acup_TH = as.factor(Douleur_Acup_TH)
+
+Evolution_Acup_TH <- ifelse(data$Evolution_Acup_TH == "", "0", data$Evolution_Acup_TH)
+data$Evolution_Acup_TH = as.factor(Evolution_Acup_TH)
+
+Prise_Acup_TH <- ifelse(data$Prise_Acup_TH == "", "0", data$Prise_Acup_TH)
+data$Prise_Acup_TH = as.factor(Prise_Acup_TH)
+
+# Hypnose TH #
+Combien_Hypnose_TH <- ifelse(data$Combien_Hypnose_TH == "", "0", data$Combien_Hypnose_TH)
+data$Combien_Hypnose_TH = as.factor(Combien_Hypnose_TH)
+
+Douleur_Hypnose_TH <- ifelse(data$Douleur_Hypnose_TH == "", "0", data$Douleur_Hypnose_TH)
+data$Douleur_Hypnose_TH = as.factor(Douleur_Hypnose_TH)
+
+Evolution_Hypnose_TH <- ifelse(data$Evolution_Hypnose_TH == "", "0", data$Evolution_Hypnose_TH)
+data$Evolution_Hypnose_TH = as.factor(Evolution_Hypnose_TH)
+
+Prise_Hypnose_TH <- ifelse(data$Prise_Hypnose_TH == "", "0", data$Prise_Hypnose_TH)
+data$Prise_Hypnose_TH = as.factor(Prise_Hypnose_TH)
+
+# Bouillotte TH #
+Combien_Bouillotte_TH <- ifelse(data$Combien_Bouillotte_TH == "", "0", data$Combien_Bouillotte_TH)
+data$Combien_Bouillotte_TH = as.factor(Combien_Bouillotte_TH)
+
+Douleur_Bouillotte_TH <- ifelse(data$Douleur_Bouillotte_TH == "", "0", data$Douleur_Bouillotte_TH)
+data$Douleur_Bouillotte_TH = as.factor(Douleur_Bouillotte_TH)
+
+Evolution_Bouillotte_TH <- ifelse(data$Evolution_Bouillotte_TH == "", "0", data$Evolution_Bouillotte_TH)
+data$Evolution_Bouillotte_TH = as.factor(Evolution_Bouillotte_TH)
+
+Prise_Bouillotte_TH <- ifelse(data$Prise_Bouillotte_TH == "", "0", data$Prise_Bouillotte_TH)
+data$Prise_Bouillotte_TH = as.factor(Prise_Bouillotte_TH)
+
+# CBD TH #
+Combien_CBD_TH <- ifelse(data$Combien_CBD_TH == "", "0", data$Combien_CBD_TH)
+data$Combien_CBD_TH = as.factor(Combien_CBD_TH)
+
+Douleur_CBD_TH <- ifelse(data$Douleur_CBD_TH == "", "0", data$Douleur_CBD_TH)
+data$Douleur_CBD_TH = as.factor(Douleur_CBD_TH)
+
+Evolution_CBD_TH <- ifelse(data$Evolution_CBD_TH == "", "0", data$Evolution_CBD_TH)
+data$Evolution_CBD_TH = as.factor(Evolution_CBD_TH)
+
+Prise_CBD_TH <- ifelse(data$Prise_CBD_TH == "", "0", data$Prise_CBD_TH)
+data$Prise_CBD_TH = as.factor(Prise_CBD_TH)
+
+# Tens TH #
+Combien_Tens_TH <- ifelse(data$Combien_Tens_TH == "", "0", data$Combien_Tens_TH)
+data$Combien_Tens_TH = as.factor(Combien_Tens_TH)
+
+Douleur_Tens_TH <- ifelse(data$Douleur_Tens_TH == "", "0", data$Douleur_Tens_TH)
+data$Douleur_Tens_TH = as.factor(Douleur_Tens_TH)
+
+Evolution_Tens_TH <- ifelse(data$Evolution_Tens_TH == "", "0", data$Evolution_Tens_TH)
+data$Evolution_Tens_TH = as.factor(Evolution_Tens_TH)
+
+Prise_Tens_TH <- ifelse(data$Prise_Tens_TH == "", "0", data$Prise_Tens_TH)
+data$Prise_Tens_TH = as.factor(Prise_Tens_TH)
+
+#print(data$Douleur_Phyto_TH)
+```
+
+
+```{r}
+### Questions générales CM ###
+Encore_CM <- ifelse(data$Encore_CM == "", "0", data$Encore_CM)
+data$Encore_CM = as.factor(Encore_CM)
+
+Debut_CM <- ifelse(data$Debut_CM == "", "0", data$Debut_CM)
+data$Debut_CM = as.integer(Debut_CM)
+
+Depuis_CM <- ifelse(data$Depuis_CM == "", "0", data$Depuis_CM)
+data$Depuis_CM = as.factor(Depuis_CM)
+
+Combien_CM <- ifelse(data$Combien_CM == "", "0", data$Combien_CM)
+data$Combien_CM = as.factor(Combien_CM)
+
+Pas_efficace_CM <- ifelse(data$Pas_efficace_CM == "X", "1", "0")
+data$Pas_efficace_CM <- factor(Pas_efficace_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_CM <- ifelse(data$ES_CM == "X", "1", "0")
+data$ES_CM <- factor(ES_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_CM <- ifelse(data$Cout_CM == "X", "1", "0")
+data$Cout_CM <- factor(Cout_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_CM <- ifelse(data$Autre_Cause_Fin_CM == "X", "1", "0")
+data$Autre_Cause_Fin_CM <- factor(Autre_Cause_Fin_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_CM <- ifelse(data$Douleur_CM == "", "0", data$Douleur_CM)
+data$Douleur_CM = as.factor(Douleur_CM)
+
+Evolution_CM <- ifelse(data$Evolution_CM == "", "0", data$Evolution_CM)
+data$Evolution_CM = as.factor(Evolution_CM)
+
+Pre_op_CM <- ifelse(data$Pre_op_CM == "X", "1", "0")
+data$Pre_op_CM <- factor(Pre_op_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_CM <- ifelse(data$Post_op_CM == "X", "1", "0")
+data$Post_op_CM <- factor(Post_op_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_CM <- ifelse(data$Pas_op_CM == "X", "1", "0")
+data$Pas_op_CM <- factor(Pas_op_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_CM <- ifelse(data$Prise_CM == "", "0", data$Prise_CM)
+data$Prise_CM = as.factor(Prise_CM)
+
+#str(Prise_CM)
+#print(Prise_CM)
+```
+
+
+```{r}
+### Effets secondaires CM ###
+Subi_ES_CM <- ifelse(data$Subi_ES_CM == "", "0", data$Subi_ES_CM)
+data$Subi_ES_CM = as.factor(Subi_ES_CM)
+
+Tete_CM <- ifelse(data$Tete_CM == "X", "1", "0")
+data$Tete_CM <- factor(Tete_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Fatigue_CM <- ifelse(data$Fatigue_CM == "X", "1", "0")
+data$Fatigue_CM <- factor(Fatigue_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Nausee_CM <- ifelse(data$Nausee_CM == "X", "1", "0")
+data$Nausee_CM <- factor(Nausee_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Humeur_CM <- ifelse(data$Humeur_CM == "X", "1", "0")
+data$Humeur_CM <- factor(Humeur_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Libido_CM <- ifelse(data$Libido_CM == "X", "1", "0")
+data$Libido_CM <- factor(Libido_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Sang_CM <- ifelse(data$Sang_CM == "X", "1", "0")
+data$Sang_CM <- factor(Sang_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Poids_CM <- ifelse(data$Poids_CM == "X", "1", "0")
+data$Poids_CM <- factor(Poids_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Allergie_CM <- ifelse(data$Allergie_CM == "X", "1", "0")
+data$Allergie_CM <- factor(Allergie_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Thrombose_CM <- ifelse(data$Thrombose_CM == "X", "1", "0")
+data$Thrombose_CM <- factor(Thrombose_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_ES_CM <- ifelse(data$Autre_ES_CM == "X", "1", "0")
+data$Autre_ES_CM <- factor(Autre_ES_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Apparition_Tete_CM <- ifelse(data$Apparition_Tete_CM == "", "0", data$Apparition_Tete_CM)
+data$Apparition_Tete_CM = as.factor(Apparition_Tete_CM)
+
+Frequence_Tete_CM <- ifelse(data$Frequence_Tete_CM == "", "0", data$Frequence_Tete_CM)
+data$Frequence_Tete_CM = as.factor(Frequence_Tete_CM)
+
+Apparition_Fatigue_CM <- ifelse(data$Apparition_Fatigue_CM == "", "0", data$Apparition_Fatigue_CM)
+data$Apparition_Fatigue_CM = as.factor(Apparition_Fatigue_CM)
+
+Frequence_Fatigue_CM <- ifelse(data$Frequence_Fatigue_CM == "", "0", data$Frequence_Fatigue_CM)
+data$Frequence_Fatigue_CM = as.factor(Frequence_Fatigue_CM)
+
+Apparition_Nausee_CM <- ifelse(data$Apparition_Nausee_CM == "", "0", data$Apparition_Nausee_CM)
+data$Apparition_Nausee_CM = as.factor(Apparition_Nausee_CM)
+
+Frequence_Nausee_CM <- ifelse(data$Frequence_Nausee_CM == "", "0", data$Frequence_Nausee_CM)
+data$Frequence_Nausee_CM = as.factor(Frequence_Nausee_CM)
+
+Apparition_Humeur_CM <- ifelse(data$Apparition_Humeur_CM == "", "0", data$Apparition_Humeur_CM)
+data$Apparition_Humeur_CM = as.factor(Apparition_Humeur_CM)
+
+Frequence_Humeur_CM <- ifelse(data$Frequence_Humeur_CM == "", "0", data$Frequence_Humeur_CM)
+data$Frequence_Humeur_CM = as.factor(Frequence_Humeur_CM)
+
+Apparition_Libido_CM <- ifelse(data$Apparition_Libido_CM == "", "0", data$Apparition_Libido_CM)
+data$Apparition_Libido_CM = as.factor(Apparition_Libido_CM)
+
+Frequence_Libido_CM <- ifelse(data$Frequence_Libido_CM == "", "0", data$Frequence_Libido_CM)
+data$Frequence_Libido_CM = as.factor(Frequence_Libido_CM)
+
+Apparition_Sang_CM <- ifelse(data$Apparition_Sang_CM == "", "0", data$Apparition_Sang_CM)
+data$Apparition_Sang_CM = as.factor(Apparition_Sang_CM)
+
+Frequence_Sang_CM <- ifelse(data$Frequence_Sang_CM == "", "0", data$Frequence_Sang_CM)
+data$Frequence_Sang_CM = as.factor(Frequence_Sang_CM)
+
+Apparition_Thrombose_CM <- ifelse(data$Apparition_Thrombose_CM == "", "0", data$Apparition_Thrombose_CM)
+data$Apparition_Thrombose_CM = as.factor(Apparition_Thrombose_CM)
+
+#str(Apparition_Thrombose_CM)
+#print(Apparition_Thrombose_CM)
+```
+
+
+```{r}
+### Traitements non médicamenteux CM ###
+Mobilite_CM <- ifelse(data$Mobilite_CM == "X", "1", "0")
+data$Mobilite_CM <- factor(Mobilite_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Nutrition_CM <- ifelse(data$Nutrition_CM == "X", "1", "0")
+data$Nutrition_CM <- factor(Nutrition_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Stress_CM <- ifelse(data$Stress_CM == "X", "1", "0")
+data$Stress_CM <- factor(Stress_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Phyto_CM <- ifelse(data$Phyto_CM == "X", "1", "0")
+data$Phyto_CM <- factor(Phyto_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Acup_CM <- ifelse(data$Acup_CM == "X", "1", "0")
+data$Acup_CM <- factor(Acup_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Hypnose_CM <- ifelse(data$Hypnose_CM == "X", "1", "0")
+data$Hypnose_CM <- factor(Hypnose_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Bouillotte_CM <- ifelse(data$Bouillotte_CM == "X", "1", "0")
+data$Bouillotte_CM <- factor(Bouillotte_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+CBD_CM <- ifelse(data$CBD_CM == "X", "1", "0")
+data$CBD_CM <- factor(CBD_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Tens_CM <- ifelse(data$Tens_CM == "X", "1", "0")
+data$Tens_CM <- factor(Tens_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+Aucun_CM <- ifelse(data$Aucun_CM == "X", "1", "0")
+data$Aucun_CM <- factor(Aucun_CM, levels = c("1", "0"), labels = c("1", "0"))
+
+# Mobilité CM #
+Combien_Mobilite_CM <- ifelse(data$Combien_Mobilite_CM == "", "0", data$Combien_Mobilite_CM)
+data$Combien_Mobilite_CM = as.factor(Combien_Mobilite_CM)
+
+Douleur_Mobilite_CM <- ifelse(data$Douleur_Mobilite_CM == "", "0", data$Douleur_Mobilite_CM)
+data$Douleur_Mobilite_CM = as.factor(Douleur_Mobilite_CM)
+
+Evolution_Mobilite_CM <- ifelse(data$Evolution_Mobilite_CM == "", "0", data$Evolution_Mobilite_CM)
+data$Evolution_Mobilite_CM = as.factor(Evolution_Mobilite_CM)
+
+Prise_Mobilite_CM <- ifelse(data$Prise_Mobilite_CM == "", "0", data$Prise_Mobilite_CM)
+data$Prise_Mobilite_CM = as.factor(Prise_Mobilite_CM)
+
+# Nutrition CM #
+Combien_Nutrition_CM <- ifelse(data$Combien_Nutrition_CM == "", "0", data$Combien_Nutrition_CM)
+data$Combien_Nutrition_CM = as.factor(Combien_Nutrition_CM)
+
+Douleur_Nutrition_CM <- ifelse(data$Douleur_Nutrition_CM == "", "0", data$Douleur_Nutrition_CM)
+data$Douleur_Nutrition_CM = as.factor(Douleur_Nutrition_CM)
+
+Evolution_Nutrition_CM <- ifelse(data$Evolution_Nutrition_CM == "", "0", data$Evolution_Nutrition_CM)
+data$Evolution_Nutrition_CM = as.factor(Evolution_Nutrition_CM)
+
+Prise_Nutrition_CM <- ifelse(data$Prise_Nutrition_CM == "", "0", data$Prise_Nutrition_CM)
+data$Prise_Nutrition_CM = as.factor(Prise_Nutrition_CM)
+
+# Stress CM #
+Combien_Stress_CM <- ifelse(data$Combien_Stress_CM == "", "0", data$Combien_Stress_CM)
+data$Combien_Stress_CM = as.factor(Combien_Stress_CM)
+
+Douleur_Stress_CM <- ifelse(data$Douleur_Stress_CM == "", "0", data$Douleur_Stress_CM)
+data$Douleur_Stress_CM = as.factor(Douleur_Stress_CM)
+
+Evolution_Stress_CM <- ifelse(data$Evolution_Stress_CM == "", "0", data$Evolution_Stress_CM)
+data$Evolution_Stress_CM = as.factor(Evolution_Stress_CM)
+
+Prise_Stress_CM <- ifelse(data$Prise_Stress_CM == "", "0", data$Prise_Stress_CM)
+data$Prise_Stress_CM = as.factor(Prise_Stress_CM)
+
+# Phyto CM #
+Combien_Phyto_CM <- ifelse(data$Combien_Phyto_CM == "", "0", data$Combien_Phyto_CM)
+data$Combien_Phyto_CM = as.factor(Combien_Phyto_CM)
+
+Douleur_Phyto_CM <- ifelse(data$Douleur_Phyto_CM == "", "0", data$Douleur_Phyto_CM)
+data$Douleur_Phyto_CM = as.factor(Douleur_Phyto_CM)
+
+Evolution_Phyto_CM <- ifelse(data$Evolution_Phyto_CM == "", "0", data$Evolution_Phyto_CM)
+data$Evolution_Phyto_CM = as.factor(Evolution_Phyto_CM)
+
+Prise_Phyto_CM <- ifelse(data$Prise_Phyto_CM == "", "0", data$Prise_Phyto_CM)
+data$Prise_Phyto_CM = as.factor(Prise_Phyto_CM)
+
+# Acup CM #
+Combien_Acup_CM <- ifelse(data$Combien_Acup_CM == "", "0", data$Combien_Acup_CM)
+data$Combien_Acup_CM = as.factor(Combien_Acup_CM)
+
+Douleur_Acup_CM <- ifelse(data$Douleur_Acup_CM == "", "0", data$Douleur_Acup_CM)
+data$Douleur_Acup_CM = as.factor(Douleur_Acup_CM)
+
+Evolution_Acup_CM <- ifelse(data$Evolution_Acup_CM == "", "0", data$Evolution_Acup_CM)
+data$Evolution_Acup_CM = as.factor(Evolution_Acup_CM)
+
+Prise_Acup_CM <- ifelse(data$Prise_Acup_CM == "", "0", data$Prise_Acup_CM)
+data$Prise_Acup_CM = as.factor(Prise_Acup_CM)
+
+# Hypnose CM #
+Combien_Hypnose_CM <- ifelse(data$Combien_Hypnose_CM == "", "0", data$Combien_Hypnose_CM)
+data$Combien_Hypnose_CM = as.factor(Combien_Hypnose_CM)
+
+Douleur_Hypnose_CM <- ifelse(data$Douleur_Hypnose_CM == "", "0", data$Douleur_Hypnose_CM)
+data$Douleur_Hypnose_CM = as.factor(Douleur_Hypnose_CM)
+
+Evolution_Hypnose_CM <- ifelse(data$Evolution_Hypnose_CM == "", "0", data$Evolution_Hypnose_CM)
+data$Evolution_Hypnose_CM = as.factor(Evolution_Hypnose_CM)
+
+Prise_Hypnose_CM <- ifelse(data$Prise_Hypnose_CM == "", "0", data$Prise_Hypnose_CM)
+data$Prise_Hypnose_CM = as.factor(Prise_Hypnose_CM)
+
+# Bouillotte CM #
+Combien_Bouillotte_CM <- ifelse(data$Combien_Bouillotte_CM == "", "0", data$Combien_Bouillotte_CM)
+data$Combien_Bouillotte_CM = as.factor(Combien_Bouillotte_CM)
+
+Douleur_Bouillotte_CM <- ifelse(data$Douleur_Bouillotte_CM == "", "0", data$Douleur_Bouillotte_CM)
+data$Douleur_Bouillotte_CM = as.factor(Douleur_Bouillotte_CM)
+
+Evolution_Bouillotte_CM <- ifelse(data$Evolution_Bouillotte_CM == "", "0", data$Evolution_Bouillotte_CM)
+data$Evolution_Bouillotte_CM = as.factor(Evolution_Bouillotte_CM)
+
+Prise_Bouillotte_CM <- ifelse(data$Prise_Bouillotte_CM == "", "0", data$Prise_Bouillotte_CM)
+data$Prise_Bouillotte_CM = as.factor(Prise_Bouillotte_CM)
+
+# CBD CM #
+Combien_CBD_CM <- ifelse(data$Combien_CBD_CM == "", "0", data$Combien_CBD_CM)
+data$Combien_CBD_CM = as.factor(Combien_CBD_CM)
+
+Douleur_CBD_CM <- ifelse(data$Douleur_CBD_CM == "", "0", data$Douleur_CBD_CM)
+data$Douleur_CBD_CM = as.factor(Douleur_CBD_CM)
+
+Evolution_CBD_CM <- ifelse(data$Evolution_CBD_CM == "", "0", data$Evolution_CBD_CM)
+data$Evolution_CBD_CM = as.factor(Evolution_CBD_CM)
+
+Prise_CBD_CM <- ifelse(data$Prise_CBD_CM == "", "0", data$Prise_CBD_CM)
+data$Prise_CBD_CM = as.factor(Prise_CBD_CM)
+
+# Tens CM #
+Combien_Tens_CM <- ifelse(data$Combien_Tens_CM == "", "0", data$Combien_Tens_CM)
+data$Combien_Tens_CM = as.factor(Combien_Tens_CM)
+
+Douleur_Tens_CM <- ifelse(data$Douleur_Tens_CM == "", "0", data$Douleur_Tens_CM)
+data$Douleur_Tens_CM = as.factor(Douleur_Tens_CM)
+
+Evolution_Tens_CM <- ifelse(data$Evolution_Tens_CM == "", "0", data$Evolution_Tens_CM)
+data$Evolution_Tens_CM = as.factor(Evolution_Tens_CM)
+
+Prise_Tens_CM <- ifelse(data$Prise_Tens_CM == "", "0", data$Prise_Tens_CM)
+data$Prise_Tens_CM = as.factor(Prise_Tens_CM)
+
+#str(Prise_Tens_CM)
+```
+
+
+```{r}
+### Traitements non médicamenteux seuls ###
+Mobilite_NM <- ifelse(data$Mobilite_NM == "X", "1", "0")
+data$Mobilite_NM <- factor(Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Nutrition_NM <- ifelse(data$Nutrition_NM == "X", "1", "0")
+data$Nutrition_NM <- factor(Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Stress_NM <- ifelse(data$Stress_NM == "X", "1", "0")
+data$Stress_NM <- factor(Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Phyto_NM <- ifelse(data$Phyto_NM == "X", "1", "0")
+data$Phyto_NM <- factor(Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Acup_NM <- ifelse(data$Acup_NM == "X", "1", "0")
+data$Acup_NM <- factor(Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Hypnose_NM <- ifelse(data$Hypnose_NM == "X", "1", "0")
+data$Hypnose_NM <- factor(Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Bouillotte_NM <- ifelse(data$Bouillotte_NM == "X", "1", "0")
+data$Bouillotte_NM <- factor(Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+CBD_NM <- ifelse(data$CBD_NM == "X", "1", "0")
+data$CBD_NM <- factor(CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Tens_NM <- ifelse(data$Tens_NM == "X", "1", "0")
+data$Tens_NM <- factor(Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Aucun_NM <- ifelse(data$Aucun_NM == "X", "1", "0")
+data$Aucun_NM <- factor(Aucun_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+#str(Aucun_NM)
+```
+
+
+```{r}
+# Mobilité NM #
+Encore_Mobilite_NM <- ifelse(data$Encore_Mobilite_NM == "", "0", data$Encore_Mobilite_NM)
+data$Encore_Mobilite_NM = as.factor(Encore_Mobilite_NM)
+
+Debut_Mobilite_NM <- ifelse(data$Debut_Mobilite_NM == "", "0", data$Debut_Mobilite_NM)
+data$Debut_Mobilite_NM = as.integer(Debut_Mobilite_NM)
+
+Depuis_Mobilite_NM <- ifelse(data$Depuis_Mobilite_NM == "", "0", data$Depuis_Mobilite_NM)
+data$Depuis_Mobilite_NM = as.factor(Depuis_Mobilite_NM)
+
+Combien_Mobilite_NM <- ifelse(data$Combien_Mobilite_NM == "", "0", data$Combien_Mobilite_NM)
+data$Combien_Mobilite_NM = as.factor(Combien_Mobilite_NM)
+
+Pas_efficace_Mobilite_NM <- ifelse(data$Pas_efficace_Mobilite_NM == "X", "1", "0")
+data$Pas_efficace_Mobilite_NM <- factor(Pas_efficace_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_Mobilite_NM <- ifelse(data$ES_Mobilite_NM == "X", "1", "0")
+data$ES_Mobilite_NM <- factor(ES_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_Mobilite_NM <- ifelse(data$Cout_Mobilite_NM == "X", "1", "0")
+data$Cout_Mobilite_NM <- factor(Cout_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_Mobilite_NM <- ifelse(data$Autre_Cause_Fin_Mobilite_NM == "X", "1", "0")
+data$Autre_Cause_Fin_Mobilite_NM <- factor(Autre_Cause_Fin_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_Mobilite_NM <- ifelse(data$Douleur_Mobilite_NM == "", "0", data$Douleur_Mobilite_NM)
+data$Douleur_Mobilite_NM = as.factor(Douleur_Mobilite_NM)
+
+Evolution_Mobilite_NM <- ifelse(data$Evolution_Mobilite_NM == "", "0", data$Evolution_Mobilite_NM)
+data$Evolution_Mobilite_NM = as.factor(Evolution_Mobilite_NM)
+
+Pre_op_Mobilite_NM <- ifelse(data$Pre_op_Mobilite_NM == "X", "1", "0")
+data$Pre_op_Mobilite_NM <- factor(Pre_op_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_Mobilite_NM <- ifelse(data$Post_op_Mobilite_NM == "X", "1", "0")
+data$Post_op_Mobilite_NM <- factor(Post_op_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_Mobilite_NM <- ifelse(data$Pas_op_Mobilite_NM == "X", "1", "0")
+data$Pas_op_Mobilite_NM <- factor(Pas_op_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_Mobilite_NM <- ifelse(data$Prise_Mobilite_NM == "", "0", data$Prise_Mobilite_NM)
+data$Prise_Mobilite_NM = as.factor(Prise_Mobilite_NM)
+
+#str(Prise_Mobilite_NM)
+#print(Prise_Mobilite_NM)
+```
+
+
+```{r}
+# Nutrition NM #
+Encore_Nutrition_NM <- ifelse(data$Encore_Nutrition_NM == "", "0", data$Encore_Nutrition_NM)
+data$Encore_Nutrition_NM = as.factor(Encore_Nutrition_NM)
+
+Debut_Nutrition_NM <- ifelse(data$Debut_Nutrition_NM == "", "0", data$Debut_Nutrition_NM)
+data$Debut_Nutrition_NM = as.integer(Debut_Nutrition_NM)
+
+Depuis_Nutrition_NM <- ifelse(data$Depuis_Nutrition_NM == "", "0", data$Depuis_Nutrition_NM)
+data$Depuis_Nutrition_NM = as.factor(Depuis_Nutrition_NM)
+
+Combien_Nutrition_NM <- ifelse(data$Combien_Nutrition_NM == "", "0", data$Combien_Nutrition_NM)
+data$Combien_Nutrition_NM = as.factor(Combien_Nutrition_NM)
+
+Pas_efficace_Nutrition_NM <- ifelse(data$Pas_efficace_Nutrition_NM == "X", "1", "0")
+data$Pas_efficace_Nutrition_NM <- factor(Pas_efficace_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_Nutrition_NM <- ifelse(data$ES_Nutrition_NM == "X", "1", "0")
+data$ES_Nutrition_NM <- factor(ES_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_Nutrition_NM <- ifelse(data$Cout_Nutrition_NM == "X", "1", "0")
+data$Cout_Nutrition_NM <- factor(Cout_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_Nutrition_NM <- ifelse(data$Autre_Cause_Fin_Nutrition_NM == "X", "1", "0")
+data$Autre_Cause_Fin_Nutrition_NM <- factor(Autre_Cause_Fin_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_Nutrition_NM <- ifelse(data$Douleur_Nutrition_NM == "", "0", data$Douleur_Nutrition_NM)
+data$Douleur_Nutrition_NM = as.factor(Douleur_Nutrition_NM)
+
+Evolution_Nutrition_NM <- ifelse(data$Evolution_Nutrition_NM == "", "0", data$Evolution_Nutrition_NM)
+data$Evolution_Nutrition_NM = as.factor(Evolution_Nutrition_NM)
+
+Pre_op_Nutrition_NM <- ifelse(data$Pre_op_Nutrition_NM == "X", "1", "0")
+data$Pre_op_Nutrition_NM <- factor(Pre_op_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_Nutrition_NM <- ifelse(data$Post_op_Nutrition_NM == "X", "1", "0")
+data$Post_op_Nutrition_NM <- factor(Post_op_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_Nutrition_NM <- ifelse(data$Pas_op_Nutrition_NM == "X", "1", "0")
+Pas_op_Nutrition_NM <- factor(Pas_op_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_Nutrition_NM <- ifelse(data$Prise_Nutrition_NM == "", "0", data$Prise_Nutrition_NM)
+data$Prise_Nutrition_NM = as.factor(Prise_Nutrition_NM)
+
+#str(Prise_Nutrition_NM)
+#print(Prise_Nutrition_NM)
+```
+
+
+```{r}
+# Stress NM #
+Encore_Stress_NM <- ifelse(data$Encore_Stress_NM == "", "0", data$Encore_Stress_NM)
+data$Encore_Stress_NM = as.factor(Encore_Stress_NM)
+
+Debut_Stress_NM <- ifelse(data$Debut_Stress_NM == "", "0", data$Debut_Stress_NM)
+data$Debut_Stress_NM = as.integer(Debut_Stress_NM)
+
+Depuis_Stress_NM <- ifelse(data$Depuis_Stress_NM == "", "0", data$Depuis_Stress_NM)
+data$Depuis_Stress_NM = as.factor(Depuis_Stress_NM)
+
+Combien_Stress_NM <- ifelse(data$Combien_Stress_NM == "", "0", data$Combien_Stress_NM)
+data$Combien_Stress_NM = as.factor(Combien_Stress_NM)
+
+Pas_efficace_Stress_NM <- ifelse(data$Pas_efficace_Stress_NM == "X", "1", "0")
+data$Pas_efficace_Stress_NM <- factor(Pas_efficace_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_Stress_NM <- ifelse(data$ES_Stress_NM == "X", "1", "0")
+data$ES_Stress_NM <- factor(ES_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_Stress_NM <- ifelse(data$Cout_Stress_NM == "X", "1", "0")
+data$Cout_Stress_NM <- factor(Cout_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_Stress_NM <- ifelse(data$Autre_Cause_Fin_Stress_NM == "X", "1", "0")
+data$Autre_Cause_Fin_Stress_NM <- factor(Autre_Cause_Fin_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_Stress_NM <- ifelse(data$Douleur_Stress_NM == "", "0", data$Douleur_Stress_NM)
+data$Douleur_Stress_NM = as.factor(Douleur_Stress_NM)
+
+Evolution_Stress_NM <- ifelse(data$Evolution_Stress_NM == "", "0", data$Evolution_Stress_NM)
+data$Evolution_Stress_NM = as.factor(Evolution_Stress_NM)
+
+Pre_op_Stress_NM <- ifelse(data$Pre_op_Stress_NM == "X", "1", "0")
+data$Pre_op_Stress_NM <- factor(Pre_op_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_Stress_NM <- ifelse(data$Post_op_Stress_NM == "X", "1", "0")
+data$Post_op_Stress_NM <- factor(Post_op_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_Stress_NM <- ifelse(data$Pas_op_Stress_NM == "X", "1", "0")
+data$Pas_op_Stress_NM <- factor(Pas_op_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_Stress_NM <- ifelse(data$Prise_Stress_NM == "", "0", data$Prise_Stress_NM)
+data$Prise_Stress_NM = as.factor(Prise_Stress_NM)
+
+#str(Prise_Stress_NM)
+#print(Prise_Stress_NM)
+```
+
+
+```{r}
+# Phyto NM #
+Encore_Phyto_NM <- ifelse(data$Encore_Phyto_NM == "", "0", data$Encore_Phyto_NM)
+data$Encore_Phyto_NM = as.factor(Encore_Phyto_NM)
+
+Debut_Phyto_NM <- ifelse(data$Debut_Phyto_NM == "", "0", data$Debut_Phyto_NM)
+data$Debut_Phyto_NM = as.integer(Debut_Phyto_NM)
+
+Depuis_Phyto_NM <- ifelse(data$Depuis_Phyto_NM == "", "0", data$Depuis_Phyto_NM)
+data$Depuis_Phyto_NM = as.factor(Depuis_Phyto_NM)
+
+Combien_Phyto_NM <- ifelse(data$Combien_Phyto_NM == "", "0", data$Combien_Phyto_NM)
+data$Combien_Phyto_NM = as.factor(Combien_Phyto_NM)
+
+Pas_efficace_Phyto_NM <- ifelse(data$Pas_efficace_Phyto_NM == "X", "1", "0")
+data$Pas_efficace_Phyto_NM <- factor(Pas_efficace_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_Phyto_NM <- ifelse(data$ES_Phyto_NM == "X", "1", "0")
+data$ES_Phyto_NM <- factor(ES_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_Phyto_NM <- ifelse(data$Cout_Phyto_NM == "X", "1", "0")
+data$Cout_Phyto_NM <- factor(Cout_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_Phyto_NM <- ifelse(data$Autre_Cause_Fin_Phyto_NM == "X", "1", "0")
+data$Autre_Cause_Fin_Phyto_NM <- factor(Autre_Cause_Fin_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_Phyto_NM <- ifelse(data$Douleur_Phyto_NM == "", "0", data$Douleur_Phyto_NM)
+data$Douleur_Phyto_NM = as.factor(Douleur_Phyto_NM)
+
+Evolution_Phyto_NM <- ifelse(data$Evolution_Phyto_NM == "", "0", data$Evolution_Phyto_NM)
+data$Evolution_Phyto_NM = as.factor(Evolution_Phyto_NM)
+
+Pre_op_Phyto_NM <- ifelse(data$Pre_op_Phyto_NM == "X", "1", "0")
+data$Pre_op_Phyto_NM <- factor(Pre_op_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_Phyto_NM <- ifelse(data$Post_op_Phyto_NM == "X", "1", "0")
+data$Post_op_Phyto_NM <- factor(Post_op_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_Phyto_NM <- ifelse(data$Pas_op_Phyto_NM == "X", "1", "0")
+data$Pas_op_Phyto_NM <- factor(Pas_op_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_Phyto_NM <- ifelse(data$Prise_Phyto_NM == "", "0", data$Prise_Phyto_NM)
+data$Prise_Phyto_NM = as.factor(Prise_Phyto_NM)
+
+#str(Prise_Phyto_NM)
+#print(Prise_Phyto_NM)
+```
+
+
+```{r}
+# Acup NM #
+Encore_Acup_NM <- ifelse(data$Encore_Acup_NM == "", "0", data$Encore_Acup_NM)
+data$Encore_Acup_NM = as.factor(Encore_Acup_NM)
+
+Debut_Acup_NM <- ifelse(data$Debut_Acup_NM == "", "0", data$Debut_Acup_NM)
+data$Debut_Acup_NM = as.integer(Debut_Acup_NM)
+
+Depuis_Acup_NM <- ifelse(data$Depuis_Acup_NM == "", "0", data$Depuis_Acup_NM)
+data$Depuis_Acup_NM = as.factor(Depuis_Acup_NM)
+
+Combien_Acup_NM <- ifelse(data$Combien_Acup_NM == "", "0", data$Combien_Acup_NM)
+data$Combien_Acup_NM = as.factor(Combien_Acup_NM)
+
+Pas_efficace_Acup_NM <- ifelse(data$Pas_efficace_Acup_NM == "X", "1", "0")
+data$Pas_efficace_Acup_NM <- factor(Pas_efficace_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_Acup_NM <- ifelse(data$ES_Acup_NM == "X", "1", "0")
+data$ES_Acup_NM <- factor(ES_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_Acup_NM <- ifelse(data$Cout_Acup_NM == "X", "1", "0")
+data$Cout_Acup_NM <- factor(Cout_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_Acup_NM <- ifelse(data$Autre_Cause_Fin_Acup_NM == "X", "1", "0")
+data$Autre_Cause_Fin_Acup_NM <- factor(Autre_Cause_Fin_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_Acup_NM <- ifelse(data$Douleur_Acup_NM == "", "0", data$Douleur_Acup_NM)
+data$Douleur_Acup_NM = as.factor(Douleur_Acup_NM)
+
+Evolution_Acup_NM <- ifelse(data$Evolution_Acup_NM == "", "0", data$Evolution_Acup_NM)
+data$Evolution_Acup_NM = as.factor(Evolution_Acup_NM)
+
+Pre_op_Acup_NM <- ifelse(data$Pre_op_Acup_NM == "X", "1", "0")
+data$Pre_op_Acup_NM <- factor(Pre_op_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_Acup_NM <- ifelse(data$Post_op_Acup_NM == "X", "1", "0")
+data$Post_op_Acup_NM <- factor(Post_op_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_Acup_NM <- ifelse(data$Pas_op_Acup_NM == "X", "1", "0")
+data$Pas_op_Acup_NM <- factor(Pas_op_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_Acup_NM <- ifelse(data$Prise_Acup_NM == "", "0", data$Prise_Acup_NM)
+data$Prise_Acup_NM = as.factor(Prise_Acup_NM)
+
+#str(Prise_Acup_NM)
+#print(Prise_Acup_NM)
+```
+
+
+```{r}
+# Hypnose NM #
+Encore_Hypnose_NM <- ifelse(data$Encore_Hypnose_NM == "", "0", data$Encore_Hypnose_NM)
+data$Encore_Hypnose_NM = as.factor(Encore_Hypnose_NM)
+
+Debut_Hypnose_NM <- ifelse(data$Debut_Hypnose_NM == "", "0", data$Debut_Hypnose_NM)
+data$Debut_Hypnose_NM = as.integer(Debut_Hypnose_NM)
+
+Depuis_Hypnose_NM <- ifelse(data$Depuis_Hypnose_NM == "", "0", data$Depuis_Hypnose_NM)
+data$Depuis_Hypnose_NM = as.factor(Depuis_Hypnose_NM)
+
+Combien_Hypnose_NM <- ifelse(data$Combien_Hypnose_NM == "", "0", data$Combien_Hypnose_NM)
+data$Combien_Hypnose_NM = as.factor(Combien_Hypnose_NM)
+
+Pas_efficace_Hypnose_NM <- ifelse(data$Pas_efficace_Hypnose_NM == "X", "1", "0")
+data$Pas_efficace_Hypnose_NM <- factor(Pas_efficace_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_Hypnose_NM <- ifelse(data$ES_Hypnose_NM == "X", "1", "0")
+data$ES_Hypnose_NM <- factor(ES_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_Hypnose_NM <- ifelse(data$Cout_Hypnose_NM == "X", "1", "0")
+data$Cout_Hypnose_NM <- factor(Cout_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_Hypnose_NM <- ifelse(data$Autre_Cause_Fin_Hypnose_NM == "X", "1", "0")
+data$Autre_Cause_Fin_Hypnose_NM <- factor(Autre_Cause_Fin_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_Hypnose_NM <- ifelse(data$Douleur_Hypnose_NM == "", "0", data$Douleur_Hypnose_NM)
+data$Douleur_Hypnose_NM = as.factor(Douleur_Hypnose_NM)
+
+Evolution_Hypnose_NM <- ifelse(data$Evolution_Hypnose_NM == "", "0", data$Evolution_Hypnose_NM)
+data$Evolution_Hypnose_NM = as.factor(Evolution_Hypnose_NM)
+
+Pre_op_Hypnose_NM <- ifelse(data$Pre_op_Hypnose_NM == "X", "1", "0")
+data$Pre_op_Hypnose_NM <- factor(Pre_op_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_Hypnose_NM <- ifelse(data$Post_op_Hypnose_NM == "X", "1", "0")
+data$Post_op_Hypnose_NM <- factor(Post_op_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_Hypnose_NM <- ifelse(data$Pas_op_Hypnose_NM == "X", "1", "0")
+data$Pas_op_Hypnose_NM <- factor(Pas_op_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_Hypnose_NM <- ifelse(data$Prise_Hypnose_NM == "", "0", data$Prise_Hypnose_NM)
+data$Prise_Hypnose_NM = as.factor(Prise_Hypnose_NM)
+
+#str(Prise_Hypnose_NM)
+#print(Prise_Hypnose_NM)
+```
+
+
+```{r}
+# Bouillotte NM #
+Encore_Bouillotte_NM <- ifelse(data$Encore_Bouillotte_NM == "", "0", data$Encore_Bouillotte_NM)
+data$Encore_Bouillotte_NM = as.factor(Encore_Bouillotte_NM)
+
+Debut_Bouillotte_NM <- ifelse(data$Debut_Bouillotte_NM == "", "0", data$Debut_Bouillotte_NM)
+data$Debut_Bouillotte_NM = as.integer(Debut_Bouillotte_NM)
+
+Depuis_Bouillotte_NM <- ifelse(data$Depuis_Bouillotte_NM == "", "0", data$Depuis_Bouillotte_NM)
+data$Depuis_Bouillotte_NM = as.factor(Depuis_Bouillotte_NM)
+
+Combien_Bouillotte_NM <- ifelse(data$Combien_Bouillotte_NM == "", "0", data$Combien_Bouillotte_NM)
+data$Combien_Bouillotte_NM = as.factor(Combien_Bouillotte_NM)
+
+Pas_efficace_Bouillotte_NM <- ifelse(data$Pas_efficace_Bouillotte_NM == "X", "1", "0")
+data$Pas_efficace_Bouillotte_NM <- factor(Pas_efficace_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_Bouillotte_NM <- ifelse(data$ES_Bouillotte_NM == "X", "1", "0")
+data$ES_Bouillotte_NM <- factor(ES_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_Bouillotte_NM <- ifelse(data$Cout_Bouillotte_NM == "X", "1", "0")
+data$Cout_Bouillotte_NM <- factor(Cout_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_Bouillotte_NM <- ifelse(data$Autre_Cause_Fin_Bouillotte_NM == "X", "1", "0")
+data$Autre_Cause_Fin_Bouillotte_NM <- factor(Autre_Cause_Fin_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_Bouillotte_NM <- ifelse(data$Douleur_Bouillotte_NM == "", "0", data$Douleur_Bouillotte_NM)
+data$Douleur_Bouillotte_NM = as.factor(Douleur_Bouillotte_NM)
+
+Evolution_Bouillotte_NM <- ifelse(data$Evolution_Bouillotte_NM == "", "0", data$Evolution_Bouillotte_NM)
+data$Evolution_Bouillotte_NM = as.factor(Evolution_Bouillotte_NM)
+
+Pre_op_Bouillotte_NM <- ifelse(data$Pre_op_Bouillotte_NM == "X", "1", "0")
+data$Pre_op_Bouillotte_NM <- factor(Pre_op_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_Bouillotte_NM <- ifelse(data$Post_op_Bouillotte_NM == "X", "1", "0")
+data$Post_op_Bouillotte_NM <- factor(Post_op_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_Bouillotte_NM <- ifelse(data$Pas_op_Bouillotte_NM == "X", "1", "0")
+data$Pas_op_Bouillotte_NM <- factor(Pas_op_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_Bouillotte_NM <- ifelse(data$Prise_Bouillotte_NM == "", "0", data$Prise_Bouillotte_NM)
+data$Prise_Bouillotte_NM = as.factor(Prise_Bouillotte_NM)
+
+#str(Prise_Bouillotte_NM)
+#print(Prise_Bouillotte_NM)
+```
+
+
+```{r}
+# CBD NM #
+Encore_CBD_NM <- ifelse(data$Encore_CBD_NM == "", "0", data$Encore_CBD_NM)
+data$Encore_CBD_NM = as.factor(Encore_CBD_NM)
+
+Debut_CBD_NM <- ifelse(data$Debut_CBD_NM == "", "0", data$Debut_CBD_NM)
+data$Debut_CBD_NM = as.integer(Debut_CBD_NM)
+
+Depuis_CBD_NM <- ifelse(data$Depuis_CBD_NM == "", "0", data$Depuis_CBD_NM)
+data$Depuis_CBD_NM = as.factor(Depuis_CBD_NM)
+
+Combien_CBD_NM <- ifelse(data$Combien_CBD_NM == "", "0", data$Combien_CBD_NM)
+data$Combien_CBD_NM = as.factor(Combien_CBD_NM)
+
+Pas_efficace_CBD_NM <- ifelse(data$Pas_efficace_CBD_NM == "X", "1", "0")
+data$Pas_efficace_CBD_NM <- factor(Pas_efficace_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_CBD_NM <- ifelse(data$ES_CBD_NM == "X", "1", "0")
+data$ES_CBD_NM <- factor(ES_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_CBD_NM <- ifelse(data$Cout_CBD_NM == "X", "1", "0")
+data$Cout_CBD_NM <- factor(Cout_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_CBD_NM <- ifelse(data$Autre_Cause_Fin_CBD_NM == "X", "1", "0")
+data$Autre_Cause_Fin_CBD_NM <- factor(Autre_Cause_Fin_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_CBD_NM <- ifelse(data$Douleur_CBD_NM == "", "0", data$Douleur_CBD_NM)
+data$Douleur_CBD_NM = as.factor(Douleur_CBD_NM)
+
+Evolution_CBD_NM <- ifelse(data$Evolution_CBD_NM == "", "0", data$Evolution_CBD_NM)
+data$Evolution_CBD_NM = as.factor(Evolution_CBD_NM)
+
+Pre_op_CBD_NM <- ifelse(data$Pre_op_CBD_NM == "X", "1", "0")
+data$Pre_op_CBD_NM <- factor(Pre_op_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_CBD_NM <- ifelse(data$Post_op_CBD_NM == "X", "1", "0")
+data$Post_op_CBD_NM <- factor(Post_op_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_CBD_NM <- ifelse(data$Pas_op_CBD_NM == "X", "1", "0")
+data$Pas_op_CBD_NM <- factor(Pas_op_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_CBD_NM <- ifelse(data$Prise_CBD_NM == "", "0", data$Prise_CBD_NM)
+data$Prise_CBD_NM = as.factor(Prise_CBD_NM)
+
+#str(Prise_CBD_NM)
+#print(Prise_CBD_NM)
+```
+
+
+```{r}
+# Tens NM #
+Encore_Tens_NM <- ifelse(data$Encore_Tens_NM == "", "0", data$Encore_Tens_NM)
+data$Encore_Tens_NM = as.factor(Encore_Tens_NM)
+
+Debut_Tens_NM <- ifelse(data$Debut_Tens_NM == "", "0", data$Debut_Tens_NM)
+data$Debut_Tens_NM = as.integer(Debut_Tens_NM)
+
+Depuis_Tens_NM <- ifelse(data$Depuis_Tens_NM == "", "0", data$Depuis_Tens_NM)
+data$Depuis_Tens_NM = as.factor(Depuis_Tens_NM)
+
+Combien_Tens_NM <- ifelse(data$Combien_Tens_NM == "", "0", data$Combien_Tens_NM)
+data$Combien_Tens_NM = as.factor(Combien_Tens_NM)
+
+Pas_efficace_Tens_NM <- ifelse(data$Pas_efficace_Tens_NM == "X", "1", "0")
+data$Pas_efficace_Tens_NM <- factor(Pas_efficace_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+ES_Tens_NM <- ifelse(data$ES_Tens_NM == "X", "1", "0")
+data$ES_Tens_NM <- factor(ES_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Cout_Tens_NM <- ifelse(data$Cout_Tens_NM == "X", "1", "0")
+data$Cout_Tens_NM <- factor(Cout_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Autre_Cause_Fin_Tens_NM <- ifelse(data$Autre_Cause_Fin_Tens_NM == "X", "1", "0")
+data$Autre_Cause_Fin_Tens_NM <- factor(Autre_Cause_Fin_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Douleur_Tens_NM <- ifelse(data$Douleur_Tens_NM == "", "0", data$Douleur_Tens_NM)
+data$Douleur_Tens_NM = as.factor(Douleur_Tens_NM)
+
+Evolution_Tens_NM <- ifelse(data$Evolution_Tens_NM == "", "0", data$Evolution_Tens_NM)
+data$Evolution_Tens_NM = as.factor(Evolution_Tens_NM)
+
+Pre_op_Tens_NM <- ifelse(data$Pre_op_Tens_NM == "X", "1", "0")
+data$Pre_op_Tens_NM <- factor(Pre_op_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Post_op_Tens_NM <- ifelse(data$Post_op_Tens_NM == "X", "1", "0")
+data$Post_op_Tens_NM <- factor(Post_op_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Pas_op_Tens_NM <- ifelse(data$Pas_op_Tens_NM == "X", "1", "0")
+data$Pas_op_Tens_NM <- factor(Pas_op_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
+
+Prise_Tens_NM <- ifelse(data$Prise_Tens_NM == "", "0", data$Prise_Tens_NM)
+data$Prise_Tens_NM = as.factor(Prise_Tens_NM)
+
+#str(Prise_Tens_NM)
+#print(Prise_Tens_NM)
+```
+
+
+```{r}
+# Autres NM #
+data$Autres_NM = as.factor(data$Autres_NM)
+
+data$Lesquels_NM <- ifelse(data$Lesquels_NM == "", "0", data$Lesquels_NM)
+# "Lesquels_NM" à traiter dans un second temps
+
+#print(Lesquels_NM)
+#str(Autres_NM)
+```
+
+
+```{r}
+### Questions finales ###
+data$Remarques <- ifelse(data$Remarques == "", "0", data$Remarques)
+# "Remarques" à traiter dans un second temps
+
+data$Email <- ifelse(data$Email == "", "0", data$Email)
+# "Email" à traiter dans un second temps
+
+#print(Email)
+```
+
+
+```{r}
+### Création des 3 dataframes ###
+
+#Premier data frame
+
+data1 <- data[which(data$TH == 1), 11:94]
+#head(data1)
+#print(nrow(data1))
+
+#Second data frame
+
+data2 <- data[which(data$CM == 1), 94:178]
+head(data2)
+print(nrow(data2))
+
+#Second data frame
+
+data3 <- data[which(data$Aucun_NM == 1), 178:314]
+#head(data3)
+#print(nrow(data3))
+
+```
+
+# Analyse Exploratoire
+
+```{r}
+### Age ###
+
+# Compter le nombre d'occurrences pour chaque âge
+age_counts <- table(data$Age)
+
+# Créer un dataframe à partir des résultats du comptage
+df_age_counts <- data.frame(age = as.numeric(names(age_counts)),
+                             count = as.numeric(age_counts))
+
+options(repr.plot.width = 10, repr.plot.height = 8)
+
+ggplot(df_age_counts, aes(x = age, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
+  theme_minimal()
+```
+
+
+```{r}
+# Lecture du fichier Excel et importation en tant que data frame
+data_pop <- read_excel("demo-pop-pyram.xlsx")
+
+data_pop <- data_pop[-c(1,2,103,104,105,106,107), ]
+
+names(data_pop)[names(data_pop) == "Pyramide des âges en 2024"] <-"Annee_Naissance"
+names(data_pop)[names(data_pop) == "...2"] <-"Age_revolu"
+names(data_pop)[names(data_pop) == "...3"] <-"Nb_femmes"
+names(data_pop)[names(data_pop) == "...4"] <-"Nb_hommes"
+names(data_pop)[names(data_pop) == "...5"] <-"Ensemble"
+
+data_pop$Annee_Naissance <- as.factor(data_pop$Annee_Naissance)
+data_pop$Age_revolu <- as.numeric(data_pop$Age_revolu)
+data_pop$Nb_femmes <- as.numeric(data_pop$Nb_femmes)
+data_pop$Nb_hommes <- as.numeric(data_pop$Nb_hommes)
+data_pop$Ensemble <- as.numeric(data_pop$Ensemble)
+
+df_age_counts_bis <- data.frame(age = data_pop$Age_revolu,
+                             count = data_pop$Nb_femmes)
+
+ggplot(df_age_counts_bis, aes(x = age, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges des femmes de la population française en 2024") +
+  theme_minimal()
+```
+
+
+```{r}
+library(gridExtra)
+
+plot1 <- ggplot(df_age_counts, aes(x = age, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
+  theme_minimal()
+
+df_age_counts_bis_filtre <- subset(df_age_counts_bis, age >= 18 & age <= 53)
+
+plot2 <- ggplot(df_age_counts_bis_filtre, aes(x = age, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges des femmes de la population française en 2024 (âges 18-53)") +
+  theme_minimal()
+
+grid.arrange(plot1, plot2, nrow = 1)
+```
+
+
+```{r}
+# afficher nos âges par dessus la pyramide des âges (pas réussi)
+
+# ggplot(df_age_counts, aes(x = age, y = count)) +
+# ggplot(df_age_counts_bis, aes(x = age, y = count))
+
+ggplot(df_age_counts, aes(x = age, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
+  theme_minimal() +
+  geom_bar() +
+  geom_line(data = df_age_counts_bis, color = "red")
+```
+
+
+```{r}
+# Effectuer un test du khi-deux pour comparer les distributions d'âge
+
+test_khi_deux <- chisq.test(table(df_age_counts$age, df_age_counts_bis$age[19:54]))
+
+# Afficher les résultats du test
+print(test_khi_deux)
+
+####### vous avez aussi un warning "Chi-squared approximation may be incorrect" ??
+```
+
+# p-value = 0.2376 > 0.05 (alpha=5%)
+
+
+Il ne semble donc pas y avoir de différence significative entre les distributions d'âge des deux groupes (ie les femmes ayant répondu au sondage et l'ensemble des Françaises recensées en 2024).
+
+```{r}
+# Création des tranches d'âge équilibrées
+tranches_age <- cut(data$Age[which(data$TH == 1)], breaks = 5)
+
+## A voir si on peut l'exploiter : creer 5 tranches d'age
+```
+
+
+```{r}
+## Evolution de la douleur sous TH en fonction de la prise
+
+# Création d'un tableau de contingence en filtrant les valeurs nulles
+table_contingence_prise_douleur <- table(data1$Prise_TH[data1$Prise_TH != "0"], data1$Douleur_TH[data1$Douleur_TH != "0"])
+
+options(repr.plot.width = 8, repr.plot.height = 10)
+
+# Création du graphique de mosaïque
+mosaicplot(table_contingence_prise_douleur, main = "Graphique de Mosaïque", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+
+```
+
+Pas ultra pertienent : trop de prises continues en proportion pour être significatif.
+
+```{r}
+#Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
+
+Duree_TH <- factor(ifelse(data1$Depuis_TH == "0", as.character(data1$Combien_TH), as.character(data1$Depuis_TH)))
+
+table_contingence_duree_douleur <- table(Duree_TH, data1$Douleur_TH[data1$Douleur_TH != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+# Création du graphique de mosaïque
+mosaicplot(table_contingence_duree_douleur[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+
+```
+
+
+```{r}
+#Evolution de la maladie en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
+
+table_contingence_duree_evol <- table(Duree_TH, data1$Evolution_TH[data1$Evolution_TH != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+# Création du graphique de mosaïque
+mosaicplot(table_contingence_duree_evol[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4)
+
+```
+
+Semble avoir une inluence positive sur la résorption des lésions au-delà de 6 mois ?
+
+```{r}
+#Ont subi des effets secondaires en fonction duree traitement (TH)
+
+table_contingence_duree_ES <- table(Duree_TH, data1$Subi_ES_TH[data1$Subi_ES_TH != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+# Création du graphique de mosaïque
+mosaicplot(table_contingence_duree_ES[c(4, 2, 3, 1, 5),], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Subi_ES_TH))),las = 4)
+
+```
+
+La durée de prise du traitement (TH) ne semble pas influencer l'apparition des effets secondaires.
+
+```{r}
+# Efficacite douleur TH Tabac
+
+table_contingence_tabac_douleur <- table(data$Tabac[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
+
+mosaicplot(table_contingence_tabac_douleur[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+```
+
+
+```{r}
+# Efficacite douleur TH Alcool
+
+table_contingence_alcool_douleur <- table(data$Alcool[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
+
+mosaicplot(table_contingence_alcool_douleur[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+```
+
+
+Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
+
+```{r}
+install.packages("RColorBrewer")
+library(RColorBrewer)
+
+options(repr.plot.width = 16, repr.plot.height = 10)
+par(mfrow = c(1, 2))
+
+# Choix des couleurs
+colors_pastels_data1 <- brewer.pal(length(levels(data1$Douleur_TH)), "Pastel1")
+colors_pastels_data2 <- brewer.pal(length(levels(data2$Douleur_CM)), "Pastel1")
+
+# Pie chart pour data1$Douleur_TH
+data1_table <- table(data1$Douleur_TH)
+data1_table <- data1_table[data1_table != 0]  # Filtrer les zéros
+
+percentage_labels1 <- paste0(round(100 * prop.table(data1_table), 1), "%")
+percentage_labels1 <- percentage_labels1[percentage_labels1 != "0%"]  # Filtrer les 0%
+
+categories <- c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur")
+
+pie(data1_table, main = "Distribution des échelles de douleur sous Traitement Hormonal", labels = percentage_labels1, col = colors_pastels_data1)
+legend("bottom", legend = categories, fill = colors_pastels_data1, title = "Douleur_TH")
+
+pie_table_TH <- table(data1$Douleur_TH)
+text(0, 0, paste("Total:", sum(pie_table_TH)), cex = 0.8, pos = 2)
+
+# Pie chart pour data2$Douleur_CM
+data2_table <- table(data2$Douleur_CM)
+data2_table <- data2_table[data2_table != 0]  # Filtrer les zéros
+
+percentage_labels2 <- paste0(round(100 * prop.table(data2_table), 1), "%")
+percentage_labels2 <- percentage_labels2[percentage_labels2 != "0%"]  # Filtrer les 0%
+
+pie(data2_table, main = "Distribution des échelles de douleur sous Cure de Ménopause", labels = percentage_labels2, col = colors_pastels_data2)
+legend("bottom", legend = categories, fill = colors_pastels_data2, title = "Douleur_CM")
+
+pie_table_CM <- table(data2$Douleur_CM)
+text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
+```
+
+
+```{r}
+# Combo traitements non médicamenteux avec TH
+
+#install.packages("RColorBrewer")
+library(RColorBrewer)
+
+options(repr.plot.width = 20, repr.plot.height = 12)
+par(mfrow = c(1, 3))
+
+categoriesD <- c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur")
+
+# Camembert pour Traitement Hormonal x Mobilite
+data1_MTH <- data1$Douleur_Mobilite_TH[data1$Mobilite_TH == 1]
+colors_pastels_data_MTH <- brewer.pal(length(levels(data1_MTH)), "Pastel1")
+
+data1_MTH_table <- table(data1_MTH)
+data1_MTH_table <- data1_MTH_table[data1_MTH_table != 0]
+
+percentage_labels_MTH <- paste0(round(100 * prop.table(data1_MTH_table), 1), "%")
+percentage_labels_MTH <- percentage_labels_MTH[percentage_labels_MTH != "0%"]  # Filtrer les 0%
+
+pie(data1_MTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Mobilite", labels = percentage_labels_MTH, col = colors_pastels_data_MTH)
+legend("bottom", legend = categoriesD, fill = colors_pastels_data_MTH, title = "Douleur TH x Mobilite")
+
+text(0, 0, paste("Total:", sum(data1_MTH_table)), cex = 0.8, pos = 2)
+
+#print(data1_MTH_table)
+
+# Camembert pour Traitement Hormonal x Nutrition
+data1_NTH <- data1$Douleur_Nutrition_TH[data1$Nutrition_TH == 1]
+colors_pastels_data_NTH <- brewer.pal(length(levels(data1_NTH)), "Pastel1")
+
+data1_NTH_table <- table(data1_NTH)
+data1_NTH_table <- data1_NTH_table[data1_NTH_table != 0]
+
+percentage_labels_NTH <- paste0(round(100 * prop.table(data1_NTH_table), 1), "%")
+percentage_labels_NTH <- percentage_labels_NTH[percentage_labels_NTH != "0%"]  # Filtrer les 0%
+
+pie(data1_NTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Nutrition", labels = percentage_labels_NTH, col = colors_pastels_data_NTH)
+legend("bottom", legend = categoriesD, fill = colors_pastels_data_NTH, title = "Douleur TH x Nutrition")
+
+text(0, 0, paste("Total:", sum(data1_NTH_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x Stress
+data1_STH <- data1$Douleur_Stress_TH[data1$Stress_TH == 1]
+colors_pastels_data_STH <- brewer.pal(length(levels(data1_STH)), "Pastel1")
+
+data1_STH_table <- table(data1_STH)
+data1_STH_table <- data1_STH_table[data1_STH_table != 0]
+
+percentage_labels_STH <- paste0(round(100 * prop.table(data1_STH_table), 1), "%")
+percentage_labels_STH <- percentage_labels_STH[percentage_labels_STH != "0%"]  # Filtrer les 0%
+
+pie(data1_STH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Stress", labels = percentage_labels_STH, col = colors_pastels_data_STH)
+legend("bottom", legend = names(data1_STH_table), fill = colors_pastels_data_STH, title = "Douleur TH x Stress")
+
+text(0, 0, paste("Total:", sum(data1_STH_table)), cex = 0.8, pos = 2)
+```
+
+
+```{r}
+options(repr.plot.width = 20, repr.plot.height = 15)
+par(mfrow = c(1, 3))
+
+# Camembert pour Traitement Hormonal x Phyto
+data1_PTH <- data1$Douleur_Phyto_TH[data1$Phyto_TH == 1]
+colors_pastels_data_PTH <- brewer.pal(length(levels(data1_PTH)), "Pastel1")
+
+data1_PTH_table <- table(data1_PTH)
+data1_PTH_table <- data1_PTH_table[data1_PTH_table != 0]  # Filtrer les zéros
+
+percentage_labels_PTH <- paste0(round(100 * prop.table(data1_PTH_table), 1), "%")
+percentage_labels_PTH <- percentage_labels_PTH[percentage_labels_PTH != "0%"]  # Filtrer les 0%
+
+pie(data1_PTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Phyto", labels = percentage_labels_PTH, col = colors_pastels_data_PTH)
+legend("bottom", legend = names(data1_PTH_table), fill = colors_pastels_data_PTH, title = "Douleur TH x Phyto")
+
+text(0, 0, paste("Total:", sum(data1_PTH_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x Acup
+data1_ATH <- data1$Douleur_Acup_TH[data1$Acup_TH == 1]
+colors_pastels_data_ATH <- brewer.pal(length(levels(data1_ATH)), "Pastel1")
+
+data1_ATH_table <- table(data1_ATH)
+data1_ATH_table <- data1_ATH_table[data1_ATH_table != 0]  # Filtrer les zéros
+
+percentage_labels_ATH <- paste0(round(100 * prop.table(data1_ATH_table), 1), "%")
+percentage_labels_ATH <- percentage_labels_ATH[percentage_labels_ATH != "0%"]  # Filtrer les 0%
+
+pie(data1_ATH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Acup", labels = percentage_labels_ATH, col = colors_pastels_data_ATH)
+legend("bottom", legend = names(data1_ATH_table), fill = colors_pastels_data_ATH, title = "Douleur TH x Acup")
+
+text(0, 0, paste("Total:", sum(data1_ATH_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x Hypnose
+data1_HTH <- data1$Douleur_Hypnose_TH[data1$Hypnose_TH == 1]
+colors_pastels_data_HTH <- brewer.pal(length(levels(data1_HTH)), "Pastel1")
+
+data1_HTH_table <- table(data1_HTH)
+data1_HTH_table <- data1_HTH_table[data1_HTH_table != 0]  # Filtrer les zéros
+
+percentage_labels_HTH <- paste0(round(100 * prop.table(data1_HTH_table), 1), "%")
+percentage_labels_HTH <- percentage_labels_HTH[percentage_labels_HTH != "0%"]  # Filtrer les 0%
+
+pie(data1_HTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Hypnose", labels = percentage_labels_HTH, col = colors_pastels_data_HTH)
+legend("bottom", legend = names(data1_HTH_table), fill = colors_pastels_data_HTH, title = "Douleur TH x Hypnose")
+
+text(0, 0, paste("Total:", sum(data1_HTH_table)), cex = 0.8, pos = 2)
+
+```
+
+
+```{r}
+options(repr.plot.width = 20, repr.plot.height = 15)
+par(mfrow = c(1, 3))
+
+# Camembert pour Traitement Hormonal x Bouillotte
+data1_BTH <- data1$Douleur_Bouillotte_TH[data1$Bouillotte_TH == 1]
+colors_pastels_data_BTH <- brewer.pal(length(levels(data1_BTH)), "Pastel1")
+
+data1_BTH_table <- table(data1_BTH)
+data1_BTH_table <- data1_BTH_table[data1_BTH_table != 0]  # Filtrer les zéros
+
+percentage_labels_BTH <- paste0(round(100 * prop.table(data1_BTH_table), 1), "%")
+percentage_labels_BTH <- percentage_labels_BTH[percentage_labels_BTH != "0%"]  # Filtrer les 0%
+
+pie(data1_BTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Bouillotte", labels = percentage_labels_BTH, col = colors_pastels_data_BTH)
+legend("bottom", legend = names(data1_BTH_table), fill = colors_pastels_data_BTH, title = "Douleur TH x Bouillotte")
+
+text(0, 0, paste("Total:", sum(data1_BTH_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x CBD
+data1_CTH <- data1$Douleur_CBD_TH[data1$CBD_TH == 1]
+colors_pastels_data_CTH <- brewer.pal(length(levels(data1_CTH)), "Pastel1")
+
+data1_CTH_table <- table(data1_CTH)
+data1_CTH_table <- data1_CTH_table[data1_CTH_table != 0]  # Filtrer les zéros
+
+percentage_labels_CTH <- paste0(round(100 * prop.table(data1_CTH_table), 1), "%")
+percentage_labels_CTH <- percentage_labels_CTH[percentage_labels_CTH != "0%"]  # Filtrer les 0%
+
+pie(data1_CTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x CBD", labels = percentage_labels_CTH, col = colors_pastels_data_CTH)
+legend("bottom", legend = names(data1_CTH_table), fill = colors_pastels_data_CTH, title = "Douleur TH x CBD")
+
+text(0, 0, paste("Total:", sum(data1_CTH_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x Tens
+data1_TTH <- data1$Douleur_Tens_TH[data1$Tens_TH == 1]
+colors_pastels_data_TTH <- brewer.pal(length(levels(data1_TTH)), "Pastel1")
+
+data1_TTH_table <- table(data1_TTH)
+data1_TTH_table <- data1_TTH_table[data1_TTH_table != 0]  # Filtrer les zéros
+
+percentage_labels_TTH <- paste0(round(100 * prop.table(data1_TTH_table), 1), "%")
+percentage_labels_TTH <- percentage_labels_TTH[percentage_labels_TTH != "0%"]  # Filtrer les 0%
+
+pie(data1_TTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Tens", labels = percentage_labels_TTH, col = colors_pastels_data_TTH)
+legend("bottom", legend = names(data1_TTH_table), fill = colors_pastels_data_TTH, title = "Douleur TH x Tens")
+
+text(0, 0, paste("Total:", sum(data1_TTH_table)), cex = 0.8, pos = 2)
+
+```
+
+
+```{r}
+options(repr.plot.width = 15, repr.plot.height = 8)
+
+# Créer un vecteur contenant les noms des variables Douleur_qqch_TH
+noms_variables <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Hypnose", "Bouillotte", "CBD", "Tens")
+
+# Initialiser une liste pour stocker les pourcentages
+pourcentages <- numeric(length(noms_variables))
+
+# Calculer les pourcentages de "Diminution de la douleur" pour chaque variable
+for (i in seq_along(noms_variables)) {
+  variable <- paste0("Douleur_", noms_variables[i], "_TH")
+  filtered_data <- data1[data1[[paste0(noms_variables[i], "_TH")]] == 1, ]
+  pourcentages[i] <- sum(filtered_data[[variable]] == "Diminution de la douleur") / nrow(filtered_data) * 100
+}
+
+total1 = c(sum(data1_MTH_table), sum(data1_NTH_table), sum(data1_STH_table), sum(data1_PTH_table), sum(data1_ATH_table), sum(data1_HTH_table), sum(data1_BTH_table), sum(data1_CTH_table), sum(data1_TTH_table))
+
+# Créer un dataframe pour stocker les résultats
+resultats1 <- data.frame(Variable = noms_variables, Pourcentage = pourcentages, Total = total1)
+
+# Trier le dataframe par ordre décroissant des pourcentages
+resultats1 <- resultats1[order(resultats1$Pourcentage, decreasing = TRUE), ]
+
+# Afficher les résultats
+#print(resultats)
+
+# Afficher les pourcentages avec les noms des variables
+bp <- barplot(resultats1$Pourcentage, names.arg = resultats1$Variable,
+        xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
+        main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux associé à TH",
+        col = brewer.pal(length(noms_variables), "Pastel1"),
+        ylim=c(0,100))
+
+# Ajouter les totaux sur chaque bâton
+text(x = bp, y = 1, labels = resultats1$Total, pos = 3)
+```
+
+
+```{r}
+# Combo traitements non médicamenteux avec CM
+
+options(repr.plot.width = 20, repr.plot.height = 12)
+par(mfrow = c(1, 3))
+
+# Camembert pour Ménopause artificielle x Mobilite
+data2_MCM <- data2$Douleur_Mobilite_CM[data2$Mobilite_CM == 1]
+colors_pastels_data_MCM <- brewer.pal(length(levels(data2_MCM)), "Pastel1")
+
+data2_MCM_table <- table(data2_MCM)
+data2_MCM_table <- data2_MCM_table[data2_MCM_table != 0]  # Filtrer les zéros
+
+percentage_labels_MCM <- paste0(round(100 * prop.table(data2_MCM_table), 1), "%")
+percentage_labels_MCM <- percentage_labels_MCM[percentage_labels_MCM != "0%"]  # Filtrer les 0%
+
+pie(data2_MCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Mobilite", labels = percentage_labels_MCM, col = colors_pastels_data_MCM)
+legend("bottom", legend = names(data2_MCM_table), fill = colors_pastels_data_MCM, title = "Douleur CM x Mobilite")
+
+text(0, 0, paste("Total:", sum(data2_MCM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Ménopause artificielle x Nutrition
+data2_NCM <- data2$Douleur_Nutrition_CM[data2$Nutrition_CM == 1]
+colors_pastels_data_NCM <- brewer.pal(length(levels(data2_NCM)), "Pastel1")
+
+data2_NCM_table <- table(data2_NCM)
+data2_NCM_table <- data2_NCM_table[data2_NCM_table != 0]  # Filtrer les zéros
+
+percentage_labels_NCM <- paste0(round(100 * prop.table(data2_NCM_table), 1), "%")
+percentage_labels_NCM <- percentage_labels_NCM[percentage_labels_NCM != "0%"]  # Filtrer les 0%
+
+pie(data2_NCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Nutrition", labels = percentage_labels_NCM, col = colors_pastels_data_NCM)
+legend("bottom", legend = names(data2_NCM_table), fill = colors_pastels_data_NCM, title = "Douleur CM x Nutrition")
+
+text(0, 0, paste("Total:", sum(data2_NCM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Ménopause artificielle x Stress
+data2_SCM <- data2$Douleur_Stress_CM[data2$Stress_CM == 1]
+colors_pastels_data_SCM <- brewer.pal(length(levels(data2_SCM)), "Pastel1")
+
+data2_SCM_table <- table(data2_SCM)
+data2_SCM_table <- data2_SCM_table[data2_SCM_table != 0]  # Filtrer les zéros
+
+percentage_labels_SCM <- paste0(round(100 * prop.table(data2_SCM_table), 1), "%")
+percentage_labels_SCM <- percentage_labels_SCM[percentage_labels_SCM != "0%"]  # Filtrer les 0%
+
+pie(data2_SCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Stress", labels = percentage_labels_SCM, col = colors_pastels_data_SCM)
+legend("bottom", legend = names(data2_SCM_table), fill = colors_pastels_data_SCM, title = "Douleur CM x Stress")
+
+text(0, 0, paste("Total:", sum(data2_SCM_table)), cex = 0.8, pos = 2)
+
+```
+
+
+```{r}
+options(repr.plot.width = 20, repr.plot.height = 15)
+par(mfrow = c(1, 2))
+
+# Camembert pour Traitement Hormonal x Phyto
+data2_PCM <- data2$Douleur_Phyto_CM[data2$Phyto_CM == 1]
+colors_pastels_data_PCM <- brewer.pal(length(levels(data2_PCM)), "Pastel1")  # Utilisation de Set2 pour plus de couleurs
+
+data2_PCM_table <- table(data2_PCM)
+data2_PCM_table <- data2_PCM_table[data2_PCM_table != 0]  # Filtrer les zéros
+
+percentage_labels_PCM <- paste0(round(100 * prop.table(data2_PCM_table), 1), "%")
+percentage_labels_PCM <- percentage_labels_PCM[percentage_labels_PCM != "0%"]  # Filtrer les 0%
+
+pie(data2_PCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Phyto", labels = percentage_labels_PCM, col = colors_pastels_data_PCM)
+legend("bottom", legend = names(data2_PCM_table), fill = colors_pastels_data_PCM, title = "Douleur CM x Phyto")
+
+text(0, 0, paste("Total:", sum(data2_PCM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x Acup
+data2_ACM <- data2$Douleur_Acup_CM[data2$Acup_CM == 1]
+colors_pastels_data_ACM <- brewer.pal(length(levels(data2_ACM)), "Pastel1")  # Utilisation de Set2 pour plus de couleurs
+
+data2_ACM_table <- table(data2_ACM)
+data2_ACM_table <- data2_ACM_table[data2_ACM_table != 0]  # Filtrer les zéros
+
+percentage_labels_ACM <- paste0(round(100 * prop.table(data2_ACM_table), 1), "%")
+percentage_labels_ACM <- percentage_labels_ACM[percentage_labels_ACM != "0%"]  # Filtrer les 0%
+
+pie(data2_ACM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Acup", labels = percentage_labels_ACM, col = colors_pastels_data_ACM)
+legend("bottom", legend = names(data2_ACM_table), fill = colors_pastels_data_ACM, title = "Douleur CM x Acup")
+
+text(0, 0, paste("Total:", sum(data2_ACM_table)), cex = 0.8, pos = 2)
+
+```
+
+
+```{r}
+options(repr.plot.width = 20, repr.plot.height = 15)
+par(mfrow = c(1, 3))
+
+# Camembert pour Traitement Hormonal x Bouillotte
+data2_BCM <- data2$Douleur_Bouillotte_CM[data2$Bouillotte_CM == 1]
+colors_pastels_data_BCM <- brewer.pal(length(levels(data2_BCM)), "Pastel1")
+
+data2_BCM_table <- table(data2_BCM)
+data2_BCM_table <- data2_BCM_table[data2_BCM_table != 0]
+
+percentage_labels_BCM <- paste0(round(100 * prop.table(data2_BCM_table), 1), "%")
+percentage_labels_BCM <- percentage_labels_BCM[percentage_labels_BCM != "0%"]
+
+pie(data2_BCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Bouillotte", labels = percentage_labels_BCM, col = colors_pastels_data_BCM)
+legend("bottom", legend = names(data2_BCM_table), fill = colors_pastels_data_BCM, title = "Douleur CM x Bouillotte")
+
+text(0, 0, paste("Total:", sum(data2_BCM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x CBD
+data2_CCM <- data2$Douleur_CBD_CM[data2$CBD_CM == 1]
+colors_pastels_data_CCM <- brewer.pal(length(levels(data2_CCM)), "Pastel1")
+
+data2_CCM_table <- table(data2_CCM)
+data2_CCM_table <- data2_CCM_table[data2_CCM_table != 0]
+
+percentage_labels_CCM <- paste0(round(100 * prop.table(data2_CCM_table), 1), "%")
+percentage_labels_CCM <- percentage_labels_CCM[percentage_labels_CCM != "0%"]
+
+pie(data2_CCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x CBD", labels = percentage_labels_CCM, col = colors_pastels_data_CCM)
+legend("bottom", legend = names(data2_CCM_table), fill = colors_pastels_data_CCM, title = "Douleur CM x CBD")
+
+text(0, 0, paste("Total:", sum(data2_CCM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Hormonal x Tens
+data2_TCM <- data2$Douleur_Tens_CM[data2$Tens_CM == 1]
+colors_pastels_data_TCM <- brewer.pal(length(levels(data2_TCM)), "Pastel1")
+
+data2_TCM_table <- table(data2_TCM)
+data2_TCM_table <- data2_TCM_table[data2_TCM_table != 0]
+
+percentage_labels_TCM <- paste0(round(100 * prop.table(data2_TCM_table), 1), "%")
+percentage_labels_TCM <- percentage_labels_TCM[percentage_labels_TCM != "0%"]
+
+pie(data2_TCM_table, main = "Distribution des échelles de douleur sous Ménopause artificielle x Tens", labels = percentage_labels_TCM, col = colors_pastels_data_TCM)
+legend("bottom", legend = names(data2_TCM_table), fill = colors_pastels_data_TCM, title = "Douleur CM x Tens")
+
+text(0, 0, paste("Total:", sum(data2_TCM_table)), cex = 0.8, pos = 2)
+
+```
+
+
+```{r}
+options(repr.plot.width = 15, repr.plot.height = 8)
+
+# Créer un vecteur contenant les noms des variables Douleur_qqch_TH
+noms_variables2 <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Bouillotte", "CBD", "Tens")
+
+# Initialiser une liste pour stocker les pourcentages
+pourcentages2 <- numeric(length(noms_variables2))
+
+# Calculer les pourcentages de "Diminution de la douleur" pour chaque variable
+for (i in seq_along(noms_variables2)) {
+  variable2 <- paste0("Douleur_", noms_variables2[i], "_CM")
+  filtered_data2 <- data2[data2[[paste0(noms_variables2[i], "_CM")]] == 1, ]
+  pourcentages2[i] <- sum(filtered_data2[[variable2]] == "Diminution de la douleur") / nrow(filtered_data2) * 100
+}
+
+total2 = c(sum(data2_MCM_table), sum(data2_NCM_table), sum(data2_SCM_table), sum(data2_PCM_table), sum(data2_ACM_table), sum(data2_BCM_table), sum(data2_CCM_table), sum(data2_TCM_table))
+
+# Créer un dataframe pour stocker les résultats
+resultats2 <- data.frame(Variable = noms_variables2, Pourcentage = pourcentages2, Total = total2)
+
+# Trier le dataframe par ordre décroissant des pourcentages
+resultats2 <- resultats2[order(resultats2$Pourcentage, decreasing = TRUE), ]
+
+# Afficher les résultats
+#print(resultats)
+
+# Afficher les pourcentages avec les noms des variables
+bp <- barplot(resultats2$Pourcentage, names.arg = resultats2$Variable,
+              xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
+              main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux associé à CM",
+              col = brewer.pal(length(noms_variables2), "Pastel1"),
+              ylim=c(0,100))
+
+# Ajouter les totaux sur chaque bâton
+text(x = bp, y = 1, labels = resultats2$Total, pos = 3)
+
+```
+
+Attention niveau interpretation : acupunture à 100% car peu de cas relevé
+
+```{r}
+
+```
+
