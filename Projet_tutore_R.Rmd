@@ -1547,6 +1547,7 @@ ggplot(df_age_counts_bis, aes(x = age, y = count)) +
 ```{r}
 library(gridExtra)
 
+
 plot1 <- ggplot(df_age_counts, aes(x = age, y = count)) +
   geom_bar(stat = "identity", fill = "skyblue") +
   labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
@@ -1598,50 +1599,92 @@ tranches_age <- cut(data$Age[which(data$TH == 1)], breaks = 5)
 ## A voir si on peut l'exploiter : creer 5 tranches d'age
 ```
 
+# Evolution de la douleur en fonction de la prise du traitement
 
 ```{r}
 ## Evolution de la douleur sous TH en fonction de la prise
 
 # Création d'un tableau de contingence en filtrant les valeurs nulles
-table_contingence_prise_douleur <- table(data1$Prise_TH[data1$Prise_TH != "0"], data1$Douleur_TH[data1$Douleur_TH != "0"])
+table_contingence_prise_douleur_TH <- table(data1$Prise_TH[data1$Prise_TH != "0"], data1$Douleur_TH[data1$Douleur_TH != "0"])
 
 options(repr.plot.width = 8, repr.plot.height = 10)
 
 # Création du graphique de mosaïque
-mosaicplot(table_contingence_prise_douleur, main = "Graphique de Mosaïque", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+mosaicplot(table_contingence_prise_douleur_TH, main = "Graphique de Mosaïque", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
 
 ```
+```{r}
+## Evolution de la douleur sous CM en fonction de la prise
 
-Pas ultra pertienent : trop de prises continues en proportion pour être significatif.
+table_contingence_prise_douleur_CM <- table(data2$Prise_CM[data2$Prise_CM != "0"], data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+options(repr.plot.width = 8, repr.plot.height = 10)
+
+mosaicplot(table_contingence_prise_douleur_CM, main = "Graphique de Mosaïque", cex.axis = 0.7, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+```
+
+
+Pas ultra pertinent : trop de prises continues en proportion pour être significatif.
+
+
+# Evolution de la douleur en fonction de la durée de prise du traitement
 
 ```{r}
 #Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
 
 Duree_TH <- factor(ifelse(data1$Depuis_TH == "0", as.character(data1$Combien_TH), as.character(data1$Depuis_TH)))
 
-table_contingence_duree_douleur <- table(Duree_TH, data1$Douleur_TH[data1$Douleur_TH != "0"])
+table_contingence_duree_douleur_TH <- table(Duree_TH, data1$Douleur_TH[data1$Douleur_TH != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-# Création du graphique de mosaïque
-mosaicplot(table_contingence_duree_douleur[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+mosaicplot(table_contingence_duree_douleur_TH[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
 
 ```
+```{r}
+#Evolution de la douleur en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
 
+Duree_CM <- factor(ifelse(data2$Depuis_CM == "0", as.character(data2$Combien_CM), as.character(data2$Depuis_CM)))
+
+table_contingence_duree_douleur_CM <- table(Duree_CM, data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_CM[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+```
+
+
+Pour TH et CM : prendre le traitement + de 6 mois semble augmenter l'efficacité du traitement.
+
+# Evolution de la maladie en fonction de la durée de prise du traitement
 
 ```{r}
 #Evolution de la maladie en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
 
-table_contingence_duree_evol <- table(Duree_TH, data1$Evolution_TH[data1$Evolution_TH != "0"])
+table_contingence_duree_evol_TH <- table(Duree_TH, data1$Evolution_TH[data1$Evolution_TH != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_evol_TH[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4)
+
+```
+
+```{r}
+#Evolution de la maladie en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
+
+table_contingence_duree_evol_CM <- table(Duree_CM, data2$Evolution_CM[data2$Evolution_CM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
 # Création du graphique de mosaïque
-mosaicplot(table_contingence_duree_evol[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4)
-
+mosaicplot(table_contingence_duree_evol_CM[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Evolution_CM))),las = 4)
 ```
 
+
 Semble avoir une inluence positive sur la résorption des lésions au-delà de 6 mois ?
+
+
+# Apparition des effets secondaires en fonction de la durée du traitement
 
 ```{r}
 #Ont subi des effets secondaires en fonction duree traitement (TH)
@@ -1650,28 +1693,54 @@ table_contingence_duree_ES <- table(Duree_TH, data1$Subi_ES_TH[data1$Subi_ES_TH 
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-# Création du graphique de mosaïque
 mosaicplot(table_contingence_duree_ES[c(4, 2, 3, 1, 5),], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Subi_ES_TH))),las = 4)
 
+```
+```{r}
+#Ont subi des effets secondaires en fonction duree traitement (CM)
+
+table_contingence_duree_ES <- table(Duree_CM, data2$Subi_ES_CM[data2$Subi_ES_CM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_ES[c(4, 2, 3, 1, 5),], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Subi_ES_CM))),las = 4)
 ```
 
 La durée de prise du traitement (TH) ne semble pas influencer l'apparition des effets secondaires.
 
+
+# Evolution de la douleur en fonction de la consommation de tabac
+
 ```{r}
 # Efficacite douleur TH Tabac
 
-table_contingence_tabac_douleur <- table(data$Tabac[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
+table_contingence_tabac_douleur_TH <- table(data$Tabac[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
 
-mosaicplot(table_contingence_tabac_douleur[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+mosaicplot(table_contingence_tabac_douleur_TH[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+```
+```{r}
+# Efficacite douleur CM Tabac
+
+table_contingence_tabac_douleur_CM <- table(data$Tabac[which(data$CM == 1)], data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
 ```
 
+# Evolution de la douleur en fonction de la consommation d'alcool
 
 ```{r}
 # Efficacite douleur TH Alcool
 
-table_contingence_alcool_douleur <- table(data$Alcool[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
+table_contingence_alcool_douleur_TH <- table(data$Alcool[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
 
-mosaicplot(table_contingence_alcool_douleur[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+mosaicplot(table_contingence_alcool_douleur_TH[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+```
+```{r}
+# Efficacite douleur CM Alcool
+
+table_contingence_alcool_douleur_CM <- table(data$Alcool[which(data$CM == 1)], data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
 ```
 
 
@@ -2129,7 +2198,7 @@ text(x = bp, y = 1, labels = resultats2$Total, pos = 3)
 
 ```
 
-Attention niveau interpretation : acupunture à 100% car peu de cas relevé
+Attention niveau interpretation : acupunture à 100% car peu de cas relevés
 
 ```{r}
 
