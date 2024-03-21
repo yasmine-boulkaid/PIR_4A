@@ -10,14 +10,14 @@ output:
 
 # Librairies
 
-```{r}
+```{r, echo=FALSE}
 # Définir un miroir CRAN
 options(repos = "https://cloud.r-project.org")
 
-install.packages("FactoMineR")
-install.packages("factoextra")
-install.packages("readxl")
-install.packages("gridExtra")
+#install.packages("FactoMineR")
+#install.packages("factoextra")
+#install.packages("readxl")
+#install.packages("gridExtra")
 
 library(readxl)
 library(gridExtra)
@@ -31,7 +31,7 @@ library(tidyverse)
 
 # Mise en forme des données
 
-```{r}
+```{r, echo=FALSE}
 # Renommer toutes les variables
 
 data <- read.csv("etude_sur_les_traitements_de_lendometriose.csv")
@@ -1490,7 +1490,7 @@ print(nrow(data2))
 
 #Second data frame
 
-data3 <- data[which(data$Aucun_NM == 1), 178:314]
+data3 <- data[which(data$Aucun_NM == 0), 178:314]
 #head(data3)
 #print(nrow(data3))
 ```
@@ -1582,12 +1582,9 @@ grid.arrange(plot1, plot2, nrow = 1)
 ```{r}
 # Effectuer un test du khi-deux pour comparer les distributions d'âge
 
-test_khi_deux <- chisq.test(table(df_age_counts$age, df_age_counts_bis$age[19:54]))
+chisq.test(df_age_counts$age, df_age_counts_bis$age[19:54])
 
-# Afficher les résultats du test
-print(test_khi_deux)
-
-####### vous avez aussi un warning "Chi-squared approximation may be incorrect" ??
+####### "Chi-squared approximation may be incorrect" ????
 ```
 
 # p-value = 0.2376 > 0.05 (alpha=5%)
@@ -1848,57 +1845,30 @@ legend("bottom", legend = names(data1_STH_table), fill = colors_pastels_data_STH
 
 text(0, 0, paste("Total:", sum(data1_STH_table)), cex = 0.8, pos = 2)
 ```
-
-
 ```{r}
-options(repr.plot.width = 20, repr.plot.height = 15)
+# Évolution TH
+
+options(repr.plot.width = 20, repr.plot.height = 12)
 par(mfrow = c(1, 3))
 
-# Camembert pour Traitement Hormonal x Phyto
-data1_PTH <- data1$Douleur_Phyto_TH[data1$Phyto_TH == 1]
-colors_pastels_data_PTH <- brewer.pal(length(levels(data1_PTH)), "Pastel1")
+### changer les légendes
+categories <- c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas")
 
-data1_PTH_table <- table(data1_PTH)
-data1_PTH_table <- data1_PTH_table[data1_PTH_table != 0]  # Filtrer les zéros
+# Camembert  
+data1_ETH <- data1$Evolution_TH[data1$Evolution_TH == 1]
+colors_pastels_data_ETH <- brewer.pal(length(levels(data1_ETH)), "Pastel1")
 
-percentage_labels_PTH <- paste0(round(100 * prop.table(data1_PTH_table), 1), "%")
-percentage_labels_PTH <- percentage_labels_PTH[percentage_labels_PTH != "0%"]  # Filtrer les 0%
+data1_ETH_table <- table(data1_ETH)
+data1_ETH_table <- data1_ETH_table[data1_ETH_table != 0]
 
-pie(data1_PTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Phyto", labels = percentage_labels_PTH, col = colors_pastels_data_PTH)
-legend("bottom", legend = names(data1_PTH_table), fill = colors_pastels_data_PTH, title = "Douleur TH x Phyto")
+percentage_labels_ETH <- paste0(round(100 * prop.table(data1_ETH_table), 1), "%")
+percentage_labels_ETH <- percentage_labels_ETH[percentage_labels_ETH != "0%"]  # Filtrer les 0%
 
-text(0, 0, paste("Total:", sum(data1_PTH_table)), cex = 0.8, pos = 2)
+### changer les titres
+pie(data1_ETH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Mobilite", labels = percentage_labels_ETH, col = colors_pastels_data_ETH)
+legend("bottom", legend = categories, fill = colors_pastels_data_ETH, title = "Douleur TH x Mobilite")
 
-# Camembert pour Traitement Hormonal x Acup
-data1_ATH <- data1$Douleur_Acup_TH[data1$Acup_TH == 1]
-colors_pastels_data_ATH <- brewer.pal(length(levels(data1_ATH)), "Pastel1")
-
-data1_ATH_table <- table(data1_ATH)
-data1_ATH_table <- data1_ATH_table[data1_ATH_table != 0]  # Filtrer les zéros
-
-percentage_labels_ATH <- paste0(round(100 * prop.table(data1_ATH_table), 1), "%")
-percentage_labels_ATH <- percentage_labels_ATH[percentage_labels_ATH != "0%"]  # Filtrer les 0%
-
-pie(data1_ATH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Acup", labels = percentage_labels_ATH, col = colors_pastels_data_ATH)
-legend("bottom", legend = names(data1_ATH_table), fill = colors_pastels_data_ATH, title = "Douleur TH x Acup")
-
-text(0, 0, paste("Total:", sum(data1_ATH_table)), cex = 0.8, pos = 2)
-
-# Camembert pour Traitement Hormonal x Hypnose
-data1_HTH <- data1$Douleur_Hypnose_TH[data1$Hypnose_TH == 1]
-colors_pastels_data_HTH <- brewer.pal(length(levels(data1_HTH)), "Pastel1")
-
-data1_HTH_table <- table(data1_HTH)
-data1_HTH_table <- data1_HTH_table[data1_HTH_table != 0]  # Filtrer les zéros
-
-percentage_labels_HTH <- paste0(round(100 * prop.table(data1_HTH_table), 1), "%")
-percentage_labels_HTH <- percentage_labels_HTH[percentage_labels_HTH != "0%"]  # Filtrer les 0%
-
-pie(data1_HTH_table, main = "Distribution des échelles de douleur sous Traitement Hormonal x Hypnose", labels = percentage_labels_HTH, col = colors_pastels_data_HTH)
-legend("bottom", legend = names(data1_HTH_table), fill = colors_pastels_data_HTH, title = "Douleur TH x Hypnose")
-
-text(0, 0, paste("Total:", sum(data1_HTH_table)), cex = 0.8, pos = 2)
-
+text(0, 0, paste("Total:", sum(data1_ETH_table)), cex = 0.8, pos = 2)
 ```
 
 
@@ -2181,3 +2151,107 @@ Attention niveau interpretation : acupunture à 100% car peu de cas relevés
 
 ```
 
+
+```{r}
+data3_MNM <- data3$Douleur_Mobilite_NM[data3$Mobilite_NM == 1]
+head(data3$Mobilite_NM)
+```
+
+
+```{r}
+# Traitements non médicamenteux seuls : Pie chart
+
+#install.packages("RColorBrewer")
+library(RColorBrewer)
+
+options(repr.plot.width = 20, repr.plot.height = 12)
+par(mfrow = c(1, 3))
+
+categoriesDNM <- c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur","Réduction importante de la douleur")
+
+# Camembert pour Traitement Non Médicamenteux x Mobilite
+data3_MNM <- data3$Douleur_Mobilite_NM[data3$Mobilite_NM == 1]
+colors_pastels_data_MNM <- brewer.pal(length(levels(data3_MNM)), "Pastel1")
+
+data3_MNM_table <- table(data3_MNM)
+data3_MNM_table <- data3_MNM_table[data3_MNM_table != 0]
+
+percentage_labels_MNM <- paste0(round(100 * prop.table(data3_MNM_table), 1), "%")
+percentage_labels_MNM <- percentage_labels_MNM[percentage_labels_MNM != "0%"]  # Filtrer les 0%
+
+pie(data3_MNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Mobilite", labels = percentage_labels_MNM, col = colors_pastels_data_MNM)
+legend("bottom", legend = categoriesDNM, fill = colors_pastels_data_MNM, title = "Douleur NM x Mobilite")
+
+text(0, 0, paste("Total:", sum(data3_MNM_table)), cex = 0.8, pos = 2)
+
+#print(data3_MNM_table)
+
+# Camembert pour Traitement Non Médicamenteux x Nutrition
+data3_NNM <- data3$Douleur_Nutrition_NM[data3$Nutrition_NM == 1]
+colors_pastels_data_NNM <- brewer.pal(length(levels(data3_NNM)), "Pastel1")
+
+data3_NNM_table <- table(data3_NNM)
+data3_NNM_table <- data3_NNM_table[data3_NNM_table != 0]
+
+percentage_labels_NNM <- paste0(round(100 * prop.table(data3_NNM_table), 1), "%")
+percentage_labels_NNM <- percentage_labels_NNM[percentage_labels_NNM != "0%"]  # Filtrer les 0%
+
+pie(data3_NNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Nutrition", labels = percentage_labels_NNM, col = colors_pastels_data_NNM)
+legend("bottom", legend = categoriesDNM, fill = colors_pastels_data_NNM, title = "Douleur NM x Nutrition")
+
+text(0, 0, paste("Total:", sum(data3_NNM_table)), cex = 0.8, pos = 2)
+
+# Camembert pour Traitement Non Médicamenteux x Stress
+data3_SNM <- data3$Douleur_Stress_NM[data3$Stress_NM == 1]
+colors_pastels_data_SNM <- brewer.pal(length(levels(data3_SNM)), "Pastel1")
+
+data3_SNM_table <- table(data3_SNM)
+data3_SNM_table <- data3_SNM_table[data3_SNM_table != 0]
+
+percentage_labels_SNM <- paste0(round(100 * prop.table(data3_SNM_table), 1), "%")
+percentage_labels_SNM <- percentage_labels_SNM[percentage_labels_SNM != "0%"]  # Filtrer les 0%
+
+pie(data3_SNM_table, main = "Distribution des échelles de douleur sous Traitement Non Médicamenteux x Stress", labels = percentage_labels_SNM, col = colors_pastels_data_SNM)
+legend("bottom", legend = categoriesDNM, fill = colors_pastels_data_SNM, title = "Douleur NM x Stress")
+
+text(0, 0, paste("Total:", sum(data3_SNM_table)), cex = 0.8, pos = 2)
+```
+
+
+```{r}
+options(repr.plot.width = 15, repr.plot.height = 8)
+
+# Créer un vecteur contenant les noms des variables Douleur_qqch_NM
+noms_variables <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Hypnose", "Bouillotte", "CBD", "Tens")
+
+# Initialiser une liste pour stocker les pourcentages
+pourcentages <- numeric(length(noms_variables))
+
+# Calculer les pourcentages de "Diminution de la douleur" pour chaque variable
+for (i in seq_along(noms_variables)) {
+  variable <- paste0("Douleur_", noms_variables[i], "_NM")
+  filtered_data <- data3[data3[[paste0(noms_variables[i], "_NM")]] == 1, ]
+  pourcentages[i] <- sum(filtered_data[[variable]] == "Diminution de la douleur") / nrow(filtered_data) * 100
+}
+
+total3 = c(sum(data3_MNM_table), sum(data3_NNM_table), sum(data3_SNM_table), sum(data3_PNM_table), sum(data3_ANM_table), sum(data3_HNM_table), sum(data3_BNM_table), sum(data3_CNM_table), sum(data3_TNM_table))
+
+# Créer un dataframe pour stocker les résultats
+resultats3 <- data.frame(Variable = noms_variables, Pourcentage = pourcentages, Total = total3)
+
+# Trier le dataframe par ordre décroissant des pourcentages
+resultats3 <- resultats3[order(resultats3$Pourcentage, decreasing = TRUE), ]
+
+# Afficher les résultats
+#print(resultats)
+
+# Afficher les pourcentages avec les noms des variables
+bp <- barplot(resultats3$Pourcentage, names.arg = resultats3$Variable,
+        xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
+        main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux associé à NM",
+        col = brewer.pal(length(noms_variables), "Pastel1"),
+        ylim=c(0,100))
+
+# Ajouter les totaux sur chaque bâton
+text(x = bp, y = 1, labels = resultats1$Total, pos = 3)
+```
