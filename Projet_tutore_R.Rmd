@@ -429,17 +429,9 @@ names(data)[names(data) == "X.315"] <- "Lesquels_NM"
 names(data)[names(data) == "X.316"] <- "Remarques"
 names(data)[names(data) == "X.317"] <- "Email"
 
-head(data)
-```
-
-```{r}
 ### Supression des deux premières lignes ###
 data <- data[-c(1:2), ]
 
-head(data)
-```
-
-```{r}
 ### Questions préliminaires ###
 data$Age = as.integer(data$Age)
 data$Stade = as.factor(data$Stade)
@@ -465,9 +457,7 @@ data$Lesquels_M <- ifelse(data$Lesquels_M == "", "0", data$Lesquels_M)
 head(data)
 print(data$TH)
 #str(Aucun)
-```
 
-```{r}
 ### Questions générales TH ###
 Encore_TH <- ifelse(data$Encore_TH == "", "0", data$Encore_TH)
 data$Encore_TH = as.factor(Encore_TH)
@@ -514,9 +504,7 @@ data$Prise_TH = as.factor(Prise_TH)
 #str(Prise_TH)
 #print(Prise_TH)
 #print(Pre_op_TH)
-```
 
-```{r}
 ### Effets secondaires TH ###
 Subi_ES_TH <- ifelse(data$Subi_ES_TH == "", "0", data$Subi_ES_TH)
 data$Subi_ES_TH = as.factor(Subi_ES_TH)
@@ -597,10 +585,7 @@ data$Apparition_Thrombose_TH = as.factor(Apparition_Thrombose_TH)
 
 #str(Frequence_Sang_TH)
 #print(Frequence_Sang_TH)
-```
 
-
-```{r}
 ### Traitements non médicamenteux TH ###
 Mobilite_TH <- ifelse(data$Mobilite_TH == "X", "1", "0")
 data$Mobilite_TH <- factor(Mobilite_TH, levels = c("1", "0"), labels = c("1", "0"))
@@ -751,10 +736,7 @@ Prise_Tens_TH <- ifelse(data$Prise_Tens_TH == "", "0", data$Prise_Tens_TH)
 data$Prise_Tens_TH = as.factor(Prise_Tens_TH)
 
 #print(data$Douleur_Phyto_TH)
-```
 
-
-```{r}
 ### Questions générales CM ###
 Encore_CM <- ifelse(data$Encore_CM == "", "0", data$Encore_CM)
 data$Encore_CM = as.factor(Encore_CM)
@@ -800,10 +782,7 @@ data$Prise_CM = as.factor(Prise_CM)
 
 #str(Prise_CM)
 #print(Prise_CM)
-```
 
-
-```{r}
 ### Effets secondaires CM ###
 Subi_ES_CM <- ifelse(data$Subi_ES_CM == "", "0", data$Subi_ES_CM)
 data$Subi_ES_CM = as.factor(Subi_ES_CM)
@@ -879,10 +858,7 @@ data$Apparition_Thrombose_CM = as.factor(Apparition_Thrombose_CM)
 
 #str(Apparition_Thrombose_CM)
 #print(Apparition_Thrombose_CM)
-```
 
-
-```{r}
 ### Traitements non médicamenteux CM ###
 Mobilite_CM <- ifelse(data$Mobilite_CM == "X", "1", "0")
 data$Mobilite_CM <- factor(Mobilite_CM, levels = c("1", "0"), labels = c("1", "0"))
@@ -1032,10 +1008,7 @@ Prise_Tens_CM <- ifelse(data$Prise_Tens_CM == "", "0", data$Prise_Tens_CM)
 data$Prise_Tens_CM = as.factor(Prise_Tens_CM)
 
 #str(Prise_Tens_CM)
-```
 
-
-```{r}
 ### Traitements non médicamenteux seuls ###
 Mobilite_NM <- ifelse(data$Mobilite_NM == "X", "1", "0")
 data$Mobilite_NM <- factor(Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
@@ -1068,10 +1041,7 @@ Aucun_NM <- ifelse(data$Aucun_NM == "X", "1", "0")
 data$Aucun_NM <- factor(Aucun_NM, levels = c("1", "0"), labels = c("1", "0"))
 
 #str(Aucun_NM)
-```
 
-
-```{r}
 # Mobilité NM #
 Encore_Mobilite_NM <- ifelse(data$Encore_Mobilite_NM == "", "0", data$Encore_Mobilite_NM)
 data$Encore_Mobilite_NM = as.factor(Encore_Mobilite_NM)
@@ -1117,10 +1087,7 @@ data$Prise_Mobilite_NM = as.factor(Prise_Mobilite_NM)
 
 #str(Prise_Mobilite_NM)
 #print(Prise_Mobilite_NM)
-```
 
-
-```{r}
 # Nutrition NM #
 Encore_Nutrition_NM <- ifelse(data$Encore_Nutrition_NM == "", "0", data$Encore_Nutrition_NM)
 data$Encore_Nutrition_NM = as.factor(Encore_Nutrition_NM)
@@ -1166,10 +1133,7 @@ data$Prise_Nutrition_NM = as.factor(Prise_Nutrition_NM)
 
 #str(Prise_Nutrition_NM)
 #print(Prise_Nutrition_NM)
-```
 
-
-```{r}
 # Stress NM #
 Encore_Stress_NM <- ifelse(data$Encore_Stress_NM == "", "0", data$Encore_Stress_NM)
 data$Encore_Stress_NM = as.factor(Encore_Stress_NM)
@@ -1215,10 +1179,7 @@ data$Prise_Stress_NM = as.factor(Prise_Stress_NM)
 
 #str(Prise_Stress_NM)
 #print(Prise_Stress_NM)
-```
 
-
-```{r}
 # Phyto NM #
 Encore_Phyto_NM <- ifelse(data$Encore_Phyto_NM == "", "0", data$Encore_Phyto_NM)
 data$Encore_Phyto_NM = as.factor(Encore_Phyto_NM)
@@ -1264,10 +1225,7 @@ data$Prise_Phyto_NM = as.factor(Prise_Phyto_NM)
 
 #str(Prise_Phyto_NM)
 #print(Prise_Phyto_NM)
-```
 
-
-```{r}
 # Acup NM #
 Encore_Acup_NM <- ifelse(data$Encore_Acup_NM == "", "0", data$Encore_Acup_NM)
 data$Encore_Acup_NM = as.factor(Encore_Acup_NM)
@@ -1313,10 +1271,7 @@ data$Prise_Acup_NM = as.factor(Prise_Acup_NM)
 
 #str(Prise_Acup_NM)
 #print(Prise_Acup_NM)
-```
 
-
-```{r}
 # Hypnose NM #
 Encore_Hypnose_NM <- ifelse(data$Encore_Hypnose_NM == "", "0", data$Encore_Hypnose_NM)
 data$Encore_Hypnose_NM = as.factor(Encore_Hypnose_NM)
@@ -1362,10 +1317,7 @@ data$Prise_Hypnose_NM = as.factor(Prise_Hypnose_NM)
 
 #str(Prise_Hypnose_NM)
 #print(Prise_Hypnose_NM)
-```
 
-
-```{r}
 # Bouillotte NM #
 Encore_Bouillotte_NM <- ifelse(data$Encore_Bouillotte_NM == "", "0", data$Encore_Bouillotte_NM)
 data$Encore_Bouillotte_NM = as.factor(Encore_Bouillotte_NM)
@@ -1411,10 +1363,7 @@ data$Prise_Bouillotte_NM = as.factor(Prise_Bouillotte_NM)
 
 #str(Prise_Bouillotte_NM)
 #print(Prise_Bouillotte_NM)
-```
 
-
-```{r}
 # CBD NM #
 Encore_CBD_NM <- ifelse(data$Encore_CBD_NM == "", "0", data$Encore_CBD_NM)
 data$Encore_CBD_NM = as.factor(Encore_CBD_NM)
@@ -1460,10 +1409,7 @@ data$Prise_CBD_NM = as.factor(Prise_CBD_NM)
 
 #str(Prise_CBD_NM)
 #print(Prise_CBD_NM)
-```
 
-
-```{r}
 # Tens NM #
 Encore_Tens_NM <- ifelse(data$Encore_Tens_NM == "", "0", data$Encore_Tens_NM)
 data$Encore_Tens_NM = as.factor(Encore_Tens_NM)
@@ -1509,10 +1455,7 @@ data$Prise_Tens_NM = as.factor(Prise_Tens_NM)
 
 #str(Prise_Tens_NM)
 #print(Prise_Tens_NM)
-```
 
-
-```{r}
 # Autres NM #
 data$Autres_NM = as.factor(data$Autres_NM)
 
@@ -1521,10 +1464,7 @@ data$Lesquels_NM <- ifelse(data$Lesquels_NM == "", "0", data$Lesquels_NM)
 
 #print(Lesquels_NM)
 #str(Autres_NM)
-```
 
-
-```{r}
 ### Questions finales ###
 data$Remarques <- ifelse(data$Remarques == "", "0", data$Remarques)
 # "Remarques" à traiter dans un second temps
@@ -1533,10 +1473,7 @@ data$Email <- ifelse(data$Email == "", "0", data$Email)
 # "Email" à traiter dans un second temps
 
 #print(Email)
-```
 
-
-```{r}
 ### Création des 3 dataframes ###
 
 #Premier data frame
@@ -1556,7 +1493,6 @@ print(nrow(data2))
 data3 <- data[which(data$Aucun_NM == 1), 178:314]
 #head(data3)
 #print(nrow(data3))
-
 ```
 
 # Analyse Exploratoire
