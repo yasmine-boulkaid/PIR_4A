@@ -1587,44 +1587,9 @@ chisq.test(df_age_counts$age, df_age_counts_bis$age[19:54])
 ####### "Chi-squared approximation may be incorrect" ????
 ```
 
-# p-value = 0.2376 > 0.05 (alpha=5%)
-
+p-value = 0.2376 > 0.05 (alpha=5%)
 
 Il ne semble donc pas y avoir de différence significative entre les distributions d'âge des deux groupes (ie les femmes ayant répondu au sondage et l'ensemble des Françaises recensées en 2024).
-
-```{r}
-# Création des tranches d'âge équilibrées
-tranches_age <- cut(data$Age[which(data$TH == 1)], breaks = 5)
-
-## A voir si on peut l'exploiter : creer 5 tranches d'age
-```
-
-# Evolution de la douleur en fonction de la prise du traitement
-
-```{r}
-## Evolution de la douleur sous TH en fonction de la prise
-
-# Création d'un tableau de contingence en filtrant les valeurs nulles
-table_contingence_prise_douleur_TH <- table(data1$Prise_TH[data1$Prise_TH != "0"], data1$Douleur_TH[data1$Douleur_TH != "0"])
-
-options(repr.plot.width = 8, repr.plot.height = 10)
-
-# Création du graphique de mosaïque
-mosaicplot(table_contingence_prise_douleur_TH, main = "Graphique de Mosaïque", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
-
-```
-```{r}
-## Evolution de la douleur sous CM en fonction de la prise
-
-table_contingence_prise_douleur_CM <- table(data2$Prise_CM[data2$Prise_CM != "0"], data2$Douleur_CM[data2$Douleur_CM != "0"])
-
-options(repr.plot.width = 8, repr.plot.height = 10)
-
-mosaicplot(table_contingence_prise_douleur_CM, main = "Graphique de Mosaïque", cex.axis = 0.7, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
-```
-
-
-Pas ultra pertinent : trop de prises continues en proportion pour être significatif.
 
 
 # Evolution de la douleur en fonction de la durée de prise du traitement
@@ -1638,10 +1603,8 @@ table_contingence_duree_douleur_TH <- table(Duree_TH, data1$Douleur_TH[data1$Dou
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_TH[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+mosaicplot(table_contingence_duree_douleur_TH[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree TH", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
 
-```
-```{r}
 #Evolution de la douleur en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
 
 Duree_CM <- factor(ifelse(data2$Depuis_CM == "0", as.character(data2$Combien_CM), as.character(data2$Depuis_CM)))
@@ -1650,11 +1613,130 @@ table_contingence_duree_douleur_CM <- table(Duree_CM, data2$Douleur_CM[data2$Dou
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_CM[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+mosaicplot(table_contingence_duree_douleur_CM[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree CM", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement Mobilite
+
+dataM <- data3[which(data3$Mobilite_NM==1),] #Récupération de tous les individus ayant expérimenté la mobilité hors traitement médicamenteux
+
+Duree_M <- factor(ifelse(dataM$Depuis_Mobilite == "0", as.character(dataM$Combien_Mobilite_NM), as.character(dataM$Depuis_Mobilite_NM)))
+
+table_contingence_duree_douleur_M <- table(Duree_M, dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_M[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree Mobilite", cex.axis = 1, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))),las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement Nutrition
+
+dataN <- data3[which(data3$Nutrition_NM==1),] # Récupération de tous les individus ayant expérimenté la nutrition hors traitement médicamenteux
+
+Duree_N <- factor(ifelse(dataN$Depuis_Nutrition == "0", as.character(dataN$Combien_Nutrition_NM), as.character(dataN$Depuis_Nutrition_NM)))
+
+table_contingence_duree_douleur_N <- table(Duree_N, dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_N[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Nutrition", cex.axis = 1, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))), las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement Gestion du stress
+
+dataS <- data3[which(data3$Stress_NM==1),] # Récupération de tous les individus ayant expérimenté la gestion du stress hors traitement médicamenteux
+
+Duree_S <- factor(ifelse(dataS$Depuis_Stress == "0", as.character(dataS$Combien_Stress_NM), as.character(dataS$Depuis_Stress_NM)))
+
+table_contingence_duree_douleur_S <- table(Duree_S, dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_S[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Stress", cex.axis = 1, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement Phytothérapie
+
+dataP <- data3[which(data3$Phyto_NM==1),] # Récupération de tous les individus ayant expérimenté la phytothérapie hors traitement médicamenteux
+
+Duree_P <- factor(ifelse(dataP$Depuis_Phyto == "0", as.character(dataP$Combien_Phyto_NM), as.character(dataP$Depuis_Phyto_NM)))
+
+table_contingence_duree_douleur_P <- table(Duree_P, dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_P[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Phyto", cex.axis = 1, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))), las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement Acupuncture
+
+dataA <- data3[which(data3$Acup_NM==1),] # Récupération de tous les individus ayant expérimenté l'acupuncture hors traitement médicamenteux
+
+Duree_A <- factor(ifelse(dataA$Depuis_Acup == "0", as.character(dataA$Combien_Acup_NM), as.character(dataA$Depuis_Acup_NM)))
+
+table_contingence_duree_douleur_A <- table(Duree_A, dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_A[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree Acupuncture", cex.axis = 1, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))), las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement Hypnose
+
+dataH <- data3[which(data3$Hypnose_NM==1),] # Récupération de tous les individus ayant expérimenté l'hypnose hors traitement médicamenteux
+
+Duree_H <- factor(ifelse(dataH$Depuis_Hypnose == "0", as.character(dataH$Combien_Hypnose_NM),as.character(dataH$Depuis_Hypnose_NM)))
+
+table_contingence_duree_douleur_H <- table(Duree_H, dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_H[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Hypnose", cex.axis = 1, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))), las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement Bouillotte
+
+dataB <- data3[which(data3$Bouillotte_NM==1),] # Récupération de tous les individus ayant expérimenté la bouillotte hors traitement médicamenteux
+
+Duree_B <- factor(ifelse(dataB$Depuis_Bouillotte == "0", as.character(dataB$Combien_Bouillotte_NM), as.character(dataB$Depuis_Bouillotte_NM)))
+
+table_contingence_duree_douleur_B <- table(Duree_B, dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_B[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Bouillotte", cex.axis = 1, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))), las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement CBD
+
+dataC <- data3[which(data3$CBD_NM==1),] # Récupération de tous les individus ayant expérimenté le CBD hors traitement médicamenteux
+
+Duree_C <- factor(ifelse(dataC$Depuis_CBD == "0", as.character(dataC$Combien_CBD_NM), as.character(dataC$Depuis_CBD_NM)))
+
+table_contingence_duree_douleur_C <- table(Duree_C, dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_C[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree CBD", cex.axis = 1, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))), las=4)
+
+
+#Evolution de la douleur en fonction de la duree de prise du traitement TENS
+
+dataT <- data3[which(data3$Tens_NM==1),] # Récupération de tous les individus ayant expérimenté le TENS hors traitement médicamenteux
+
+Duree_T <- factor(ifelse(dataT$Depuis_Tens == "0", as.character(dataT$Combien_Tens_NM), as.character(dataT$Depuis_Tens_NM)))
+
+table_contingence_duree_douleur_T <- table(Duree_T, dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_douleur_T[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree TENS", cex.axis = 1, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=4)
+
 ```
 
-
-Pour TH et CM : prendre le traitement + de 6 mois semble augmenter l'efficacité du traitement.
+Pour TH, CM, Mobilite?, Phyto, Tens : prendre le traitement + de 6 mois semble augmenter l'efficacité du traitement sur la douleur.
+Pour CBD : il semble que plus le traitement est pris, + il y a réduction de la douleur
+Pour les autres : pas de déduction par rapport à la durée de prise du traitement
 
 # Evolution de la maladie en fonction de la durée de prise du traitement
 
@@ -1665,24 +1747,294 @@ table_contingence_duree_evol_TH <- table(Duree_TH, data1$Evolution_TH[data1$Evol
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_evol_TH[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4)
+mosaicplot(table_contingence_duree_evol_TH[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Mosaïque Evolution x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4)
 
-```
 
-```{r}
 #Evolution de la maladie en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
 
 table_contingence_duree_evol_CM <- table(Duree_CM, data2$Evolution_CM[data2$Evolution_CM != "0"])
 
+mosaicplot(table_contingence_duree_evol_CM[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Mosaïque Evolution x Duree CM", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Evolution_CM))),las = 4)
+
+
+#Evolution de la maladie en fonction de la duree de prise du traitement Mobilite (qu'il y ait eu arrêt ou non)
+
+table_contingence_duree_evol_Mobilite <- table(Duree_M, data3$Evolution_Mobilite_NM[data$Evolution_Mobilite_NM != "0"])
+
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-# Création du graphique de mosaïque
-mosaicplot(table_contingence_duree_evol_CM[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Evolution_CM))),las = 4)
+mosaicplot(table_contingence_duree_evol_Mobilite[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Mobilite", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Mobilite_NM))),las = 4)
+
+# Evolution de la maladie en fonction de la duree de prise du traitement Nutrition (qu'il y ait eu arrêt ou non)
+table_contingence_duree_evol_Nutrition <- table(Duree_N, data3$Evolution_Nutrition_NM[data3$Evolution_Nutrition_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_evol_Nutrition[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Nutrition", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Nutrition_NM))),las = 4)
+
+# Evolution de la maladie en fonction de la duree de prise du traitement Stress (qu'il y ait eu arrêt ou non)
+table_contingence_duree_evol_Stress <- table(Duree_S, data3$Evolution_Stress_NM[data3$Evolution_Stress_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_evol_Stress[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Stress", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Stress_NM))),las = 4)
+
+# Evolution de la maladie en fonction de la duree de prise du traitement Phyto (qu'il y ait eu arrêt ou non)
+table_contingence_duree_evol_Phyto <- table(Duree_P, data3$Evolution_Phyto_NM[data3$Evolution_Phyto_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_evol_Phyto[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Phyto", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Phyto_NM))),las = 4)
+
+# Evolution de la maladie en fonction de la duree de prise du traitement Acup (qu'il y ait eu arrêt ou non)
+table_contingence_duree_evol_Acup <- table(Duree_A, data3$Evolution_Acup_NM[data3$Evolution_Acup_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_evol_Acup[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Acup", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Acup_NM))),las = 4)
+
+# Evolution de la maladie en fonction de la duree de prise du traitement Hypnose (qu'il y ait eu arrêt ou non)
+table_contingence_duree_evol_Hypnose <- table(Duree_H, data3$Evolution_Hypnose_NM[data3$Evolution_Hypnose_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_evol_Hypnose[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Hypnose", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Hypnose_NM))),las = 4)
+
+# Evolution de la maladie en fonction de la duree de prise du traitement Bouillotte (qu'il y ait eu arrêt ou non)
+table_contingence_duree_evol_Bouillotte <- table(Duree_B, data3$Evolution_Bouillotte_NM[data3$Evolution_Bouillotte_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_evol_Bouillotte[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Bouillotte", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Bouillotte_NM))),las = 4)
+
+# Evolution de la maladie en fonction de la duree de prise du traitement Tens (qu'il y ait eu arrêt ou non)
+table_contingence_duree_evol_Tens <- table(Duree_T, data3$Evolution_Tens_NM[data3$Evolution_Tens_NM != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+mosaicplot(table_contingence_duree_evol_Tens[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Tens", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Tens_NM))),las = 4)
+
+```
+
+Pour TH : semble avoir une inluence positive sur la résorption des lésions au-delà de 6 mois
+
+
+# Evolution de la douleur en fonction de la consommation de tabac
+
+```{r}
+# Efficacite douleur TH Tabac
+
+table_contingence_tabac_douleur_TH <- table(data$Tabac[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_TH[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac TH", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+
+
+# Efficacite douleur CM Tabac
+
+table_contingence_tabac_douleur_CM <- table(data$Tabac[which(data$CM == 1)], data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac CM", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+
+
+# Efficacite douleur Mobilite Tabac
+
+table_contingence_tabac_douleur_Mobilite <- table(data$Tabac[which(data3$Mobilite_NM == 1)], dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_Mobilite[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac Mobilite", cex.axis = 1, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))),las=4)
+
+# Efficacite douleur Nutrition Tabac
+table_contingence_tabac_douleur_Nutrition <- table(data$Tabac[which(data$Nutrition_NM == 1)], dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_Nutrition[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Nutrition", cex.axis = 1, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))),las=4)
+
+# Efficacite douleur Stress Tabac
+table_contingence_tabac_douleur_Stress <- table(data$Tabac[which(data$Stress_NM == 1)], dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_Stress[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Stress", cex.axis = 1, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))),las=4)
+
+# Efficacite douleur Phyto Tabac
+table_contingence_tabac_douleur_Phyto <- table(data$Tabac[which(data$Phyto_NM == 1)], dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_Phyto[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Phyto", cex.axis = 1, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))),las=4)
+
+# Efficacite douleur Acup Tabac
+table_contingence_tabac_douleur_Acup <- table(data$Tabac[which(data$Acup_NM == 1)], dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_Acup[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac Acupuncture", cex.axis = 1, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))),las=4)
+
+# Efficacite douleur Hypnose Tabac
+table_contingence_tabac_douleur_Hypnose <- table(data$Tabac[which(data3$Hypnose_NM == 1)], dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_Hypnose[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Hypnose", cex.axis = 1, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))),las=4)
+
+# Efficacite douleur Bouillotte Tabac
+table_contingence_tabac_douleur_Bouillotte <- table(data$Tabac[which(data3$Bouillotte_NM == 1)], dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_Bouillotte[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Bouillotte", cex.axis = 1, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))),las=4)
+
+# Efficacite douleur CBD Tabac
+table_contingence_tabac_douleur_CBD <- table(data$Tabac[which(data$CBD_NM == 1)], dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_CBD[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac CBD", cex.axis = 1, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))),las=4)
+
+# Efficacite douleur Tens Tabac
+table_contingence_tabac_douleur_Tens <- table(data$Tabac[which(data$Tens_NM == 1)], dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
+
+mosaicplot(table_contingence_tabac_douleur_Tens[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac Tens", cex.axis = 1, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))),las=4)
+
+```
+
+# Evolution de la douleur en fonction de la consommation d'alcool
+
+```{r}
+# Efficacite douleur TH Alcool
+
+table_contingence_alcool_douleur_TH <- table(data$Alcool[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_TH[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool TH", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+
+# Efficacite douleur CM Alcool
+
+table_contingence_alcool_douleur_CM <- table(data$Alcool[which(data$CM == 1)], data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool CM", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+
+# Efficacite douleur Mobilite Alcool
+
+table_contingence_alcool_douleur_Mobilite <- table(data$Alcool[which(data3$Mobilite_NM == 1)], dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_Mobilite[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool Mobilite", cex.axis = 1, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))),las=4)
+
+# Efficacite douleur Nutrition Alcool
+table_contingence_alcool_douleur_Nutrition <- table(data$Alcool[which(data$Nutrition_NM == 1)], dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_Nutrition[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Nutrition", cex.axis = 1, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))),las=4)
+
+
+# Efficacite douleur Stress Alcool
+table_contingence_alcool_douleur_Stress <- table(data$Alcool[which(data$Stress_NM == 1)], dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_Stress[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Stress", cex.axis = 1, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))),las=4)
+
+
+# Efficacite douleur Phyto Alcool
+table_contingence_alcool_douleur_Phyto <- table(data$Alcool[which(data$Phyto_NM == 1)], dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_Phyto[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Phyto", cex.axis = 1, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))),las=4)
+
+
+# Efficacite douleur Acup Alcool
+table_contingence_alcool_douleur_Acup <- table(data$Alcool[which(data$Acup_NM == 1)], dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_Acup[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool Acup", cex.axis = 1, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))),las=4)
+
+
+# Efficacite douleur Hypnose Alcool
+table_contingence_alcool_douleur_Hypnose <- table(data$Alcool[which(data3$Hypnose_NM == 1)], dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_Hypnose[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Hypnose", cex.axis = 1, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))),las=4)
+
+
+# Efficacite douleur Bouillotte Alcool
+table_contingence_alcool_douleur_Bouillotte <- table(data$Alcool[which(data3$Bouillotte_NM == 1)], dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_Bouillotte[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Bouillotte", cex.axis = 1, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))),las=4)
+
+
+# Efficacite douleur CBD Alcool
+table_contingence_alcool_douleur_CBD <- table(data$Alcool[which(data$CBD_NM == 1)], dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_CBD[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool CBD", cex.axis = 1, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))),las=4)
+
+
+# Efficacite douleur Tens Alcool
+table_contingence_alcool_douleur_Tens <- table(data$Alcool[which(data$Tens_NM == 1)], dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
+
+mosaicplot(table_contingence_alcool_douleur_Tens[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool Tens", cex.axis = 1, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))),las=4)
+
+```
+
+Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
+
+
+# Evolution de la douleur en fonction de la prise du traitement
+
+```{r}
+## Evolution de la douleur sous TH en fonction de la prise
+
+table_contingence_prise_douleur_TH <- table(data1$Prise_TH[data1$Prise_TH != "0"], data1$Douleur_TH[data1$Douleur_TH != "0"])
+
+options(repr.plot.width = 8, repr.plot.height = 10)
+
+mosaicplot(table_contingence_prise_douleur_TH, main = "Mosaïque Douleur x Prise TH", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+
+
+## Evolution de la douleur sous CM en fonction de la prise
+
+table_contingence_prise_douleur_CM <- table(data2$Prise_CM[data2$Prise_CM != "0"], data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_CM, main = "Mosaïque Douleur x Prise CM", cex.axis = 0.7, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+
+
+## Evolution de la douleur sous Mobilite en fonction de la prise
+
+table_contingence_prise_douleur_Mobilite <- table(data3$Prise_Mobilite_NM[data3$Prise_Mobilite_NM != "0"], dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_Mobilite, main = "Mosaïque Douleur x Prise Mobilite", cex.axis = 0.7, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))),las=4)
+
+## Evolution de la douleur sous Nutrition en fonction de la prise
+
+table_contingence_prise_douleur_Nutrition <- table(data3$Prise_Nutrition_NM[data3$Prise_Nutrition_NM != "0"], dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_Nutrition, main = "Mosaïque Douleur x Prise Nutrition", cex.axis = 0.7, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))),las=4)
+
+## Evolution de la douleur sous Stress en fonction de la prise
+
+table_contingence_prise_douleur_Stress <- table(data3$Prise_Stress_NM[data3$Prise_Stress_NM != "0"], dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_Stress, main = "Mosaïque Douleur x Prise Stress", cex.axis = 0.7, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))),las=4)
+
+## Evolution de la douleur sous Phyto en fonction de la prise
+
+table_contingence_prise_douleur_Phyto <- table(data3$Prise_Phyto_NM[data3$Prise_Phyto_NM != "0"], dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_Phyto, main = "Mosaïque Douleur x Prise Phyto", cex.axis = 0.7, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))),las=4)
+
+## Evolution de la douleur sous Acup en fonction de la prise
+
+table_contingence_prise_douleur_Acup <- table(data3$Prise_Acup_NM[data3$Prise_Acup_NM != "0"], dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_Acup, main = "Mosaïque Douleur x Prise Acup", cex.axis = 0.7, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))),las=4)
+
+## Evolution de la douleur sous Hypnose en fonction de la prise
+
+table_contingence_prise_douleur_Hypnose <- table(data3$Prise_Hypnose_NM[data3$Prise_Hypnose_NM != "0"], dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_Hypnose, main = "Mosaïque Douleur x Prise Hypnose", cex.axis = 0.7, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))),las=4)
+
+## Evolution de la douleur sous Bouillotte en fonction de la prise
+
+table_contingence_prise_douleur_Bouillotte <- table(data3$Prise_Bouillotte_NM[data3$Prise_Bouillotte_NM != "0"], dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_Bouillotte, main = "Mosaïque Douleur x Prise Bouillotte", cex.axis = 0.7, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))),las=4)
+
+## Evolution de la douleur sous CBD en fonction de la prise
+
+table_contingence_prise_douleur_CBD <- table(data3$Prise_CBD_NM[data3$Prise_CBD_NM != "0"], dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_CBD, main = "Mosaïque Douleur x Prise CBD", cex.axis = 0.7, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))),las=4)
+
+## Evolution de la douleur sous Tens en fonction de la prise
+
+table_contingence_prise_douleur_Tens <- table(data3$Prise_Tens_NM[data3$Prise_Tens_NM != "0"], dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
+
+mosaicplot(table_contingence_prise_douleur_Tens, main = "Mosaïque Douleur x Prise Tens", cex.axis = 0.7, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))),las=4)
+
 ```
 
 
-Semble avoir une inluence positive sur la résorption des lésions au-delà de 6 mois ?
-
+Pour TH : pas ultra pertinent car trop de prises continues en proportion pour être significatif.
+Pour CM : type de prise ne semble pas trop impacter efficacité sur la douleur
 
 # Apparition des effets secondaires en fonction de la durée du traitement
 
@@ -1695,8 +2047,7 @@ options(repr.plot.width = 12, repr.plot.height = 8)
 
 mosaicplot(table_contingence_duree_ES[c(4, 2, 3, 1, 5),], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Subi_ES_TH))),las = 4)
 
-```
-```{r}
+
 #Ont subi des effets secondaires en fonction duree traitement (CM)
 
 table_contingence_duree_ES <- table(Duree_CM, data2$Subi_ES_CM[data2$Subi_ES_CM != "0"])
@@ -1704,47 +2055,13 @@ table_contingence_duree_ES <- table(Duree_CM, data2$Subi_ES_CM[data2$Subi_ES_CM 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
 mosaicplot(table_contingence_duree_ES[c(4, 2, 3, 1, 5),], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Subi_ES_CM))),las = 4)
+
 ```
 
-La durée de prise du traitement (TH) ne semble pas influencer l'apparition des effets secondaires.
+La durée de prise du traitement, que ce soit TH ou CM, ne semble pas influencer l'apparition des effets secondaires.
 
 
-# Evolution de la douleur en fonction de la consommation de tabac
-
-```{r}
-# Efficacite douleur TH Tabac
-
-table_contingence_tabac_douleur_TH <- table(data$Tabac[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
-
-mosaicplot(table_contingence_tabac_douleur_TH[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
-```
-```{r}
-# Efficacite douleur CM Tabac
-
-table_contingence_tabac_douleur_CM <- table(data$Tabac[which(data$CM == 1)], data2$Douleur_CM[data2$Douleur_CM != "0"])
-
-mosaicplot(table_contingence_tabac_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
-```
-
-# Evolution de la douleur en fonction de la consommation d'alcool
-
-```{r}
-# Efficacite douleur TH Alcool
-
-table_contingence_alcool_douleur_TH <- table(data$Alcool[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
-
-mosaicplot(table_contingence_alcool_douleur_TH[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
-```
-```{r}
-# Efficacite douleur CM Alcool
-
-table_contingence_alcool_douleur_CM <- table(data$Alcool[which(data$CM == 1)], data2$Douleur_CM[data2$Douleur_CM != "0"])
-
-mosaicplot(table_contingence_alcool_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Graphique de Mosaïque", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
-```
-
-
-Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
+# Pie Chart
 
 ```{r}
 install.packages("RColorBrewer")
