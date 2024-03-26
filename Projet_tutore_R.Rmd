@@ -1482,14 +1482,14 @@ data1 <- data[which(data$TH == 1), 11:94]
 #Second data frame
 
 data2 <- data[which(data$CM == 1), 95:178]
-head(data2)
-print(nrow(data2))
+#head(data2)
+#print(nrow(data2))
 
 #Second data frame
 
-data3 <- data[which(data$Aucun_NM == 0), 178:314]
-#head(data3)
-#print(nrow(data3))
+data3 <- data[which(data$Aucun_NM == 0), 179:314]
+head(data3)
+print(nrow(data3))
 ```
 
 # Analyse Exploratoire
@@ -1590,66 +1590,93 @@ Il ne semble donc pas y avoir de différence significative entre les distributio
 RESTE À FAIRE : REFAIRE LE TEST EN FAISANT DES REGROUPEMENTS DES ÂGES
 
 # Evolution de la douleur en fonction de la durée de prise du traitement
-## Mosaic plots 
+## Mosaic plots
+
 ```{r}
 #Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
 
-Duree_TH <- factor(ifelse(data1$Depuis_TH == "0", as.character(data1$Combien_TH), as.character(data1$Depuis_TH)))
+Duree_TH <- factor(ifelse(data1$Depuis_TH == "0", as.character(data1$Combien_TH), as.character(data1$Depuis_TH)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_TH <- table(Duree_TH, data1$Douleur_TH[data1$Douleur_TH != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_TH[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree TH", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_TH, main = "Mosaïque Douleur x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Douleur_TH))), las=4, xlab = "")
+
 
 #Evolution de la douleur en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
 
-Duree_CM <- factor(ifelse(data2$Depuis_CM == "0", as.character(data2$Combien_CM), as.character(data2$Depuis_CM)))
+Duree_CM <- factor(ifelse(data2$Depuis_CM == "0", as.character(data2$Combien_CM), as.character(data2$Depuis_CM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_CM <- table(Duree_CM, data2$Douleur_CM[data2$Douleur_CM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_CM[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree CM", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_CM, main = "Mosaïque Douleur x Duree CM", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Douleur_CM))), las=4, xlab = "")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Mobilite
 
 dataM <- data3[which(data3$Mobilite_NM==1),] #Récupération de tous les individus ayant expérimenté la mobilité hors traitement médicamenteux
 
-Duree_M <- factor(ifelse(dataM$Depuis_Mobilite == "0", as.character(dataM$Combien_Mobilite_NM), as.character(dataM$Depuis_Mobilite_NM)))
+Duree_M <- factor(ifelse(dataM$Depuis_Mobilite == "0", as.character(dataM$Combien_Mobilite_NM), as.character(dataM$Depuis_Mobilite_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_M <- table(Duree_M, dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_M[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree Mobilite", cex.axis = 1, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))),las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_M, main = "Mosaïque Douleur x Duree Mobilite", cex.axis = 0.8, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))), las=4, xlab = "")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Nutrition
 
 dataN <- data3[which(data3$Nutrition_NM==1),] # Récupération de tous les individus ayant expérimenté la nutrition hors traitement médicamenteux
 
-Duree_N <- factor(ifelse(dataN$Depuis_Nutrition == "0", as.character(dataN$Combien_Nutrition_NM), as.character(dataN$Depuis_Nutrition_NM)))
+Duree_N <- factor(ifelse(dataN$Depuis_Nutrition == "0", as.character(dataN$Combien_Nutrition_NM), as.character(dataN$Depuis_Nutrition_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_N <- table(Duree_N, dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_N[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Nutrition", cex.axis = 1, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))), las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_N, main = "Mosaïque Douleur x Duree Nutrition", cex.axis = 0.8, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))), las=4, xlab="")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Gestion du stress
 
 dataS <- data3[which(data3$Stress_NM==1),] # Récupération de tous les individus ayant expérimenté la gestion du stress hors traitement médicamenteux
 
-Duree_S <- factor(ifelse(dataS$Depuis_Stress == "0", as.character(dataS$Combien_Stress_NM), as.character(dataS$Depuis_Stress_NM)))
+Duree_S <- factor(ifelse(dataS$Depuis_Stress == "0", as.character(dataS$Combien_Stress_NM), as.character(dataS$Depuis_Stress_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_S <- table(Duree_S, dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_S[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Stress", cex.axis = 1, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_S, main = "Mosaïque Douleur x Duree Stress", cex.axis = 0.8, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=4, xlab="")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Phytothérapie
@@ -1736,10 +1763,6 @@ Pour les autres : pas de déduction par rapport à la durée de prise du traitem
 
 # Evolution de la maladie en fonction de la durée de prise du traitement
 ## Mosaic plots 
-```{r}
-print(Duree_TH)
-```
-
 
 ```{r}
 #Evolution de la maladie en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
