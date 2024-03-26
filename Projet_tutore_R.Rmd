@@ -1483,7 +1483,7 @@ data1 <- data[which(data$TH == 1), 11:94]
 
 #Second data frame
 
-data2 <- data[which(data$CM == 1), 94:178]
+data2 <- data[which(data$CM == 1), 95:178]
 head(data2)
 print(nrow(data2))
 
@@ -1740,13 +1740,22 @@ Pour les autres : pas de déduction par rapport à la durée de prise du traitem
 # Evolution de la maladie en fonction de la durée de prise du traitement
 
 ```{r}
+print(Duree_TH)
+```
+
+
+```{r}
 #Evolution de la maladie en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
 
-table_contingence_duree_evol_TH <- table(Duree_TH, data1$Evolution_TH[data1$Evolution_TH != "0"])
+table_contingence_duree_evol_TH <- table(data1$Duree_TH, data1$Evolution_TH[data1$Evolution_TH != "0"])
+
+table_contingence_duree_evol_TH <- table_contingence_duree_evol_TH[table_contingence_duree_evol_TH != 0]  # Filtrer les zéros
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_evol_TH[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Mosaïque Evolution x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4)
+#[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)]
+
+mosaicplot(table_contingence_duree_evol_TH, main = "Mosaïque Evolution x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4)
 
 
 #Evolution de la maladie en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
