@@ -9,7 +9,6 @@ output:
 ---
 
 # Librairies
-
 ```{r, echo=FALSE}
 # Définir un miroir CRAN
 options(repos = "https://cloud.r-project.org")
@@ -30,7 +29,6 @@ library(tidyverse)
 ```
 
 # Mise en forme des données
-
 ```{r, echo=FALSE}
 # Renommer toutes les variables
 
@@ -1495,7 +1493,7 @@ data3 <- data[which(data$Aucun_NM == 0), 178:314]
 ```
 
 # Analyse Exploratoire
-
+## Pyramide des âges de la bdd
 ```{r}
 ### Age ###
 
@@ -1514,7 +1512,7 @@ ggplot(df_age_counts, aes(x = age, y = count)) +
   theme_minimal()
 ```
 
-
+## Pyramide des âges de la pop française 
 ```{r}
 # Lecture du fichier Excel et importation en tant que data frame
 data_pop <- read_excel("demo-pop-pyram.xlsx")
@@ -1542,7 +1540,7 @@ ggplot(df_age_counts_bis, aes(x = age, y = count)) +
   theme_minimal()
 ```
 
-
+## Pyramides des âges côte à côte
 ```{r}
 library(gridExtra)
 
@@ -1562,7 +1560,7 @@ plot2 <- ggplot(df_age_counts_bis_filtre, aes(x = age, y = count)) +
 grid.arrange(plot1, plot2, nrow = 1)
 ```
 
-
+## Tentative d'afficher les pyramides une sur l'autre
 ```{r}
 # afficher nos âges par dessus la pyramide des âges (pas réussi)
 
@@ -1577,7 +1575,7 @@ grid.arrange(plot1, plot2, nrow = 1)
 #  geom_line(data = df_age_counts_bis, color = "red")
 ```
 
-
+## Test khi2 d'adéquation des âges
 ```{r}
 # Effectuer un test du khi-deux pour comparer les distributions d'âge
 
@@ -1585,14 +1583,14 @@ chisq.test(df_age_counts$age, df_age_counts_bis$age[19:54])
 
 ####### "Chi-squared approximation may be incorrect" ????
 ```
-
 p-value = 0.2376 > 0.05 (alpha=5%)
 
 Il ne semble donc pas y avoir de différence significative entre les distributions d'âge des deux groupes (ie les femmes ayant répondu au sondage et l'ensemble des Françaises recensées en 2024).
 
+RESTE À FAIRE : REFAIRE LE TEST EN FAISANT DES REGROUPEMENTS DES ÂGES
 
 # Evolution de la douleur en fonction de la durée de prise du traitement
-
+## Mosaic plots 
 ```{r}
 #Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
 
@@ -1732,13 +1730,12 @@ options(repr.plot.width = 12, repr.plot.height = 8)
 mosaicplot(table_contingence_duree_douleur_T[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree TENS", cex.axis = 1, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=4)
 
 ```
-
 Pour TH, CM, Mobilite?, Phyto, Tens : prendre le traitement + de 6 mois semble augmenter l'efficacité du traitement sur la douleur.
 Pour CBD : il semble que plus le traitement est pris, + il y a réduction de la douleur
 Pour les autres : pas de déduction par rapport à la durée de prise du traitement
 
 # Evolution de la maladie en fonction de la durée de prise du traitement
-
+## Mosaic plots 
 ```{r}
 print(Duree_TH)
 ```
@@ -1823,12 +1820,10 @@ options(repr.plot.width = 12, repr.plot.height = 8)
 mosaicplot(table_contingence_duree_evol_Tens[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Tens", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Tens_NM))),las = 4)
 
 ```
-
 Pour TH : semble avoir une inluence positive sur la résorption des lésions au-delà de 6 mois
 
-
 # Evolution de la douleur en fonction de la consommation de tabac
-
+## Mosaic plots 
 ```{r}
 # Efficacite douleur TH Tabac
 
@@ -1893,7 +1888,7 @@ mosaicplot(table_contingence_tabac_douleur_Tens[,c(1, 4, 5, 3, 2)], main = "Mosa
 ```
 
 # Evolution de la douleur en fonction de la consommation d'alcool
-
+## Mosaic plots 
 ```{r}
 # Efficacite douleur TH Alcool
 
@@ -1961,12 +1956,11 @@ table_contingence_alcool_douleur_Tens <- table(data$Alcool[which(data$Tens_NM ==
 mosaicplot(table_contingence_alcool_douleur_Tens[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool Tens", cex.axis = 1, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))),las=4)
 
 ```
-
 Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
 
 
 # Evolution de la douleur en fonction de la prise du traitement
-
+## Mosaic plots 
 ```{r}
 ## Evolution de la douleur sous TH en fonction de la prise
 
@@ -2039,13 +2033,11 @@ table_contingence_prise_douleur_Tens <- table(data3$Prise_Tens_NM[data3$Prise_Te
 mosaicplot(table_contingence_prise_douleur_Tens, main = "Mosaïque Douleur x Prise Tens", cex.axis = 0.7, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))),las=4)
 
 ```
-
-
 Pour TH : pas ultra pertinent car trop de prises continues en proportion pour être significatif.
 Pour CM : type de prise ne semble pas trop impacter efficacité sur la douleur
 
 # Apparition des effets secondaires en fonction de la durée du traitement
-
+## Mosaic plots 
 ```{r}
 #Ont subi des effets secondaires en fonction duree traitement (TH)
 
@@ -2065,12 +2057,10 @@ options(repr.plot.width = 12, repr.plot.height = 8)
 mosaicplot(table_contingence_duree_ES[c(4, 2, 3, 1, 5),], main = "Graphique de Mosaïque", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Subi_ES_CM))),las = 4)
 
 ```
-
 La durée de prise du traitement, que ce soit TH ou CM, ne semble pas influencer l'apparition des effets secondaires.
 
-
-# Pie Chart
-
+# Douleur TH / Douleur CM
+## Pie charts
 ```{r}
 #install.packages("RColorBrewer")
 library(RColorBrewer)
@@ -2116,10 +2106,9 @@ pie_table_CM <- table(data2$Douleur_CM)
 text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
 ```
 
+# Évolution TH / Évolution CM
+## Pie charts
 ```{r}
-#install.packages("RColorBrewer")
-library(RColorBrewer)
-
 options(repr.plot.width = 16, repr.plot.height = 10)
 par(mfrow = c(1, 2))
 
