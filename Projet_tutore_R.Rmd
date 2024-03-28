@@ -1593,6 +1593,26 @@ RESTE À FAIRE : REFAIRE LE TEST EN FAISANT DES REGROUPEMENTS DES ÂGES
 ## Mosaic plots
 
 ```{r}
+dataS <- data3[which(data3$Stress_NM==1),] # Récupération de tous les individus ayant expérimenté la gestion du stress hors traitement médicamenteux
+
+Duree_S <- factor(ifelse(dataS$Depuis_Stress_NM == "0", as.character(dataS$Combien_Stress_NM), as.character(dataS$Depuis_Stress_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
+
+Douleur_S <- factor(dataS$Douleur_Stress_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur\n\n", "Réduction importante de la douleur"), ordered = TRUE)
+
+table_contingence_duree_douleur_S <- table(Duree_S, Douleur_S)
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_S, main = "Mosaïque Douleur x Stress NM", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Douleur_TH))), las=4, xlab = "", ylab="")
+```
+
+
+```{r}
 #Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
 
 Duree_TH <- factor(ifelse(data1$Depuis_TH == "0", as.character(data1$Combien_TH), as.character(data1$Depuis_TH)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
@@ -1667,7 +1687,9 @@ dataS <- data3[which(data3$Stress_NM==1),] # Récupération de tous les individu
 
 Duree_S <- factor(ifelse(dataS$Depuis_Stress == "0", as.character(dataS$Combien_Stress_NM), as.character(dataS$Depuis_Stress_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
-table_contingence_duree_douleur_S <- table(Duree_S, dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+Douleur_S <- factor(dataS$Douleur_Stress_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur\n\n", "Réduction importante de la douleur"), ordered = TRUE)
+
+table_contingence_duree_douleur_S <- table(Duree_S, Douleur_S)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
@@ -1676,85 +1698,117 @@ margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans marg
 
 par(mar = margins)
 
-mosaicplot(table_contingence_duree_douleur_S, main = "Mosaïque Douleur x Duree Stress", cex.axis = 0.8, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=4, xlab="")
+mosaicplot(table_contingence_duree_douleur_S, main = "Mosaïque Douleur x Duree Stress", cex.axis = 0.8, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=4, xlab="", ylab="")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Phytothérapie
 
 dataP <- data3[which(data3$Phyto_NM==1),] # Récupération de tous les individus ayant expérimenté la phytothérapie hors traitement médicamenteux
 
-Duree_P <- factor(ifelse(dataP$Depuis_Phyto == "0", as.character(dataP$Combien_Phyto_NM), as.character(dataP$Depuis_Phyto_NM)))
+Duree_P <- factor(ifelse(dataP$Depuis_Phyto == "0", as.character(dataP$Combien_Phyto_NM), as.character(dataP$Depuis_Phyto_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_P <- table(Duree_P, dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_P[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Phyto", cex.axis = 1, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))), las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_P, main = "Mosaïque Douleur x Duree Phyto", cex.axis = 0.8, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))), las=4, xlab="")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Acupuncture
 
 dataA <- data3[which(data3$Acup_NM==1),] # Récupération de tous les individus ayant expérimenté l'acupuncture hors traitement médicamenteux
 
-Duree_A <- factor(ifelse(dataA$Depuis_Acup == "0", as.character(dataA$Combien_Acup_NM), as.character(dataA$Depuis_Acup_NM)))
+Duree_A <- factor(ifelse(dataA$Depuis_Acup == "0", as.character(dataA$Combien_Acup_NM), as.character(dataA$Depuis_Acup_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_A <- table(Duree_A, dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_A[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree Acupuncture", cex.axis = 1, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))), las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_A, main = "Mosaïque Douleur x Duree Acupuncture", cex.axis = 0.8, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))), las=4, xlab="")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Hypnose
 
 dataH <- data3[which(data3$Hypnose_NM==1),] # Récupération de tous les individus ayant expérimenté l'hypnose hors traitement médicamenteux
 
-Duree_H <- factor(ifelse(dataH$Depuis_Hypnose == "0", as.character(dataH$Combien_Hypnose_NM),as.character(dataH$Depuis_Hypnose_NM)))
+Duree_H <- factor(ifelse(dataH$Depuis_Hypnose_NM == "0", as.character(dataH$Combien_Hypnose_NM),as.character(dataH$Depuis_Hypnose_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
-table_contingence_duree_douleur_H <- table(Duree_H, dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+Douleur_H <- factor(dataH$Douleur_Hypnose_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "\nPas d'impact sur la douleur", "\n\nRéduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+table_contingence_duree_douleur_H <- table(Duree_H,Douleur_H)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_H[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Hypnose", cex.axis = 1, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))), las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_H, main = "Mosaïque Douleur x Duree Hypnose", cex.axis = 0.8, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))), las=4, xlab="", ylab="")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Bouillotte
 
 dataB <- data3[which(data3$Bouillotte_NM==1),] # Récupération de tous les individus ayant expérimenté la bouillotte hors traitement médicamenteux
 
-Duree_B <- factor(ifelse(dataB$Depuis_Bouillotte == "0", as.character(dataB$Combien_Bouillotte_NM), as.character(dataB$Depuis_Bouillotte_NM)))
+Duree_B <- factor(ifelse(dataB$Depuis_Bouillotte == "0", as.character(dataB$Combien_Bouillotte_NM), as.character(dataB$Depuis_Bouillotte_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_B <- table(Duree_B, dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_B[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree Bouillotte", cex.axis = 1, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))), las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_B, main = "Mosaïque Douleur x Duree Bouillotte", cex.axis = 0.8, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))), las=4, xlab="")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement CBD
 
 dataC <- data3[which(data3$CBD_NM==1),] # Récupération de tous les individus ayant expérimenté le CBD hors traitement médicamenteux
 
-Duree_C <- factor(ifelse(dataC$Depuis_CBD == "0", as.character(dataC$Combien_CBD_NM), as.character(dataC$Depuis_CBD_NM)))
+Duree_C <- factor(ifelse(dataC$Depuis_CBD == "0", as.character(dataC$Combien_CBD_NM), as.character(dataC$Depuis_CBD_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_C <- table(Duree_C, dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_C[c(4, 2, 3, 1, 5),c(1, 3, 4, 2)], main = "Mosaïque Douleur x Duree CBD", cex.axis = 1, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))), las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_C, main = "Mosaïque Douleur x Duree CBD", cex.axis = 0.8, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))), las=4, xlab="")
 
 
 #Evolution de la douleur en fonction de la duree de prise du traitement TENS
 
 dataT <- data3[which(data3$Tens_NM==1),] # Récupération de tous les individus ayant expérimenté le TENS hors traitement médicamenteux
 
-Duree_T <- factor(ifelse(dataT$Depuis_Tens == "0", as.character(dataT$Combien_Tens_NM), as.character(dataT$Depuis_Tens_NM)))
+Duree_T <- factor(ifelse(dataT$Depuis_Tens == "0", as.character(dataT$Combien_Tens_NM), as.character(dataT$Depuis_Tens_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_T <- table(Duree_T, dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_douleur_T[c(4, 2, 3, 1, 5),c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Duree TENS", cex.axis = 1, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_douleur_T, main = "Mosaïque Douleur x Duree TENS", cex.axis = 0.8, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=4, xlab="")
 
 ```
 Pour TH, CM, Mobilite?, Phyto, Tens : prendre le traitement + de 6 mois semble augmenter l'efficacité du traitement sur la douleur.
