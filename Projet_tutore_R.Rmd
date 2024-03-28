@@ -1471,6 +1471,14 @@ data$Email <- ifelse(data$Email == "", "0", data$Email)
 
 #print(Email)
 
+### Supression de la case Aucun_NM cochée par erreur ###
+for (i in 1:nrow(data)) {
+  if (data[i, "Aucun_NM"] == 1 & data[i, "Hypnose_NM"] == 1 & data[i, "Bouillotte_NM"] == 1) {
+    data[i, "Aucun_NM"] = 0
+    break  # Sortir de la boucle une fois que la ligne est trouvée
+  }
+}
+
 ### Création des 3 dataframes ###
 
 #Premier data frame
@@ -1485,12 +1493,13 @@ data2 <- data[which(data$CM == 1), 95:178]
 #head(data2)
 #print(nrow(data2))
 
-#Second data frame
+#Troisième data frame
 
 data3 <- data[which(data$Aucun_NM == 0), 179:314]
 head(data3)
 print(nrow(data3))
 ```
+
 
 # Analyse Exploratoire
 ## Pyramide des âges de la bdd
@@ -1628,26 +1637,6 @@ length(df_age_counts_bis$age[19:54])
 ## Mosaic plots
 
 ```{r}
-dataS <- data3[which(data3$Stress_NM==1),] # Récupération de tous les individus ayant expérimenté la gestion du stress hors traitement médicamenteux
-
-Duree_S <- factor(ifelse(dataS$Depuis_Stress_NM == "0", as.character(dataS$Combien_Stress_NM), as.character(dataS$Depuis_Stress_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
-
-Douleur_S <- factor(dataS$Douleur_Stress_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur\n\n", "Réduction importante de la douleur"), ordered = TRUE)
-
-table_contingence_duree_douleur_S <- table(Duree_S, Douleur_S)
-
-options(repr.plot.width = 12, repr.plot.height = 8)
-
-margins <- par()$mar
-margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
-
-par(mar = margins)
-
-mosaicplot(table_contingence_duree_douleur_S, main = "Mosaïque Douleur x Stress NM", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Douleur_TH))), las=4, xlab = "", ylab="")
-```
-
-
-```{r}
 #Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
 
 Duree_TH <- factor(ifelse(data1$Depuis_TH == "0", as.character(data1$Combien_TH), as.character(data1$Depuis_TH)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
@@ -1771,7 +1760,6 @@ par(mar = margins)
 
 mosaicplot(table_contingence_duree_douleur_A, main = "Mosaïque Douleur x Duree Acupuncture", cex.axis = 0.8, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))), las=4, xlab="")
 
-
 #Evolution de la douleur en fonction de la duree de prise du traitement Hypnose
 
 dataH <- data3[which(data3$Hypnose_NM==1),] # Récupération de tous les individus ayant expérimenté l'hypnose hors traitement médicamenteux
@@ -1790,7 +1778,6 @@ margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans marg
 par(mar = margins)
 
 mosaicplot(table_contingence_duree_douleur_H, main = "Mosaïque Douleur x Duree Hypnose", cex.axis = 0.8, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))), las=4, xlab="", ylab="")
-
 
 #Evolution de la douleur en fonction de la duree de prise du traitement Bouillotte
 
@@ -1856,31 +1843,46 @@ Pour les autres : pas de déduction par rapport à la durée de prise du traitem
 ```{r}
 #Evolution de la maladie en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
 
-table_contingence_duree_evol_TH <- table(data1$Duree_TH, data1$Evolution_TH[data1$Evolution_TH != "0"])
+Evolution_TH <- factor(data1$Evolution_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "\nRéduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
-table_contingence_duree_evol_TH <- table_contingence_duree_evol_TH[table_contingence_duree_evol_TH != 0]  # Filtrer les zéros
+table_contingence_duree_evol_TH <- table(Duree_TH, Evolution_TH)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-#[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)]
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-mosaicplot(table_contingence_duree_evol_TH, main = "Mosaïque Evolution x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4)
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_TH, main = "Mosaïque Evolution x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4, xlab="", ylab="")
 
 
 #Evolution de la maladie en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
 
-table_contingence_duree_evol_CM <- table(Duree_CM, data2$Evolution_CM[data2$Evolution_CM != "0"])
+Evolution_CM <- factor(data2$Evolution_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "\n\nPas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
-mosaicplot(table_contingence_duree_evol_CM[c(4, 2, 3, 1, 5),c(1, 4, 6, 7, 5, 3, 2)], main = "Mosaïque Evolution x Duree CM", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Evolution_CM))),las = 4)
+table_contingence_duree_evol_CM <- table(Duree_CM, Evolution_CM)
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_CM, main = "Mosaïque Evolution x Duree CM", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Evolution_CM))),las = 4, xlab="", ylab="")
 
 
 #Evolution de la maladie en fonction de la duree de prise du traitement Mobilite (qu'il y ait eu arrêt ou non)
 
-table_contingence_duree_evol_Mobilite <- table(Duree_M, data3$Evolution_Mobilite_NM[data$Evolution_Mobilite_NM != "0"])
+table_contingence_duree_evol_Mobilite <- table(Duree_M, dataM$Evolution_Mobilite_NM[dataM$Evolution_Mobilite_NM != "0"])
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_evol_Mobilite[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Mobilite", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Mobilite_NM))),las = 4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_Mobilite, main = "Mosaïque Evolution x Duree Mobilite", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Mobilite_NM))),las = 4, xlab="")
 
 # Evolution de la maladie en fonction de la duree de prise du traitement Nutrition (qu'il y ait eu arrêt ou non)
 table_contingence_duree_evol_Nutrition <- table(Duree_N, data3$Evolution_Nutrition_NM[data3$Evolution_Nutrition_NM != "0"])
@@ -1937,135 +1939,336 @@ Pour TH : semble avoir une inluence positive sur la résorption des lésions au-
 # Evolution de la douleur en fonction de la consommation de tabac
 ## Mosaic plots 
 ```{r}
-# Efficacite douleur TH Tabac
+##### Efficacite douleur TH Tabac #####
 
-table_contingence_tabac_douleur_TH <- table(data$Tabac[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
+Tabac_TH <- factor(data$Tabac[which(data$TH == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
 
-#mosaicplot(table_contingence_tabac_douleur_TH[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac TH", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+table_contingence_tabac_douleur_TH <- table(Tabac_TH, data1$Douleur_TH[data1$Douleur_TH != "0"])
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_tabac_douleur_TH, main = "Mosaïque Douleur x Tabac TH", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))),las=1, xlab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
 
 
-# Efficacite douleur CM Tabac
+##### Efficacite douleur CM Tabac #####
 
-table_contingence_tabac_douleur_CM <- table(data$Tabac[which(data$CM == 1)], data2$Douleur_CM[data2$Douleur_CM != "0"])
+Tabac_CM <- factor(data$Tabac[which(data$CM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
 
-#mosaicplot(table_contingence_tabac_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac CM", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+table_contingence_tabac_douleur_CM <- table(Tabac_CM, data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_tabac_douleur_CM, main = "Mosaïque Douleur x Tabac CM", cex.axis = 0.7, col = terrain.colors(length(unique(data2$Douleur_CM))), las=1, xlab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
 
 
-# Efficacite douleur Mobilite Tabac
+##### Efficacite douleur Mobilite Tabac #####
 
-table_contingence_tabac_douleur_Mobilite <- table(data$Tabac[which(data3$Mobilite_NM == 1)], dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
+Tabac_M <- factor(data$Tabac[which(data$Mobilite_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
 
-#mosaicplot(table_contingence_tabac_douleur_Mobilite[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac Mobilite", cex.axis = 1, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))),las=4)
+table_contingence_tabac_douleur_Mobilite <- table(Tabac_M, dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
 
-# Efficacite douleur Nutrition Tabac
-table_contingence_tabac_douleur_Nutrition <- table(data$Tabac[which(data$Nutrition_NM == 1)], dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+par(mar = margins)
 
-#mosaicplot(table_contingence_tabac_douleur_Nutrition[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Nutrition", cex.axis = 1, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))),las=4)
+mosaicplot(table_contingence_tabac_douleur_Mobilite, main = "Mosaïque Douleur x Tabac Mobilite", cex.axis = 0.7, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))), las=1, xlab="")
 
-# Efficacite douleur Stress Tabac
-table_contingence_tabac_douleur_Stress <- table(data$Tabac[which(data$Stress_NM == 1)], dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+##### Efficacite douleur Nutrition Tabac #####
 
-#mosaicplot(table_contingence_tabac_douleur_Stress[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Stress", cex.axis = 1, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))),las=4)
 
-# Efficacite douleur Phyto Tabac
-table_contingence_tabac_douleur_Phyto <- table(data$Tabac[which(data$Phyto_NM == 1)], dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+Tabac_N <- factor(data$Tabac[which(data$Nutrition_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+Douleur_Tabac_N <- factor(dataN$Douleur_Nutrition_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "\nPas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
 
-#mosaicplot(table_contingence_tabac_douleur_Phyto[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Phyto", cex.axis = 1, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))),las=4)
+table_contingence_tabac_douleur_Nutrition <- table(Tabac_N, Douleur_Tabac_N)
 
-# Efficacite douleur Acup Tabac
-table_contingence_tabac_douleur_Acup <- table(data$Tabac[which(data$Acup_NM == 1)], dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+par(mar = margins)
 
-#mosaicplot(table_contingence_tabac_douleur_Acup[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac Acupuncture", cex.axis = 1, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))),las=4)
+mosaicplot(table_contingence_tabac_douleur_Nutrition, main = "Mosaïque Douleur x Tabac Nutrition", cex.axis = 0.7, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))), las=1, xlab="", ylab="")
 
-# Efficacite douleur Hypnose Tabac
-table_contingence_tabac_douleur_Hypnose <- table(data$Tabac[which(data3$Hypnose_NM == 1)], dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+##### Efficacite douleur Stress Tabac #####
 
-#mosaicplot(table_contingence_tabac_douleur_Hypnose[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Hypnose", cex.axis = 1, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))),las=4)
+Tabac_S <- factor(data$Tabac[which(data$Stress_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
 
-# Efficacite douleur Bouillotte Tabac
-table_contingence_tabac_douleur_Bouillotte <- table(data$Tabac[which(data3$Bouillotte_NM == 1)], dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
+table_contingence_tabac_douleur_Stress <- table(Tabac_S, dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
 
-#mosaicplot(table_contingence_tabac_douleur_Bouillotte[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac Bouillotte", cex.axis = 1, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))),las=4)
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-# Efficacite douleur CBD Tabac
-table_contingence_tabac_douleur_CBD <- table(data$Tabac[which(data$CBD_NM == 1)], dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+par(mar = margins)
 
-#mosaicplot(table_contingence_tabac_douleur_CBD[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Tabac CBD", cex.axis = 1, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))),las=4)
+mosaicplot(table_contingence_tabac_douleur_Stress, main = "Mosaïque Douleur x Tabac Stress", cex.axis = 0.7, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=1, xlab="")
 
-# Efficacite douleur Tens Tabac
-table_contingence_tabac_douleur_Tens <- table(data$Tabac[which(data$Tens_NM == 1)], dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
 
-#mosaicplot(table_contingence_tabac_douleur_Tens[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Tabac Tens", cex.axis = 1, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))),las=4)
+##### Efficacite douleur Phyto Tabac #####
+
+Tabac_P <- factor(data$Tabac[which(data$Phyto_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_tabac_douleur_Phyto <- table(Tabac_P, dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_tabac_douleur_Phyto, main = "Mosaïque Douleur x Tabac Phyto", cex.axis = 0.7, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))), las=1, xlab="")
+
+
+##### Efficacite douleur Acup Tabac #####
+
+Tabac_A <- factor(data$Tabac[which(data$Acup_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_tabac_douleur_Acup <- table(Tabac_A, dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_tabac_douleur_Acup, main = "Mosaïque Douleur x Tabac Acupuncture", cex.axis = 0.7, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))), las=1, xlab="")
+
+
+##### Efficacite douleur Hypnose Tabac #####
+
+Tabac_H <- factor(data$Tabac[which(data$Hypnose_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_tabac_douleur_Hypnose <- table(Tabac_H, dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_tabac_douleur_Hypnose, main = "Mosaïque Douleur x Tabac Hypnose", cex.axis = 0.7, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))), las=1, xlab="")
+
+
+##### Efficacite douleur Bouillotte Tabac #####
+
+Tabac_B <- factor(data$Tabac[which(data$Bouillotte_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+Douleur_Tabac_B <- factor(dataB$Douleur_Bouillotte_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "\nPas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+table_contingence_tabac_douleur_Bouillotte <- table(Tabac_B, Douleur_Tabac_B)
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_tabac_douleur_Bouillotte, main = "Mosaïque Douleur x Tabac Bouillotte", cex.axis = 0.7, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))), las=1, xlab="", ylab="")
+
+
+##### Efficacite douleur CBD Tabac #####
+
+Tabac_C <- factor(data$Tabac[which(data$CBD_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_tabac_douleur_CBD <- table(Tabac_C, dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_tabac_douleur_CBD, main = "Mosaïque Douleur x Tabac CBD", cex.axis = 0.7, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))), las=1, xlab="")
+
+
+##### Efficacite douleur Tens Tabac #####
+
+Tabac_T <- factor(data$Tabac[which(data$Tens_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_tabac_douleur_Tens <- table(Tabac_T, dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_tabac_douleur_Tens, main = "Mosaïque Douleur x Tabac Tens", cex.axis = 0.7, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=1, xlab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
 
 ```
 
 # Evolution de la douleur en fonction de la consommation d'alcool
 ## Mosaic plots 
 ```{r}
-# Efficacite douleur TH Alcool
+##### Efficacite douleur TH Alcool #####
 
-table_contingence_alcool_douleur_TH <- table(data$Alcool[which(data$TH == 1)], data1$Douleur_TH[data1$Douleur_TH != "0"])
+Alcool_TH <- factor(data$Alcool[which(data$TH == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
 
-#mosaicplot(table_contingence_alcool_douleur_TH[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool TH", cex.axis = 1, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+table_contingence_alcool_douleur_TH <- table(Alcool_TH, data1$Douleur_TH[data1$Douleur_TH != "0"])
 
-# Efficacite douleur CM Alcool
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-table_contingence_alcool_douleur_CM <- table(data$Alcool[which(data$CM == 1)], data2$Douleur_CM[data2$Douleur_CM != "0"])
+par(mar = margins)
 
-#mosaicplot(table_contingence_alcool_douleur_CM[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool CM", cex.axis = 1, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
-
-# Efficacite douleur Mobilite Alcool
-
-table_contingence_alcool_douleur_Mobilite <- table(data$Alcool[which(data3$Mobilite_NM == 1)], dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
-
-#mosaicplot(table_contingence_alcool_douleur_Mobilite[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool Mobilite", cex.axis = 1, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))),las=4)
-
-# Efficacite douleur Nutrition Alcool
-table_contingence_alcool_douleur_Nutrition <- table(data$Alcool[which(data$Nutrition_NM == 1)], dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
-
-#mosaicplot(table_contingence_alcool_douleur_Nutrition[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Nutrition", cex.axis = 1, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))),las=4)
+mosaicplot(table_contingence_alcool_douleur_TH, main = "Mosaïque Douleur x Alcool TH", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))), las=1, xlab="")
 
 
-# Efficacite douleur Stress Alcool
-table_contingence_alcool_douleur_Stress <- table(data$Alcool[which(data$Stress_NM == 1)], dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+##### Efficacite douleur CM Alcool #####
 
-#mosaicplot(table_contingence_alcool_douleur_Stress[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Stress", cex.axis = 1, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))),las=4)
+Alcool_CM <- factor(data$Alcool[which(data$CM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
 
+Douleur_Alcool_CM <- factor(data2$Douleur_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "\nPas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
 
-# Efficacite douleur Phyto Alcool
-table_contingence_alcool_douleur_Phyto <- table(data$Alcool[which(data$Phyto_NM == 1)], dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+table_contingence_alcool_douleur_CM <- table(Alcool_CM, Douleur_Alcool_CM)
 
-#mosaicplot(table_contingence_alcool_douleur_Phyto[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Phyto", cex.axis = 1, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))),las=4)
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
 
+par(mar = margins)
 
-# Efficacite douleur Acup Alcool
-table_contingence_alcool_douleur_Acup <- table(data$Alcool[which(data$Acup_NM == 1)], dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
-
-#mosaicplot(table_contingence_alcool_douleur_Acup[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool Acup", cex.axis = 1, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))),las=4)
-
-
-# Efficacite douleur Hypnose Alcool
-table_contingence_alcool_douleur_Hypnose <- table(data$Alcool[which(data3$Hypnose_NM == 1)], dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
-
-#mosaicplot(table_contingence_alcool_douleur_Hypnose[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Hypnose", cex.axis = 1, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))),las=4)
+mosaicplot(table_contingence_alcool_douleur_CM, main = "Mosaïque Douleur x Alcool CM", cex.axis = 0.7, col = terrain.colors(length(unique(data2$Douleur_CM))), las=1, xlab="", ylab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
 
 
-# Efficacite douleur Bouillotte Alcool
-table_contingence_alcool_douleur_Bouillotte <- table(data$Alcool[which(data3$Bouillotte_NM == 1)], dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
+##### Efficacite douleur Mobilite Alcool #####
 
-#mosaicplot(table_contingence_alcool_douleur_Bouillotte[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool Bouillotte", cex.axis = 1, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))),las=4)
+Alcool_M <- factor(data$Alcool[which(data$Mobilite_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_alcool_douleur_Mobilite <- table(Alcool_M, dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_Mobilite, main = "Mosaïque Douleur x Alcool Mobilite", cex.axis = 0.7, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))), las=1, xlab="")
+
+##### Efficacite douleur Nutrition Alcool #####
+
+Alcool_N <- factor(data$Alcool[which(data$Nutrition_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+Douleur_Alcool_N <- factor(dataN$Douleur_Nutrition_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "\nPas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+table_contingence_alcool_douleur_Nutrition <- table(Alcool_N, Douleur_Alcool_N)
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_Nutrition, main = "Mosaïque Douleur x Alcool Nutrition", cex.axis = 0.7, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))), las=1, xlab="", ylab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
 
 
-# Efficacite douleur CBD Alcool
-table_contingence_alcool_douleur_CBD <- table(data$Alcool[which(data$CBD_NM == 1)], dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+##### Efficacite douleur Stress Alcool #####
 
-#mosaicplot(table_contingence_alcool_douleur_CBD[,c(1, 3, 4, 2)], main = "Mosaïque Douleur x Alcool CBD", cex.axis = 1, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))),las=4)
+Alcool_S <- factor(data$Alcool[which(data$Stress_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_alcool_douleur_Stress <- table(Alcool_S, dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_Stress, main = "Mosaïque Douleur x Alcool Stress", cex.axis = 0.7, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=1, xlab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
 
 
-# Efficacite douleur Tens Alcool
-table_contingence_alcool_douleur_Tens <- table(data$Alcool[which(data$Tens_NM == 1)], dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
+##### Efficacite douleur Phyto Alcool #####
 
-#mosaicplot(table_contingence_alcool_douleur_Tens[,c(1, 4, 5, 3, 2)], main = "Mosaïque Douleur x Alcool Tens", cex.axis = 1, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))),las=4)
+Alcool_P <- factor(data$Alcool[which(data$Phyto_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_alcool_douleur_Phyto <- table(Alcool_P, dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_Phyto, main = "Mosaïque Douleur x Alcool Phyto", cex.axis = 0.7, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))), las=1, xlab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
+
+
+##### Efficacite douleur Acup Alcool #####
+
+Alcool_A <- factor(data$Alcool[which(data$Acup_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_alcool_douleur_Acup <- table(Alcool_A, dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_Acup, main = "Mosaïque Douleur x Alcool Acup", cex.axis = 0.7, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))), las=1, xlab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
+
+
+##### Efficacite douleur Hypnose Alcool #####
+
+Alcool_H <- factor(data$Alcool[which(data$Hypnose_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_alcool_douleur_Hypnose <- table(Alcool_H, dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_Hypnose, main = "Mosaïque Douleur x Alcool Hypnose", cex.axis = 0.7, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))), las=1, xlab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
+
+
+##### Efficacite douleur Bouillotte Alcool #####
+
+Alcool_B <- factor(data$Alcool[which(data$Bouillotte_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+Douleur_Alcool_B <- factor(dataB$Douleur_Bouillotte_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "\nPas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+table_contingence_alcool_douleur_Bouillotte <- table(Alcool_B, Douleur_Alcool_B)
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_Bouillotte, main = "Mosaïque Douleur x Alcool Bouillotte", cex.axis = 0.7, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))), las=1, xlab="", ylab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
+
+
+##### Efficacite douleur CBD Alcool #####
+
+Alcool_C <- factor(data$Alcool[which(data$CBD_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+table_contingence_alcool_douleur_CBD <- table(Alcool_C, dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_CBD, main = "Mosaïque Douleur x Alcool CBD", cex.axis = 0.7, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))), las=1, xlab="")
+
+
+##### Efficacite douleur Tens Alcool #####
+
+Alcool_T <- factor(data$Alcool[which(data$Tens_NM == 1)], levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), labels = c("Régulier", "Parfois", "Jamais"), ordered = TRUE)
+
+Douleur_Alcool_T <- factor(dataT$Douleur_Tens_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Augmentation de la douleur", "\nPas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+table_contingence_alcool_douleur_Tens <- table(Alcool_T, Douleur_Alcool_T)
+
+margins <- par()$mar
+margins[3] <- 3  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_alcool_douleur_Tens, main = "Mosaïque Douleur x Alcool Tens", cex.axis = 0.7, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=1, xlab="", ylab="")
+>>>>>>> 0a95afaf2a4146eed9f58722eaa9bb5c7aeaaef0
 
 ```
 Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
