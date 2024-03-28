@@ -1637,7 +1637,7 @@ length(df_age_counts_bis$age[19:54])
 ## Mosaic plots
 
 ```{r}
-#Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
+##### Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non) #####
 
 Duree_TH <- factor(ifelse(data1$Depuis_TH == "0", as.character(data1$Combien_TH), as.character(data1$Depuis_TH)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
@@ -1653,7 +1653,7 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_TH, main = "Mosaïque Douleur x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Douleur_TH))), las=4, xlab = "")
 
 
-#Evolution de la douleur en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
+##### Evolution de la douleur en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non) #####
 
 Duree_CM <- factor(ifelse(data2$Depuis_CM == "0", as.character(data2$Combien_CM), as.character(data2$Depuis_CM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
@@ -1669,7 +1669,7 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_CM, main = "Mosaïque Douleur x Duree CM", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Douleur_CM))), las=4, xlab = "")
 
 
-#Evolution de la douleur en fonction de la duree de prise du traitement Mobilite
+##### Evolution de la douleur en fonction de la duree de prise du traitement Mobilite #####
 
 dataM <- data3[which(data3$Mobilite_NM==1),] #Récupération de tous les individus ayant expérimenté la mobilité hors traitement médicamenteux
 
@@ -1687,7 +1687,7 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_M, main = "Mosaïque Douleur x Duree Mobilite", cex.axis = 0.8, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))), las=4, xlab = "")
 
 
-#Evolution de la douleur en fonction de la duree de prise du traitement Nutrition
+##### Evolution de la douleur en fonction de la duree de prise du traitement Nutrition #####
 
 dataN <- data3[which(data3$Nutrition_NM==1),] # Récupération de tous les individus ayant expérimenté la nutrition hors traitement médicamenteux
 
@@ -1705,7 +1705,7 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_N, main = "Mosaïque Douleur x Duree Nutrition", cex.axis = 0.8, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))), las=4, xlab="")
 
 
-#Evolution de la douleur en fonction de la duree de prise du traitement Gestion du stress
+##### Evolution de la douleur en fonction de la duree de prise du traitement Gestion du stress #####
 
 dataS <- data3[which(data3$Stress_NM==1),] # Récupération de tous les individus ayant expérimenté la gestion du stress hors traitement médicamenteux
 
@@ -1725,7 +1725,7 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_S, main = "Mosaïque Douleur x Duree Stress", cex.axis = 0.8, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=4, xlab="", ylab="")
 
 
-#Evolution de la douleur en fonction de la duree de prise du traitement Phytothérapie
+##### Evolution de la douleur en fonction de la duree de prise du traitement Phytothérapie #####
 
 dataP <- data3[which(data3$Phyto_NM==1),] # Récupération de tous les individus ayant expérimenté la phytothérapie hors traitement médicamenteux
 
@@ -1743,7 +1743,7 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_P, main = "Mosaïque Douleur x Duree Phyto", cex.axis = 0.8, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))), las=4, xlab="")
 
 
-#Evolution de la douleur en fonction de la duree de prise du traitement Acupuncture
+##### Evolution de la douleur en fonction de la duree de prise du traitement Acupuncture #####
 
 dataA <- data3[which(data3$Acup_NM==1),] # Récupération de tous les individus ayant expérimenté l'acupuncture hors traitement médicamenteux
 
@@ -1760,7 +1760,8 @@ par(mar = margins)
 
 mosaicplot(table_contingence_duree_douleur_A, main = "Mosaïque Douleur x Duree Acupuncture", cex.axis = 0.8, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))), las=4, xlab="")
 
-#Evolution de la douleur en fonction de la duree de prise du traitement Hypnose
+
+##### Evolution de la douleur en fonction de la duree de prise du traitement Hypnose #####
 
 dataH <- data3[which(data3$Hypnose_NM==1),] # Récupération de tous les individus ayant expérimenté l'hypnose hors traitement médicamenteux
 
@@ -1779,7 +1780,8 @@ par(mar = margins)
 
 mosaicplot(table_contingence_duree_douleur_H, main = "Mosaïque Douleur x Duree Hypnose", cex.axis = 0.8, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))), las=4, xlab="", ylab="")
 
-#Evolution de la douleur en fonction de la duree de prise du traitement Bouillotte
+
+##### Evolution de la douleur en fonction de la duree de prise du traitement Bouillotte #####
 
 dataB <- data3[which(data3$Bouillotte_NM==1),] # Récupération de tous les individus ayant expérimenté la bouillotte hors traitement médicamenteux
 
@@ -1797,7 +1799,7 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_B, main = "Mosaïque Douleur x Duree Bouillotte", cex.axis = 0.8, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))), las=4, xlab="")
 
 
-#Evolution de la douleur en fonction de la duree de prise du traitement CBD
+##### Evolution de la douleur en fonction de la duree de prise du traitement CBD #####
 
 dataC <- data3[which(data3$CBD_NM==1),] # Récupération de tous les individus ayant expérimenté le CBD hors traitement médicamenteux
 
@@ -1815,7 +1817,7 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_C, main = "Mosaïque Douleur x Duree CBD", cex.axis = 0.8, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))), las=4, xlab="")
 
 
-#Evolution de la douleur en fonction de la duree de prise du traitement TENS
+##### Evolution de la douleur en fonction de la duree de prise du traitement TENS #####
 
 dataT <- data3[which(data3$Tens_NM==1),] # Récupération de tous les individus ayant expérimenté le TENS hors traitement médicamenteux
 
@@ -1841,11 +1843,13 @@ Pour les autres : pas de déduction par rapport à la durée de prise du traitem
 ## Mosaic plots 
 
 ```{r}
-#Evolution de la maladie en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non)
+##### Evolution de la maladie en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non) #####
 
-Evolution_TH <- factor(data1$Evolution_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "\nRéduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+Duree_Evol_TH <- factor(ifelse(data1$Depuis_TH == "0", as.character(data1$Combien_TH), as.character(data1$Depuis_TH)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "\n3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
-table_contingence_duree_evol_TH <- table(Duree_TH, Evolution_TH)
+Evolution_TH <- factor(data1$Evolution_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions\n", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+table_contingence_duree_evol_TH <- table(Duree_Evol_TH, Evolution_TH)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
@@ -1854,26 +1858,30 @@ margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans marg
 
 par(mar = margins)
 
-mosaicplot(table_contingence_duree_evol_TH, main = "Mosaïque Evolution x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4, xlab="", ylab="")
+mosaicplot(table_contingence_duree_evol_TH[,1:5], main = "Mosaïque Evolution x Duree TH", cex.axis = 0.8, col = terrain.colors(length(unique(data1$Evolution_TH))),las = 4, xlab="", ylab="")
 
 
-#Evolution de la maladie en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non)
+##### Evolution de la maladie en fonction de la duree de prise du traitement CM (qu'il y ait eu arrêt ou non) #####
+
+Duree_Evol_CM <- factor(ifelse(data2$Depuis_CM == "0", as.character(data2$Combien_CM), as.character(data2$Depuis_CM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois\n", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 Evolution_CM <- factor(data2$Evolution_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "\n\nPas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
-table_contingence_duree_evol_CM <- table(Duree_CM, Evolution_CM)
+table_contingence_duree_evol_CM <- table(Duree_Evol_CM, Evolution_CM)
 
 margins <- par()$mar
 margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
 par(mar = margins)
 
-mosaicplot(table_contingence_duree_evol_CM, main = "Mosaïque Evolution x Duree CM", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Evolution_CM))),las = 4, xlab="", ylab="")
+mosaicplot(table_contingence_duree_evol_CM[,1:5], main = "Mosaïque Evolution x Duree CM", cex.axis = 0.8, col = terrain.colors(length(unique(data2$Evolution_CM))),las = 4, xlab="", ylab="")
 
 
-#Evolution de la maladie en fonction de la duree de prise du traitement Mobilite (qu'il y ait eu arrêt ou non)
+##### Evolution de la maladie en fonction de la duree de prise du traitement Mobilite (qu'il y ait eu arrêt ou non) #####
 
-table_contingence_duree_evol_Mobilite <- table(Duree_M, dataM$Evolution_Mobilite_NM[dataM$Evolution_Mobilite_NM != "0"])
+Evolution_M <- factor(dataM$Evolution_Mobilite_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions\n", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+table_contingence_duree_evol_Mobilite <- table(Duree_M, Evolution_M)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
@@ -1882,56 +1890,119 @@ margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans marg
 
 par(mar = margins)
 
-mosaicplot(table_contingence_duree_evol_Mobilite, main = "Mosaïque Evolution x Duree Mobilite", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Mobilite_NM))),las = 4, xlab="")
+mosaicplot(table_contingence_duree_evol_Mobilite[,1:5], main = "Mosaïque Evolution x Duree Mobilite", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Mobilite_NM))),las = 4, xlab="", ylab="")
 
-# Evolution de la maladie en fonction de la duree de prise du traitement Nutrition (qu'il y ait eu arrêt ou non)
-table_contingence_duree_evol_Nutrition <- table(Duree_N, data3$Evolution_Nutrition_NM[data3$Evolution_Nutrition_NM != "0"])
 
-options(repr.plot.width = 12, repr.plot.height = 8)
+##### Evolution de la maladie en fonction de la duree de prise du traitement Nutrition (qu'il y ait eu arrêt ou non) #####
 
-mosaicplot(table_contingence_duree_evol_Nutrition[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Nutrition", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Nutrition_NM))),las = 4)
+Evolution_N <- factor(dataN$Evolution_Nutrition_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions\n", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
-# Evolution de la maladie en fonction de la duree de prise du traitement Stress (qu'il y ait eu arrêt ou non)
-table_contingence_duree_evol_Stress <- table(Duree_S, data3$Evolution_Stress_NM[data3$Evolution_Stress_NM != "0"])
+table_contingence_duree_evol_Nutrition <- table(Duree_N, Evolution_N)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_evol_Stress[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Stress", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Stress_NM))),las = 4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-# Evolution de la maladie en fonction de la duree de prise du traitement Phyto (qu'il y ait eu arrêt ou non)
-table_contingence_duree_evol_Phyto <- table(Duree_P, data3$Evolution_Phyto_NM[data3$Evolution_Phyto_NM != "0"])
+par(mar = margins)
 
-options(repr.plot.width = 12, repr.plot.height = 8)
+mosaicplot(table_contingence_duree_evol_Nutrition[,1:5], main = "Mosaïque Evolution x Duree Nutrition", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Nutrition_NM))), las = 4, xlab="", ylab="")
 
-mosaicplot(table_contingence_duree_evol_Phyto[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Phyto", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Phyto_NM))),las = 4)
 
-# Evolution de la maladie en fonction de la duree de prise du traitement Acup (qu'il y ait eu arrêt ou non)
-table_contingence_duree_evol_Acup <- table(Duree_A, data3$Evolution_Acup_NM[data3$Evolution_Acup_NM != "0"])
+##### Evolution de la maladie en fonction de la duree de prise du traitement Stress (qu'il y ait eu arrêt ou non) #####
 
-options(repr.plot.width = 12, repr.plot.height = 8)
+Evolution_S <- factor(dataS$Evolution_Stress_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions\n", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
-mosaicplot(table_contingence_duree_evol_Acup[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Acup", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Acup_NM))),las = 4)
-
-# Evolution de la maladie en fonction de la duree de prise du traitement Hypnose (qu'il y ait eu arrêt ou non)
-table_contingence_duree_evol_Hypnose <- table(Duree_H, data3$Evolution_Hypnose_NM[data3$Evolution_Hypnose_NM != "0"])
+table_contingence_duree_evol_Stress <- table(Duree_S, Evolution_S)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_evol_Hypnose[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Hypnose", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Hypnose_NM))),las = 4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-# Evolution de la maladie en fonction de la duree de prise du traitement Bouillotte (qu'il y ait eu arrêt ou non)
-table_contingence_duree_evol_Bouillotte <- table(Duree_B, data3$Evolution_Bouillotte_NM[data3$Evolution_Bouillotte_NM != "0"])
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_Stress[,1:5], main = "Mosaïque Evolution x Duree Stress", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Stress_NM))), las = 4, xlab="", ylab="")
+
+
+##### Evolution de la maladie en fonction de la duree de prise du traitement Phyto (qu'il y ait eu arrêt ou non) #####
+
+Evolution_P <- factor(dataP$Evolution_Phyto_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions\n", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+table_contingence_duree_evol_Phyto <- table(Duree_P, Evolution_P)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_evol_Bouillotte[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Bouillotte", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Bouillotte_NM))),las = 4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-# Evolution de la maladie en fonction de la duree de prise du traitement Tens (qu'il y ait eu arrêt ou non)
-table_contingence_duree_evol_Tens <- table(Duree_T, data3$Evolution_Tens_NM[data3$Evolution_Tens_NM != "0"])
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_Phyto[,1:5], main = "Mosaïque Evolution x Duree Phyto", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Phyto_NM))), las = 4, xlab="", ylab="")
+
+
+##### Evolution de la maladie en fonction de la duree de prise du traitement Acup (qu'il y ait eu arrêt ou non) #####
+
+Evolution_A <- factor(dataA$Evolution_Acup_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+table_contingence_duree_evol_Acup <- table(Duree_A, Evolution_A)
 
 options(repr.plot.width = 12, repr.plot.height = 8)
 
-mosaicplot(table_contingence_duree_evol_Tens[c(4, 2, 3, 1, 5),], main = "Mosaïque Evolution x Duree Tens", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Tens_NM))),las = 4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_Acup[,1:5], main = "Mosaïque Evolution x Duree Acup", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Acup_NM))), las = 4, xlab="", ylab="")
+
+
+##### Evolution de la maladie en fonction de la duree de prise du traitement Hypnose (qu'il y ait eu arrêt ou non) #####
+
+Evolution_H <- factor(dataH$Evolution_Hypnose_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions\n", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+table_contingence_duree_evol_Hypnose <- table(Duree_H, Evolution_H)
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_Hypnose[,1:5], main = "Mosaïque Evolution x Duree Hypnose", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Hypnose_NM))), las = 4, xlab="", ylab="")
+
+
+##### Evolution de la maladie en fonction de la duree de prise du traitement Bouillotte (qu'il y ait eu arrêt ou non) #####
+
+Evolution_B <- factor(dataB$Evolution_Bouillotte_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions\n", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+table_contingence_duree_evol_Bouillotte <- table(Duree_Evol_B, Evolution_B)
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_Bouillotte[,1:5], main = "Mosaïque Evolution x Duree Bouillotte", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Bouillotte_NM))), las = 4, xlab="", ylab="")
+
+
+##### Evolution de la maladie en fonction de la duree de prise du traitement Tens (qu'il y ait eu arrêt ou non) #####
+
+Evolution_T <- factor(dataT$Evolution_Tens_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "\nGrossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions\n", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+table_contingence_duree_evol_Tens <- table(Duree_T, Evolution_T)
+
+options(repr.plot.width = 12, repr.plot.height = 8)
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_duree_evol_Tens[,1:5], main = "Mosaïque Evolution x Duree Tens", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Tens_NM))), las = 4, xlab="", ylab="")
 
 ```
 Pour TH : semble avoir une inluence positive sur la résorption des lésions au-delà de 6 mois
@@ -2268,75 +2339,160 @@ Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacit�
 # Evolution de la douleur en fonction de la prise du traitement
 ## Mosaic plots 
 ```{r}
-## Evolution de la douleur sous TH en fonction de la prise
+##### Evolution de la douleur sous TH en fonction de la prise #####
 
-table_contingence_prise_douleur_TH <- table(data1$Prise_TH[data1$Prise_TH != "0"], data1$Douleur_TH[data1$Douleur_TH != "0"])
+Prise_TH <- factor(data1$Prise_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "   Occasionnelle\n\n"), ordered = TRUE)
+
+table_contingence_prise_douleur_TH <- table(Prise_TH, data1$Douleur_TH[data1$Douleur_TH != "0"])
 
 options(repr.plot.width = 8, repr.plot.height = 10)
 
-mosaicplot(table_contingence_prise_douleur_TH, main = "Mosaïque Douleur x Prise TH", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))),las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_prise_douleur_TH, main = "Mosaïque Douleur x Prise TH", cex.axis = 0.7, col = terrain.colors(length(unique(data1$Douleur_TH))), las=1, xlab="")
 
 
-## Evolution de la douleur sous CM en fonction de la prise
+##### Evolution de la douleur sous CM en fonction de la prise #####
 
-table_contingence_prise_douleur_CM <- table(data2$Prise_CM[data2$Prise_CM != "0"], data2$Douleur_CM[data2$Douleur_CM != "0"])
+Prise_CM <- factor(data2$Prise_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
 
-mosaicplot(table_contingence_prise_douleur_CM, main = "Mosaïque Douleur x Prise CM", cex.axis = 0.7, col = terrain.colors(length(unique(data2$Douleur_CM))),las=4)
+table_contingence_prise_douleur_CM <- table(Prise_CM, data2$Douleur_CM[data2$Douleur_CM != "0"])
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_prise_douleur_CM, main = "Mosaïque Douleur x Prise CM", cex.axis = 0.7, col = terrain.colors(length(unique(data2$Douleur_CM))), las=1, xlab="")
 
 
-## Evolution de la douleur sous Mobilite en fonction de la prise
+##### Evolution de la douleur sous Mobilite en fonction de la prise #####
 
-table_contingence_prise_douleur_Mobilite <- table(data3$Prise_Mobilite_NM[data3$Prise_Mobilite_NM != "0"], dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
+Prise_M <- factor(dataM$Prise_Mobilite_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
 
-mosaicplot(table_contingence_prise_douleur_Mobilite, main = "Mosaïque Douleur x Prise Mobilite", cex.axis = 0.7, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))),las=4)
+table_contingence_prise_douleur_Mobilite <- table(Prise_M, dataM$Douleur_Mobilite_NM[dataM$Douleur_Mobilite_NM != "0"])
 
-## Evolution de la douleur sous Nutrition en fonction de la prise
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-table_contingence_prise_douleur_Nutrition <- table(data3$Prise_Nutrition_NM[data3$Prise_Nutrition_NM != "0"], dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
+par(mar = margins)
 
-mosaicplot(table_contingence_prise_douleur_Nutrition, main = "Mosaïque Douleur x Prise Nutrition", cex.axis = 0.7, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))),las=4)
+mosaicplot(table_contingence_prise_douleur_Mobilite, main = "Mosaïque Douleur x Prise Mobilite", cex.axis = 0.7, col = terrain.colors(length(unique(dataM$Douleur_Mobilite_NM))), las=1, xlab="")
 
-## Evolution de la douleur sous Stress en fonction de la prise
 
-table_contingence_prise_douleur_Stress <- table(data3$Prise_Stress_NM[data3$Prise_Stress_NM != "0"], dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
+##### Evolution de la douleur sous Nutrition en fonction de la prise #####
 
-mosaicplot(table_contingence_prise_douleur_Stress, main = "Mosaïque Douleur x Prise Stress", cex.axis = 0.7, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))),las=4)
+Prise_N <- factor(dataN$Prise_Nutrition_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle\n\n"), ordered = TRUE)
 
-## Evolution de la douleur sous Phyto en fonction de la prise
+table_contingence_prise_douleur_Nutrition <- table(Prise_N, dataN$Douleur_Nutrition_NM[dataN$Douleur_Nutrition_NM != "0"])
 
-table_contingence_prise_douleur_Phyto <- table(data3$Prise_Phyto_NM[data3$Prise_Phyto_NM != "0"], dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-mosaicplot(table_contingence_prise_douleur_Phyto, main = "Mosaïque Douleur x Prise Phyto", cex.axis = 0.7, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))),las=4)
+par(mar = margins)
 
-## Evolution de la douleur sous Acup en fonction de la prise
+mosaicplot(table_contingence_prise_douleur_Nutrition, main = "Mosaïque Douleur x Prise Nutrition", cex.axis = 0.7, col = terrain.colors(length(unique(dataN$Douleur_Nutrition_NM))), las=1, xlab="")
 
-table_contingence_prise_douleur_Acup <- table(data3$Prise_Acup_NM[data3$Prise_Acup_NM != "0"], dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
 
-mosaicplot(table_contingence_prise_douleur_Acup, main = "Mosaïque Douleur x Prise Acup", cex.axis = 0.7, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))),las=4)
+##### Evolution de la douleur sous Stress en fonction de la prise #####
 
-## Evolution de la douleur sous Hypnose en fonction de la prise
+Prise_S <- factor(dataS$Prise_Stress_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
 
-table_contingence_prise_douleur_Hypnose <- table(data3$Prise_Hypnose_NM[data3$Prise_Hypnose_NM != "0"], dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+table_contingence_prise_douleur_Stress <- table(Prise_S, dataS$Douleur_Stress_NM[dataS$Douleur_Stress_NM != "0"])
 
-mosaicplot(table_contingence_prise_douleur_Hypnose, main = "Mosaïque Douleur x Prise Hypnose", cex.axis = 0.7, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))),las=4)
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-## Evolution de la douleur sous Bouillotte en fonction de la prise
+par(mar = margins)
 
-table_contingence_prise_douleur_Bouillotte <- table(data3$Prise_Bouillotte_NM[data3$Prise_Bouillotte_NM != "0"], dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
+mosaicplot(table_contingence_prise_douleur_Stress, main = "Mosaïque Douleur x Prise Stress", cex.axis = 0.7, col = terrain.colors(length(unique(dataS$Douleur_Stress_NM))), las=1, xlab="")
 
-mosaicplot(table_contingence_prise_douleur_Bouillotte, main = "Mosaïque Douleur x Prise Bouillotte", cex.axis = 0.7, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))),las=4)
 
-## Evolution de la douleur sous CBD en fonction de la prise
+##### Evolution de la douleur sous Phyto en fonction de la prise #####
 
-table_contingence_prise_douleur_CBD <- table(data3$Prise_CBD_NM[data3$Prise_CBD_NM != "0"], dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+Prise_P <- factor(dataP$Prise_Phyto_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
 
-mosaicplot(table_contingence_prise_douleur_CBD, main = "Mosaïque Douleur x Prise CBD", cex.axis = 0.7, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))),las=4)
+table_contingence_prise_douleur_Phyto <- table(Prise_P, dataP$Douleur_Phyto_NM[dataP$Douleur_Phyto_NM != "0"])
 
-## Evolution de la douleur sous Tens en fonction de la prise
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
 
-table_contingence_prise_douleur_Tens <- table(data3$Prise_Tens_NM[data3$Prise_Tens_NM != "0"], dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
+par(mar = margins)
 
-mosaicplot(table_contingence_prise_douleur_Tens, main = "Mosaïque Douleur x Prise Tens", cex.axis = 0.7, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))),las=4)
+mosaicplot(table_contingence_prise_douleur_Phyto, main = "Mosaïque Douleur x Prise Phyto", cex.axis = 0.7, col = terrain.colors(length(unique(dataP$Douleur_Phyto_NM))), las=1, xlab="")
+
+
+##### Evolution de la douleur sous Acup en fonction de la prise #####
+
+Prise_A <- factor(dataA$Prise_Acup_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
+
+table_contingence_prise_douleur_Acup <- table(Prise_A, dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_prise_douleur_Acup, main = "Mosaïque Douleur x Prise Acup", cex.axis = 0.7, col = terrain.colors(length(unique(dataA$Douleur_Acup_NM))), las=1, xlab="")
+
+
+##### Evolution de la douleur sous Hypnose en fonction de la prise #####
+
+Prise_H <- factor(dataH$Prise_Hypnose_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
+
+table_contingence_prise_douleur_Hypnose <- table(Prise_H, dataH$Douleur_Hypnose_NM[dataH$Douleur_Hypnose_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_prise_douleur_Hypnose, main = "Mosaïque Douleur x Prise Hypnose", cex.axis = 0.7, col = terrain.colors(length(unique(dataH$Douleur_Hypnose_NM))), las=1, xlab="")
+
+
+##### Evolution de la douleur sous Bouillotte en fonction de la prise #####
+
+Prise_B <- factor(dataB$Prise_Bouillotte_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
+
+table_contingence_prise_douleur_Bouillotte <- table(Prise_B, dataB$Douleur_Bouillotte_NM[dataB$Douleur_Bouillotte_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_prise_douleur_Bouillotte, main = "Mosaïque Douleur x Prise Bouillotte", cex.axis = 0.7, col = terrain.colors(length(unique(dataB$Douleur_Bouillotte_NM))), las=1, xlab="")
+
+
+##### Evolution de la douleur sous CBD en fonction de la prise #####
+
+Prise_C <- factor(dataC$Prise_CBD_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
+
+table_contingence_prise_douleur_CBD <- table(Prise_C, dataC$Douleur_CBD_NM[dataC$Douleur_CBD_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_prise_douleur_CBD, main = "Mosaïque Douleur x Prise CBD", cex.axis = 0.7, col = terrain.colors(length(unique(dataC$Douleur_CBD_NM))), las=1, xlab="")
+
+
+##### Evolution de la douleur sous Tens en fonction de la prise #####
+
+Prise_T <- factor(dataT$Prise_Tens_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), labels = c("Continue", "Cyclique", "Occasionnelle"), ordered = TRUE)
+
+table_contingence_prise_douleur_Tens <- table(Prise_T, dataT$Douleur_Tens_NM[dataT$Douleur_Tens_NM != "0"])
+
+margins <- par()$mar
+margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans margins)
+
+par(mar = margins)
+
+mosaicplot(table_contingence_prise_douleur_Tens, main = "Mosaïque Douleur x Prise Tens", cex.axis = 0.7, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=1, xlab="")
 
 ```
 Pour TH : pas ultra pertinent car trop de prises continues en proportion pour être significatif.
