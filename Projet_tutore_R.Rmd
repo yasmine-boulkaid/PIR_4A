@@ -1525,6 +1525,7 @@ names(data_pop)[names(data_pop) == "...3"] <-"Nb_femmes"
 names(data_pop)[names(data_pop) == "...4"] <-"Nb_hommes"
 names(data_pop)[names(data_pop) == "...5"] <-"Ensemble"
 
+
 data_pop$Annee_Naissance <- as.factor(data_pop$Annee_Naissance)
 data_pop$Age_revolu <- as.numeric(data_pop$Age_revolu)
 data_pop$Nb_femmes <- as.numeric(data_pop$Nb_femmes)
@@ -1533,6 +1534,8 @@ data_pop$Ensemble <- as.numeric(data_pop$Ensemble)
 
 df_age_counts_bis <- data.frame(age = data_pop$Age_revolu,
                              count = data_pop$Nb_femmes)
+
+head(df_age_counts_bis_filtre)
 
 ggplot(df_age_counts_bis, aes(x = age, y = count)) +
   geom_bar(stat = "identity", fill = "skyblue") +
@@ -1550,7 +1553,7 @@ plot1 <- ggplot(df_age_counts, aes(x = age, y = count)) +
   labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
   theme_minimal()
 
-df_age_counts_bis_filtre <- subset(df_age_counts_bis, age >= 18 & age <= 53)
+df_age_counts_bis_filtre <- subset(df_age_counts_bis, age >= 17 & age <= 53)
 
 plot2 <- ggplot(df_age_counts_bis_filtre, aes(x = age, y = count)) +
   geom_bar(stat = "identity", fill = "skyblue") +
@@ -1575,6 +1578,29 @@ grid.arrange(plot1, plot2, nrow = 1)
 #  geom_line(data = df_age_counts_bis, color = "red")
 ```
 
+## Regroupement en tranches d'âges
+```{r}
+tranches_age <- cut(data$Age, breaks = 5)
+tranches_age_pyramide = cut(df_age_counts_bis_filtre$count, breaks = 5)
+
+plot(tranches_age)
+plot(tranches_age_pyramide)
+
+plot1 <- ggplot(tranches_age, aes(x = age, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
+  theme_minimal()
+
+plot2 <- ggplot(tranches_age_pyramide, aes(x = age, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges des femmes de la population française en 2024 (âges 18-53)") +
+  theme_minimal()
+
+grid.arrange(plot1, plot2, nrow = 1)
+
+length(df_age_counts_bis_filtre$age)
+```
+
 ## Test khi2 d'adéquation des âges
 ```{r}
 # Effectuer un test du khi-deux pour comparer les distributions d'âge
@@ -1588,6 +1614,15 @@ p-value = 0.2376 > 0.05 (alpha=5%)
 Il ne semble donc pas y avoir de différence significative entre les distributions d'âge des deux groupes (ie les femmes ayant répondu au sondage et l'ensemble des Françaises recensées en 2024).
 
 RESTE À FAIRE : REFAIRE LE TEST EN FAISANT DES REGROUPEMENTS DES ÂGES
+## Test khi2 d'adéquation des tranches d'âges 
+```{r}
+# Effectuer un test du khi-deux pour comparer les distributions d'âge
+
+chisq.test(tranches_age, tranches_age_pyramide)
+length(df_age_counts$age)
+length(df_age_counts_bis$age[19:54])
+?chisq.test
+```
 
 # Evolution de la douleur en fonction de la durée de prise du traitement
 ## Mosaic plots
@@ -2034,7 +2069,6 @@ mosaicplot(table_contingence_alcool_douleur_Tens[,c(1, 4, 5, 3, 2)], main = "Mos
 
 ```
 Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
-
 
 # Evolution de la douleur en fonction de la prise du traitement
 ## Mosaic plots 
