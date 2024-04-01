@@ -3213,8 +3213,9 @@ text(x = bp, y = 1, labels = resultats3$Total, pos = 3)
 
 #### Tests de Chi_deux ####
 
-## Test de Chi_deux Duree x Douleur
 
+
+## Test de Chi_deux Duree x Douleur
 
 ```{r}
 ######### Duree x Douleur TH ##########
@@ -3249,6 +3250,15 @@ print(table_contingence_duree_douleur_CM_grouped)
 ## Test Khi-deux
 print(chisq.test(table_contingence_duree_douleur_CM_grouped))
 
+
+######### Duree x Douleur Traitements médicameteux réunis ##########
+
+table_contingence_duree_douleur_TM_grouped <- table_contingence_duree_douleur_TH_grouped + table_contingence_duree_douleur_CM_grouped
+
+print(table_contingence_duree_douleur_TM_grouped)
+print(chisq.test(table_contingence_duree_douleur_TM_grouped))
+
+
 ######### Duree x Douleur Mobilite ##########
 
 ## Nouvelle table
@@ -3281,6 +3291,13 @@ print(table_contingence_duree_douleur_Nutrition_grouped)
 ## Test Khi-deux
 print(chisq.test(table_contingence_duree_douleur_Nutrition_grouped))
 
+
+### Cas où absence d'augmentation de la douleur
+table_contingence_duree_douleur_Nutrition_grouped_bis <- table_contingence_duree_douleur_Nutrition_grouped[-1, ]
+print(table_contingence_duree_douleur_Nutrition_grouped_bis)
+print(chisq.test(table_contingence_duree_douleur_Nutrition_grouped_bis))
+
+
 ######### Duree x Douleur Stress ##########
 
 ## Nouvelle table
@@ -3296,6 +3313,11 @@ print(table_contingence_duree_douleur_Stress_grouped)
 
 ## Test Khi-deux
 print(chisq.test(table_contingence_duree_douleur_Stress_grouped))
+
+### Cas où absence d'augmentation de la douleur
+table_contingence_duree_douleur_Stress_grouped_bis <- table_contingence_duree_douleur_Stress_grouped[-1, ]
+print(table_contingence_duree_douleur_Stress_grouped_bis)
+print(chisq.test(table_contingence_duree_douleur_Stress_grouped_bis))
 
 
 ######### Duree x Douleur Phyto ##########
@@ -3314,6 +3336,11 @@ print(table_contingence_duree_douleur_Phyto_grouped)
 ## Test Khi-deux
 print(chisq.test(table_contingence_duree_douleur_Phyto_grouped))
 
+### Cas où absence d'augmentation de la douleur
+table_contingence_duree_douleur_Phyto_grouped_bis <- table_contingence_duree_douleur_Phyto_grouped[-1, ]
+print(table_contingence_duree_douleur_Phyto_grouped_bis)
+print(chisq.test(table_contingence_duree_douleur_Phyto_grouped_bis))
+
 
 ######### Duree x Douleur Hypnose ##########
 
@@ -3330,6 +3357,11 @@ print(table_contingence_duree_douleur_Hypnose_grouped)
 
 ## Test Khi-deux
 print(chisq.test(table_contingence_duree_douleur_Hypnose_grouped))
+
+### Cas où absence d'augmentation de la douleur
+table_contingence_duree_douleur_Hypnose_grouped_bis <- table_contingence_duree_douleur_Hypnose_grouped[-1, ]
+print(table_contingence_duree_douleur_Hypnose_grouped_bis)
+print(chisq.test(table_contingence_duree_douleur_Hypnose_grouped_bis))
 
 
 ######### Duree x Douleur Acup ##########
@@ -3365,6 +3397,11 @@ print(table_contingence_duree_douleur_Bouillotte_grouped)
 ## Test Khi-deux
 print(chisq.test(table_contingence_duree_douleur_Bouillotte_grouped))
 
+### Cas où absence d'augmentation de la douleur
+table_contingence_duree_douleur_Bouillotte_grouped_bis <- table_contingence_duree_douleur_Bouillotte_grouped[-1, ]
+print(table_contingence_duree_douleur_Bouillotte_grouped_bis)
+print(chisq.test(table_contingence_duree_douleur_Bouillotte_grouped_bis))
+
 
 ######### Duree x Douleur CBD ##########
 
@@ -3373,14 +3410,19 @@ Duree_CBD_sans_label <- factor(ifelse(is.na(data3$Depuis_CBD_NM), as.character(d
 
 Duree_CBD_grouped <- case_when(
   Duree_CBD_sans_label %in% c("Moins de 3 mois", "Entre 3 et 6 mois") ~ "Moins de 6 mois",
-  Duree_CBD_sans_label %in% c("Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans") ~ "Plus de 6 mois"
-)
+  Duree_CBD_sans_label %in% c("Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans") ~ "Plus de 6 mois")
+
 
 table_contingence_duree_douleur_CBD_grouped <- table(data3$Douleur_CBD_NM[data3$Douleur_CBD_NM != "0"], Duree_CBD_grouped)
 print(table_contingence_duree_douleur_CBD_grouped)
 
 ## Test Khi-deux
 print(chisq.test(table_contingence_duree_douleur_CBD_grouped))
+
+### Cas où absence d'augmentation de la douleur
+table_contingence_duree_douleur_CBD_grouped_bis <- table_contingence_duree_douleur_CBD_grouped[-1, ]
+print(table_contingence_duree_douleur_CBD_grouped_bis)
+print(chisq.test(table_contingence_duree_douleur_CBD_grouped_bis))
 
 
 ######### Duree x Douleur Tens ##########
@@ -3402,83 +3444,172 @@ print(chisq.test(table_contingence_duree_douleur_Tens_grouped))
 
 ```
 
-Ne pas faire le regroupement pour CBD
+Globalement permet de confirmer que TH, CM, Mobilite, Phyto et Tens + efficaces lorsqu'ils sont pris plus de 6 mois.
+En revanche, aucune confirmation pour le CBD.
 
 
 ## Test de Chi_deux Tabac x Douleur
 
 ```{r}
+
+# TH
+
 print(table_contingence_tabac_douleur_TH)
 print(chisq.test(table_contingence_tabac_douleur_TH))
+
+# CM
 
 print(table_contingence_tabac_douleur_CM)
 print(chisq.test(table_contingence_tabac_douleur_CM))
 
+# Mobilite
+
 print(table_contingence_tabac_douleur_Mobilite)
 print(chisq.test(table_contingence_tabac_douleur_Mobilite))
+
+# Nutrition
 
 print(table_contingence_tabac_douleur_Nutrition)
 print(chisq.test(table_contingence_tabac_douleur_Nutrition))
 
+print(table_contingence_tabac_douleur_Nutrition[,-1])
+print(chisq.test(table_contingence_tabac_douleur_Nutrition[,-1]))
+
+# Stress
+
 print(table_contingence_tabac_douleur_Stress)
 print(chisq.test(table_contingence_tabac_douleur_Stress))
+
+print(table_contingence_tabac_douleur_Stress[,-1])
+print(chisq.test(table_contingence_tabac_douleur_Stress[,-1]))
+
+# Phyto
 
 print(table_contingence_tabac_douleur_Phyto)
 print(chisq.test(table_contingence_tabac_douleur_Phyto))
 
+print(table_contingence_tabac_douleur_Phyto[,-1])
+print(chisq.test(table_contingence_tabac_douleur_Phyto[,-1]))
+
+# Hypnose
+
 print(table_contingence_tabac_douleur_Hypnose)
 print(chisq.test(table_contingence_tabac_douleur_Hypnose))
+
+print(table_contingence_tabac_douleur_Hypnose[,-1])
+print(chisq.test(table_contingence_tabac_douleur_Hypnose[,-1]))
+
+# Acup
 
 print(table_contingence_tabac_douleur_Acup)
 print(chisq.test(table_contingence_tabac_douleur_Acup))
 
+# Bouillotte
+
 print(table_contingence_tabac_douleur_Bouillotte)
 print(chisq.test(table_contingence_tabac_douleur_Bouillotte))
 
+print(table_contingence_tabac_douleur_Bouillotte[,-1])
+print(chisq.test(table_contingence_tabac_douleur_Bouillotte[,-1]))
+
+# CBD
+
 print(table_contingence_tabac_douleur_CBD)
 print(chisq.test(table_contingence_tabac_douleur_CBD))
+
+print(table_contingence_tabac_douleur_CBD[,-1])
+print(chisq.test(table_contingence_tabac_douleur_CBD[,-1]))
+
+# Tens
 
 print(table_contingence_tabac_douleur_Tens)
 print(chisq.test(table_contingence_tabac_douleur_Tens))
 ```
 
+Pour tous : test de Khi-2 confirment que la consommation de tabac et la douleur ressentie au cours du traitement sont indépendantes.
+
+
 ## Test de Chi_deux Alcool x Douleur
 
 ```{r}
+# TH
+
 print(table_contingence_alcool_douleur_TH)
 print(chisq.test(table_contingence_alcool_douleur_TH))
+
+# CM
 
 print(table_contingence_alcool_douleur_CM)
 print(chisq.test(table_contingence_alcool_douleur_CM))
 
+# Mobilite
+
 print(table_contingence_alcool_douleur_Mobilite)
 print(chisq.test(table_contingence_alcool_douleur_Mobilite))
+
+# Nutrition
 
 print(table_contingence_alcool_douleur_Nutrition)
 print(chisq.test(table_contingence_alcool_douleur_Nutrition))
 
+print(table_contingence_alcool_douleur_Nutrition[,-1])
+print(chisq.test(table_contingence_alcool_douleur_Nutrition[,-1]))
+
+# Stress
+
 print(table_contingence_alcool_douleur_Stress)
 print(chisq.test(table_contingence_alcool_douleur_Stress))
+
+print(table_contingence_alcool_douleur_Stress[,-1])
+print(chisq.test(table_contingence_alcool_douleur_Stress[,-1]))
+
+# Phyto
 
 print(table_contingence_alcool_douleur_Phyto)
 print(chisq.test(table_contingence_alcool_douleur_Phyto))
 
+print(table_contingence_alcool_douleur_Phyto[,-1])
+print(chisq.test(table_contingence_alcool_douleur_Phyto[,-1]))
+
+# Hypnose
+
 print(table_contingence_alcool_douleur_Hypnose)
 print(chisq.test(table_contingence_alcool_douleur_Hypnose))
+
+print(table_contingence_alcool_douleur_Hypnose[,-1])
+print(chisq.test(table_contingence_alcool_douleur_Hypnose[,-1]))
+
+# Acup
 
 print(table_contingence_alcool_douleur_Acup)
 print(chisq.test(table_contingence_alcool_douleur_Acup))
 
+# Bouillotte
+
 print(table_contingence_alcool_douleur_Bouillotte)
 print(chisq.test(table_contingence_alcool_douleur_Bouillotte))
+
+print(table_contingence_alcool_douleur_Bouillotte[,-1])
+print(chisq.test(table_contingence_alcool_douleur_Bouillotte[,-1]))
+
+# CBD
 
 print(table_contingence_alcool_douleur_CBD)
 print(chisq.test(table_contingence_alcool_douleur_CBD))
 
+print(table_contingence_alcool_douleur_CBD[,-1])
+print(chisq.test(table_contingence_alcool_douleur_CBD[,-1]))
+
+# Tens
+
 print(table_contingence_alcool_douleur_Tens)
 print(chisq.test(table_contingence_alcool_douleur_Tens))
 
+
 ```
+
+Pour tous : test de Khi-2 confirment que la consommation d'alcool et la douleur ressentie au cours du traitement sont indépendantes.
+
 
 ## Test Chi_deux Apparition effets secondaires en fonction duree du traitement
 
@@ -3490,6 +3621,8 @@ print(table_contingence_duree_ES_CM)
 print(chisq.test(table_contingence_duree_ES_CM))
 
 ```
+
+=> Comme prevu durée du traitement n'influence pas l'apparition des effets secondaires
 
 
 ## Test de Chi_deux Prise x Douleur
@@ -3656,8 +3789,8 @@ print(chisq.test(table_contingence_age_douleur_Tens))
 
 ```
 
-
 => Âge indépendant de la perception de la douleur
+
 
 ##Test de Chi_deux Age x ES
 
@@ -3683,5 +3816,46 @@ print(chisq.test(table_contingence_age_ES_CM))
 
 
 ```
+
+
+Non probleme sur age : il faut age au moment du traitement si jms il y a eu arrêt
+
+
+
+## AMC sur TOUTES les variables
+
+```{r}
+
+# Convertir toutes les variables en facteurs
+data_facteurs <- lapply(data, function(x) {
+  if(is.factor(x) || is.ordered(x)) {
+    as.factor(x)
+  } else if (is.numeric(x) || is.character(x)) {
+    as.factor(as.character(x))
+  } else {
+    x
+  }
+})
+
+data_facteurs <- as.data.frame(data_facteurs, stringsAsFactors = TRUE)
+data_facteurs_subset <- data_facteurs[, -c(10, (ncol(data_facteurs)-2):ncol(data_facteurs))] #Colonnes à exclure
+
+#str(data_facteurs_subset)
+
+res.mca <- MCA(data_facteurs_subset, graph = FALSE)
+print(res.mca)
+
+head(res.mca$eig)
+
+fviz_screeplot(res.mca, addlabels=TRUE, ncp=20)
+
+fviz_mca_biplot(res.mca)
+
+fviz_mca_var(res.mca, choice="mca.cor", repel=TRUE)
+
+```
+
+
+
 
 
