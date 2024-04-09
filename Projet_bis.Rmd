@@ -1,5 +1,5 @@
 ---
-title: "Projet_tutore_R"
+title: "Projet_bis"
 author: "Yasmine Boulkaid, Cassandra Jan & Illana Rabasquinho"
 date: "2024-04-09"
 output:
@@ -36,6 +36,74 @@ data <- read.csv("etude_sur_les_traitements_de_lendometriose_bis.csv")
 n <- length(data)
 
 head(data)
+```
+
+# Test fonction renommage
+
+```{r}
+
+### Questions préliminaires ###
+names(data)[names(data) == "Étude.sur.les.traitements.de.l.endométriose"] <- "ID"
+names(data)[names(data) == "X"] <- "Age"
+names(data)[names(data) == "X.1"] <- "Stade"
+names(data)[names(data) == "X.2"] <- "Diagnostic"
+names(data)[names(data) == "X.3"] <- "Tabac"
+names(data)[names(data) == "X.4"] <- "Alcool"
+names(data)[names(data) == "X.5"] <- "TH"
+names(data)[names(data) == "X.6"] <- "CM"
+names(data)[names(data) == "X.7"] <- "Autre"
+names(data)[names(data) == "X.8"] <- "Aucun"
+names(data)[names(data) == "X.9"] <- "Lesquels_M"
+
+Renommage <- function(data,TM,ES){
+  
+  ### Questions générales ###
+  names(data)[names(data) == "X.10"] <- paste("Encore_", TM, sep="")
+  names(data)[names(data) == "X.11"] <- paste("Depuis_", TM, sep="")
+  names(data)[names(data) == "X.12"] <- paste("Debut_", TM, sep="")
+  names(data)[names(data) == "X.13"] <- paste("Combien_", TM, sep="")
+  names(data)[names(data) == "X.14"] <- paste("Pas_efficace_", TM, sep="")
+  names(data)[names(data) == "X.15"] <- paste("ES_", TM, sep="")
+  names(data)[names(data) == "X.16"] <- paste("Cout_", TM, sep="")
+  names(data)[names(data) == "X.17"] <- paste("Autre_Cause_Fin_", TM, sep="")
+  names(data)[names(data) == "X.18"] <- paste("Douleur_", TM, sep="")
+  names(data)[names(data) == "X.19"] <- paste("Evolution_", TM, sep="")
+  names(data)[names(data) == "X.20"] <- paste("Pre_op_", TM, sep="")
+  names(data)[names(data) == "X.21"] <- paste("Post_op_", TM, sep="")
+  names(data)[names(data) == "X.22"] <- paste("Pas_op_", TM, sep="")
+  names(data)[names(data) == "X.23"] <- paste("Prise_", TM, sep="")
+  
+  ### Effets secondaires ###
+  names(data)[names(data) == "X.24"] <- paste("Subi_ES_", TM, sep="")
+  names(data)[names(data) == "X.25"] <- paste("Tete_", TM, sep="")
+  names(data)[names(data) == "X.26"] <- paste("Fatigue_", TM, sep="")
+  names(data)[names(data) == "X.27"] <- paste("Nausee_", TM, sep="")
+  names(data)[names(data) == "X.28"] <- paste("Humeur_", TM, sep="")
+  names(data)[names(data) == "X.29"] <- paste("Libido_", TM, sep="")
+  names(data)[names(data) == "X.30"] <- paste("Sang_", TM, sep="")
+  names(data)[names(data) == "X.31"] <- paste("Poids_", TM, sep="")
+  names(data)[names(data) == "X.32"] <- paste("Allergie_", TM, sep="")
+  names(data)[names(data) == "X.33"] <- paste("Thrombose_", TM, sep="")
+  names(data)[names(data) == "X.34"] <- paste("Autre_ES_", TM, sep="")
+  
+  for (i in seq_along(ES)){
+    es <- ES[i]
+    names(data)[names(data) == paste("X.",35+(i-1)*2, sep="")] <- paste("Apparition_",es,"_",TM, sep="")
+    if (es != "Thrombose"){
+      names(data)[names(data) == paste("X.",36+(i-1)*2, sep="")] <- paste("Frequence_",es,"_",TM, sep="")
+    }
+  }
+  
+  return(data)
+}
+
+data <- Renommage(data,"TH",c("Tete","Fatigue","Nausee","Humeur","Libido","Sang","Poids","Allergie","Thrombose"))
+
+```
+
+```{r}
+head(data)
+
 ```
 
 
