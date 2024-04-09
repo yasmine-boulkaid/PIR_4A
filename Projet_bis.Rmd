@@ -1,0 +1,1078 @@
+---
+title: "Projet_tutore_R"
+author: "Yasmine Boulkaid, Cassandra Jan & Illana Rabasquinho"
+date: "2024-04-09"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+#Librairies
+
+```{r, echo=FALSE}
+# Définir un miroir CRAN
+options(repos = "https://cloud.r-project.org")
+
+#install.packages("FactoMineR")
+#install.packages("factoextra")
+#install.packages("readxl")
+#install.packages("gridExtra")
+
+library(readxl)
+library(gridExtra)
+library(ggplot2)
+library(FactoMineR)
+library(factoextra)
+library(conflicted)
+library(dplyr)
+library(tidyverse)
+```
+
+#Mise en forme des donnees 
+
+```{r}
+data <- read.csv("etude_sur_les_traitements_de_lendometriose_bis.csv")
+n <- length(data)
+
+head(data)
+```
+
+
+# On renomme les variables
+
+```{r}
+
+### Questions préliminaires ###
+names(data)[names(data) == "Étude.sur.les.traitements.de.l.endométriose"] <- "ID"
+names(data)[names(data) == "X"] <- "Age"
+names(data)[names(data) == "X.1"] <- "Stade"
+names(data)[names(data) == "X.2"] <- "Diagnostic"
+names(data)[names(data) == "X.3"] <- "Tabac"
+names(data)[names(data) == "X.4"] <- "Alcool"
+names(data)[names(data) == "X.5"] <- "TH"
+names(data)[names(data) == "X.6"] <- "CM"
+names(data)[names(data) == "X.7"] <- "Autre"
+names(data)[names(data) == "X.8"] <- "Aucun"
+names(data)[names(data) == "X.9"] <- "Lesquels_M"
+
+### Questions générales TH ###
+names(data)[names(data) == "X.10"] <- "Encore_TH"
+names(data)[names(data) == "X.11"] <- "Depuis_TH"
+names(data)[names(data) == "X.12"] <- "Debut_TH"
+names(data)[names(data) == "X.13"] <- "Combien_TH"
+names(data)[names(data) == "X.14"] <- "Pas_efficace_TH"
+names(data)[names(data) == "X.15"] <- "ES_TH"
+names(data)[names(data) == "X.16"] <- "Cout_TH"
+names(data)[names(data) == "X.17"] <- "Autre_Cause_Fin_TH"
+names(data)[names(data) == "X.18"] <- "Douleur_TH"
+names(data)[names(data) == "X.19"] <- "Evolution_TH"
+names(data)[names(data) == "X.20"] <- "Pre_op_TH"
+names(data)[names(data) == "X.21"] <- "Post_op_TH"
+names(data)[names(data) == "X.22"] <- "Pas_op_TH"
+names(data)[names(data) == "X.23"] <- "Prise_TH"
+
+### Effets secondaires TH ###
+names(data)[names(data) == "X.24"] <- "Subi_ES_TH"
+names(data)[names(data) == "X.25"] <- "Tete_TH"
+names(data)[names(data) == "X.26"] <- "Fatigue_TH"
+names(data)[names(data) == "X.27"] <- "Nausee_TH"
+names(data)[names(data) == "X.28"] <- "Humeur_TH"
+names(data)[names(data) == "X.29"] <- "Libido_TH"
+names(data)[names(data) == "X.30"] <- "Sang_TH"
+names(data)[names(data) == "X.31"] <- "Poids_TH"
+names(data)[names(data) == "X.32"] <- "Allergie_TH"
+names(data)[names(data) == "X.33"] <- "Thrombose_TH"
+names(data)[names(data) == "X.34"] <- "Autre_ES_TH"
+names(data)[names(data) == "X.35"] <- "Apparition_Tete_TH"
+names(data)[names(data) == "X.36"] <- "Frequence_Tete_TH"
+names(data)[names(data) == "X.37"] <- "Apparition_Fatigue_TH"
+names(data)[names(data) == "X.38"] <- "Frequence_Fatigue_TH"
+names(data)[names(data) == "X.39"] <- "Apparition_Nausee_TH"
+names(data)[names(data) == "X.40"] <- "Frequence_Nausee_TH"
+names(data)[names(data) == "X.41"] <- "Apparition_Humeur_TH"
+names(data)[names(data) == "X.42"] <- "Frequence_Humeur_TH"
+names(data)[names(data) == "X.43"] <- "Apparition_Libido_TH"
+names(data)[names(data) == "X.44"] <- "Frequence_Libido_TH"
+names(data)[names(data) == "X.45"] <- "Apparition_Sang_TH"
+names(data)[names(data) == "X.46"] <- "Frequence_Sang_TH"
+names(data)[names(data) == "X.47"] <- "Apparition_Thrombose_TH"
+
+### Traitements non médicamenteux TH ###
+names(data)[names(data) == "X.48"] <- "Mobilite_TH"
+names(data)[names(data) == "X.49"] <- "Nutrition_TH"
+names(data)[names(data) == "X.50"] <- "Stress_TH"
+names(data)[names(data) == "X.51"] <- "Phyto_TH"
+names(data)[names(data) == "X.52"] <- "Acup_TH"
+names(data)[names(data) == "X.53"] <- "Hypnose_TH"
+names(data)[names(data) == "X.54"] <- "Bouillotte_TH"
+names(data)[names(data) == "X.55"] <- "CBD_TH"
+names(data)[names(data) == "X.56"] <- "Tens_TH"
+names(data)[names(data) == "X.57"] <- "Aucun_TH"
+
+# Mobilité TH #
+names(data)[names(data) == "X.58"] <- "Combien_Mobilite_TH"
+names(data)[names(data) == "X.59"] <- "Douleur_Mobilite_TH"
+names(data)[names(data) == "X.60"] <- "Evolution_Mobilite_TH"
+names(data)[names(data) == "X.61"] <- "Prise_Mobilite_TH"
+
+# Nutrition TH #
+names(data)[names(data) == "X.62"] <- "Combien_Nutrition_TH"
+names(data)[names(data) == "X.63"] <- "Douleur_Nutrition_TH"
+names(data)[names(data) == "X.64"] <- "Evolution_Nutrition_TH"
+names(data)[names(data) == "X.65"] <- "Prise_Nutrition_TH"
+
+# Stress TH #
+names(data)[names(data) == "X.66"] <- "Combien_Stress_TH"
+names(data)[names(data) == "X.67"] <- "Douleur_Stress_TH"
+names(data)[names(data) == "X.68"] <- "Evolution_Stress_TH"
+names(data)[names(data) == "X.69"] <- "Prise_Stress_TH"
+
+# Phyto TH #
+names(data)[names(data) == "X.70"] <- "Combien_Phyto_TH"
+names(data)[names(data) == "X.71"] <- "Douleur_Phyto_TH"
+names(data)[names(data) == "X.72"] <- "Evolution_Phyto_TH"
+names(data)[names(data) == "X.73"] <- "Prise_Phyto_TH"
+
+# Acup TH #
+names(data)[names(data) == "X.74"] <- "Combien_Acup_TH"
+names(data)[names(data) == "X.75"] <- "Douleur_Acup_TH"
+names(data)[names(data) == "X.76"] <- "Evolution_Acup_TH"
+names(data)[names(data) == "X.77"] <- "Prise_Acup_TH"
+
+# Hypnose TH #
+names(data)[names(data) == "X.78"] <- "Combien_Hypnose_TH"
+names(data)[names(data) == "X.79"] <- "Douleur_Hypnose_TH"
+names(data)[names(data) == "X.80"] <- "Evolution_Hypnose_TH"
+names(data)[names(data) == "X.81"] <- "Prise_Hypnose_TH"
+
+# Bouillotte TH #
+names(data)[names(data) == "X.82"] <- "Combien_Bouillotte_TH"
+names(data)[names(data) == "X.83"] <- "Douleur_Bouillotte_TH"
+names(data)[names(data) == "X.84"] <- "Evolution_Bouillotte_TH"
+names(data)[names(data) == "X.85"] <- "Prise_Bouillotte_TH"
+
+# CBD TH #
+names(data)[names(data) == "X.86"] <- "Combien_CBD_TH"
+names(data)[names(data) == "X.87"] <- "Douleur_CBD_TH"
+names(data)[names(data) == "X.88"] <- "Evolution_CBD_TH"
+names(data)[names(data) == "X.89"] <- "Prise_CBD_TH"
+
+# Tens TH #
+names(data)[names(data) == "X.90"] <- "Combien_Tens_TH"
+names(data)[names(data) == "X.91"] <- "Douleur_Tens_TH"
+names(data)[names(data) == "X.92"] <- "Evolution_Tens_TH"
+names(data)[names(data) == "X.93"] <- "Prise_Tens_TH"
+
+### Questions générales CM ###
+names(data)[names(data) == "X.94"] <- "Encore_CM"
+names(data)[names(data) == "X.95"] <- "Depuis_CM"
+names(data)[names(data) == "X.96"] <- "Debut_CM"
+names(data)[names(data) == "X.97"] <- "Combien_CM"
+names(data)[names(data) == "X.98"] <- "Pas_efficace_CM"
+names(data)[names(data) == "X.99"] <- "ES_CM"
+names(data)[names(data) == "X.100"] <- "Cout_CM"
+names(data)[names(data) == "X.101"] <- "Autre_Cause_Fin_CM"
+names(data)[names(data) == "X.102"] <- "Douleur_CM"
+names(data)[names(data) == "X.103"] <- "Evolution_CM"
+names(data)[names(data) == "X.104"] <- "Pre_op_CM"
+names(data)[names(data) == "X.105"] <- "Post_op_CM"
+names(data)[names(data) == "X.106"] <- "Pas_op_CM"
+names(data)[names(data) == "X.107"] <- "Prise_CM"
+
+### Effets secondaires CM ###
+names(data)[names(data) == "X.108"] <- "Subi_ES_CM"
+names(data)[names(data) == "X.109"] <- "Tete_CM"
+names(data)[names(data) == "X.110"] <- "Fatigue_CM"
+names(data)[names(data) == "X.111"] <- "Nausee_CM"
+names(data)[names(data) == "X.112"] <- "Humeur_CM"
+names(data)[names(data) == "X.113"] <- "Libido_CM"
+names(data)[names(data) == "X.114"] <- "Sang_CM"
+names(data)[names(data) == "X.115"] <- "Poids_CM"
+names(data)[names(data) == "X.116"] <- "Allergie_CM"
+names(data)[names(data) == "X.117"] <- "Thrombose_CM"
+names(data)[names(data) == "X.118"] <- "Autre_ES_CM"
+names(data)[names(data) == "X.119"] <- "Apparition_Tete_CM"
+names(data)[names(data) == "X.120"] <- "Frequence_Tete_CM"
+names(data)[names(data) == "X.121"] <- "Apparition_Fatigue_CM"
+names(data)[names(data) == "X.122"] <- "Frequence_Fatigue_CM"
+names(data)[names(data) == "X.123"] <- "Apparition_Nausee_CM"
+names(data)[names(data) == "X.124"] <- "Frequence_Nausee_CM"
+names(data)[names(data) == "X.125"] <- "Apparition_Humeur_CM"
+names(data)[names(data) == "X.126"] <- "Frequence_Humeur_CM"
+names(data)[names(data) == "X.127"] <- "Apparition_Libido_CM"
+names(data)[names(data) == "X.128"] <- "Frequence_Libido_CM"
+names(data)[names(data) == "X.129"] <- "Apparition_Sang_CM"
+names(data)[names(data) == "X.130"] <- "Frequence_Sang_CM"
+names(data)[names(data) == "X.131"] <- "Apparition_Thrombose_CM"
+
+### Traitements non médicamenteux CM ###
+names(data)[names(data) == "X.132"] <- "Mobilite_CM"
+names(data)[names(data) == "X.133"] <- "Nutrition_CM"
+names(data)[names(data) == "X.134"] <- "Stress_CM"
+names(data)[names(data) == "X.135"] <- "Phyto_CM"
+names(data)[names(data) == "X.136"] <- "Acup_CM"
+names(data)[names(data) == "X.137"] <- "Hypnose_CM"
+names(data)[names(data) == "X.138"] <- "Bouillotte_CM"
+names(data)[names(data) == "X.139"] <- "CBD_CM"
+names(data)[names(data) == "X.140"] <- "Tens_CM"
+names(data)[names(data) == "X.141"] <- "Aucun_CM"
+
+# Mobilite CM #
+names(data)[names(data) == "X.142"] <- "Combien_Mobilite_CM"
+names(data)[names(data) == "X.143"] <- "Douleur_Mobilite_CM"
+names(data)[names(data) == "X.144"] <- "Evolution_Mobilite_CM"
+names(data)[names(data) == "X.145"] <- "Prise_Mobilite_CM"
+
+# Nutrition CM #
+names(data)[names(data) == "X.146"] <- "Combien_Nutrition_CM"
+names(data)[names(data) == "X.147"] <- "Douleur_Nutrition_CM"
+names(data)[names(data) == "X.148"] <- "Evolution_Nutrition_CM"
+names(data)[names(data) == "X.149"] <- "Prise_Nutrition_CM"
+
+# Stress CM #
+names(data)[names(data) == "X.150"] <- "Combien_Stress_CM"
+names(data)[names(data) == "X.151"] <- "Douleur_Stress_CM"
+names(data)[names(data) == "X.152"] <- "Evolution_Stress_CM"
+names(data)[names(data) == "X.153"] <- "Prise_Stress_CM"
+
+# Phyto CM #
+names(data)[names(data) == "X.154"] <- "Combien_Phyto_CM"
+names(data)[names(data) == "X.155"] <- "Douleur_Phyto_CM"
+names(data)[names(data) == "X.156"] <- "Evolution_Phyto_CM"
+names(data)[names(data) == "X.157"] <- "Prise_Phyto_CM"
+
+# Acup CM #
+names(data)[names(data) == "X.158"] <- "Combien_Acup_CM"
+names(data)[names(data) == "X.159"] <- "Douleur_Acup_CM"
+names(data)[names(data) == "X.160"] <- "Evolution_Acup_CM"
+names(data)[names(data) == "X.161"] <- "Prise_Acup_CM"
+
+# Hypnose CM #
+names(data)[names(data) == "X.162"] <- "Combien_Hypnose_CM"
+names(data)[names(data) == "X.163"] <- "Douleur_Hypnose_CM"
+names(data)[names(data) == "X.164"] <- "Evolution_Hypnose_CM"
+names(data)[names(data) == "X.165"] <- "Prise_Hypnose_CM"
+
+# Bouillotte CM #
+names(data)[names(data) == "X.166"] <- "Combien_Bouillotte_CM"
+names(data)[names(data) == "X.167"] <- "Douleur_Bouillotte_CM"
+names(data)[names(data) == "X.168"] <- "Evolution_Bouillotte_CM"
+names(data)[names(data) == "X.169"] <- "Prise_Bouillotte_CM"
+
+# CBD CM #
+names(data)[names(data) == "X.170"] <- "Combien_CBD_CM"
+names(data)[names(data) == "X.171"] <- "Douleur_CBD_CM"
+names(data)[names(data) == "X.172"] <- "Evolution_CBD_CM"
+names(data)[names(data) == "X.173"] <- "Prise_CBD_CM"
+
+# Tens CM #
+names(data)[names(data) == "X.174"] <- "Combien_Tens_CM"
+names(data)[names(data) == "X.175"] <- "Douleur_Tens_CM"
+names(data)[names(data) == "X.176"] <- "Evolution_Tens_CM"
+names(data)[names(data) == "X.177"] <- "Prise_Tens_CM"
+
+### Traitements non médicamenteux seuls ###
+names(data)[names(data) == "X.178"] <- "Mobilite_NM"
+names(data)[names(data) == "X.179"] <- "Nutrition_NM"
+names(data)[names(data) == "X.180"] <- "Stress_NM"
+names(data)[names(data) == "X.181"] <- "Phyto_NM"
+names(data)[names(data) == "X.182"] <- "Acup_NM"
+names(data)[names(data) == "X.183"] <- "Hypnose_NM"
+names(data)[names(data) == "X.184"] <- "Bouillotte_NM"
+names(data)[names(data) == "X.185"] <- "CBD_NM"
+names(data)[names(data) == "X.186"] <- "Tens_NM"
+names(data)[names(data) == "X.187"] <- "Aucun_NM"
+
+# Mobilite NM #
+names(data)[names(data) == "X.188"] <- "Encore_Mobilite_NM"
+names(data)[names(data) == "X.189"] <- "Depuis_Mobilite_NM"
+names(data)[names(data) == "X.190"] <- "Debut_Mobilite_NM"
+names(data)[names(data) == "X.191"] <- "Combien_Mobilite_NM"
+names(data)[names(data) == "X.192"] <- "Pas_efficace_Mobilite_NM"
+names(data)[names(data) == "X.193"] <- "ES_Mobilite_NM"
+names(data)[names(data) == "X.194"] <- "Cout_Mobilite_NM"
+names(data)[names(data) == "X.195"] <- "Autre_Cause_Fin_Mobilite_NM"
+names(data)[names(data) == "X.196"] <- "Douleur_Mobilite_NM"
+names(data)[names(data) == "X.197"] <- "Evolution_Mobilite_NM"
+names(data)[names(data) == "X.198"] <- "Pre_op_Mobilite_NM"
+names(data)[names(data) == "X.199"] <- "Post_op_Mobilite_NM"
+names(data)[names(data) == "X.200"] <- "Pas_op_Mobilite_NM"
+names(data)[names(data) == "X.201"] <- "Prise_Mobilite_NM"
+
+# Nutrition NM #
+names(data)[names(data) == "X.202"] <- "Encore_Nutrition_NM"
+names(data)[names(data) == "X.203"] <- "Depuis_Nutrition_NM"
+names(data)[names(data) == "X.204"] <- "Debut_Nutrition_NM"
+names(data)[names(data) == "X.205"] <- "Combien_Nutrition_NM"
+names(data)[names(data) == "X.206"] <- "Pas_efficace_Nutrition_NM"
+names(data)[names(data) == "X.207"] <- "ES_Nutrition_NM"
+names(data)[names(data) == "X.208"] <- "Cout_Nutrition_NM"
+names(data)[names(data) == "X.209"] <- "Autre_Cause_Fin_Nutrition_NM"
+names(data)[names(data) == "X.210"] <- "Douleur_Nutrition_NM"
+names(data)[names(data) == "X.211"] <- "Evolution_Nutrition_NM"
+names(data)[names(data) == "X.212"] <- "Pre_op_Nutrition_NM"
+names(data)[names(data) == "X.213"] <- "Post_op_Nutrition_NM"
+names(data)[names(data) == "X.214"] <- "Pas_op_Nutrition_NM"
+names(data)[names(data) == "X.215"] <- "Prise_Nutrition_NM"
+
+# Stress NM #
+names(data)[names(data) == "X.216"] <- "Encore_Stress_NM"
+names(data)[names(data) == "X.217"] <- "Depuis_Stress_NM"
+names(data)[names(data) == "X.218"] <- "Debut_Stress_NM"
+names(data)[names(data) == "X.219"] <- "Combien_Stress_NM"
+names(data)[names(data) == "X.220"] <- "Pas_efficace_Stress_NM"
+names(data)[names(data) == "X.221"] <- "ES_Stress_NM"
+names(data)[names(data) == "X.222"] <- "Cout_Stress_NM"
+names(data)[names(data) == "X.223"] <- "Autre_Cause_Fin_Stress_NM"
+names(data)[names(data) == "X.224"] <- "Douleur_Stress_NM"
+names(data)[names(data) == "X.225"] <- "Evolution_Stress_NM"
+names(data)[names(data) == "X.226"] <- "Pre_op_Stress_NM"
+names(data)[names(data) == "X.227"] <- "Post_op_Stress_NM"
+names(data)[names(data) == "X.228"] <- "Pas_op_Stress_NM"
+names(data)[names(data) == "X.229"] <- "Prise_Stress_NM"
+
+# Phyto NM #
+names(data)[names(data) == "X.230"] <- "Encore_Phyto_NM"
+names(data)[names(data) == "X.231"] <- "Depuis_Phyto_NM"
+names(data)[names(data) == "X.232"] <- "Debut_Phyto_NM"
+names(data)[names(data) == "X.233"] <- "Combien_Phyto_NM"
+names(data)[names(data) == "X.234"] <- "Pas_efficace_Phyto_NM"
+names(data)[names(data) == "X.235"] <- "ES_Phyto_NM"
+names(data)[names(data) == "X.236"] <- "Cout_Phyto_NM"
+names(data)[names(data) == "X.237"] <- "Autre_Cause_Fin_Phyto_NM"
+names(data)[names(data) == "X.238"] <- "Douleur_Phyto_NM"
+names(data)[names(data) == "X.239"] <- "Evolution_Phyto_NM"
+names(data)[names(data) == "X.240"] <- "Pre_op_Phyto_NM"
+names(data)[names(data) == "X.241"] <- "Post_op_Phyto_NM"
+names(data)[names(data) == "X.242"] <- "Pas_op_Phyto_NM"
+names(data)[names(data) == "X.243"] <- "Prise_Phyto_NM"
+
+# Acup NM #
+names(data)[names(data) == "X.244"] <- "Encore_Acup_NM"
+names(data)[names(data) == "X.245"] <- "Depuis_Acup_NM"
+names(data)[names(data) == "X.246"] <- "Debut_Acup_NM"
+names(data)[names(data) == "X.247"] <- "Combien_Acup_NM"
+names(data)[names(data) == "X.248"] <- "Pas_efficace_Acup_NM"
+names(data)[names(data) == "X.249"] <- "ES_Acup_NM"
+names(data)[names(data) == "X.250"] <- "Cout_Acup_NM"
+names(data)[names(data) == "X.251"] <- "Autre_Cause_Fin_Acup_NM"
+names(data)[names(data) == "X.252"] <- "Douleur_Acup_NM"
+names(data)[names(data) == "X.253"] <- "Evolution_Acup_NM"
+names(data)[names(data) == "X.254"] <- "Pre_op_Acup_NM"
+names(data)[names(data) == "X.255"] <- "Post_op_Acup_NM"
+names(data)[names(data) == "X.256"] <- "Pas_op_Acup_NM"
+names(data)[names(data) == "X.257"] <- "Prise_Acup_NM"
+
+# Hypnose NM #
+names(data)[names(data) == "X.258"] <- "Encore_Hypnose_NM"
+names(data)[names(data) == "X.259"] <- "Depuis_Hypnose_NM"
+names(data)[names(data) == "X.260"] <- "Debut_Hypnose_NM"
+names(data)[names(data) == "X.261"] <- "Combien_Hypnose_NM"
+names(data)[names(data) == "X.262"] <- "Pas_efficace_Hypnose_NM"
+names(data)[names(data) == "X.263"] <- "ES_Hypnose_NM"
+names(data)[names(data) == "X.264"] <- "Cout_Hypnose_NM"
+names(data)[names(data) == "X.265"] <- "Autre_Cause_Fin_Hypnose_NM"
+names(data)[names(data) == "X.266"] <- "Douleur_Hypnose_NM"
+names(data)[names(data) == "X.267"] <- "Evolution_Hypnose_NM"
+names(data)[names(data) == "X.268"] <- "Pre_op_Hypnose_NM"
+names(data)[names(data) == "X.269"] <- "Post_op_Hypnose_NM"
+names(data)[names(data) == "X.270"] <- "Pas_op_Hypnose_NM"
+names(data)[names(data) == "X.271"] <- "Prise_Hypnose_NM"
+
+# Bouillotte NM #
+names(data)[names(data) == "X.272"] <- "Encore_Bouillotte_NM"
+names(data)[names(data) == "X.273"] <- "Depuis_Bouillotte_NM"
+names(data)[names(data) == "X.274"] <- "Debut_Bouillotte_NM"
+names(data)[names(data) == "X.275"] <- "Combien_Bouillotte_NM"
+names(data)[names(data) == "X.276"] <- "Pas_efficace_Bouillotte_NM"
+names(data)[names(data) == "X.277"] <- "ES_Bouillotte_NM"
+names(data)[names(data) == "X.278"] <- "Cout_Bouillotte_NM"
+names(data)[names(data) == "X.279"] <- "Autre_Cause_Fin_Bouillotte_NM"
+names(data)[names(data) == "X.280"] <- "Douleur_Bouillotte_NM"
+names(data)[names(data) == "X.281"] <- "Evolution_Bouillotte_NM"
+names(data)[names(data) == "X.282"] <- "Pre_op_Bouillotte_NM"
+names(data)[names(data) == "X.283"] <- "Post_op_Bouillotte_NM"
+names(data)[names(data) == "X.284"] <- "Pas_op_Bouillotte_NM"
+names(data)[names(data) == "X.285"] <- "Prise_Bouillotte_NM"
+
+# CBD NM #
+names(data)[names(data) == "X.286"] <- "Encore_CBD_NM"
+names(data)[names(data) == "X.287"] <- "Depuis_CBD_NM"
+names(data)[names(data) == "X.288"] <- "Debut_CBD_NM"
+names(data)[names(data) == "X.289"] <- "Combien_CBD_NM"
+names(data)[names(data) == "X.290"] <- "Pas_efficace_CBD_NM"
+names(data)[names(data) == "X.291"] <- "ES_CBD_NM"
+names(data)[names(data) == "X.292"] <- "Cout_CBD_NM"
+names(data)[names(data) == "X.293"] <- "Autre_Cause_Fin_CBD_NM"
+names(data)[names(data) == "X.294"] <- "Douleur_CBD_NM"
+names(data)[names(data) == "X.295"] <- "Evolution_CBD_NM"
+names(data)[names(data) == "X.296"] <- "Pre_op_CBD_NM"
+names(data)[names(data) == "X.297"] <- "Post_op_CBD_NM"
+names(data)[names(data) == "X.298"] <- "Pas_op_CBD_NM"
+names(data)[names(data) == "X.299"] <- "Prise_CBD_NM"
+
+# Tens NM #
+names(data)[names(data) == "X.300"] <- "Encore_Tens_NM"
+names(data)[names(data) == "X.301"] <- "Depuis_Tens_NM"
+names(data)[names(data) == "X.302"] <- "Debut_Tens_NM"
+names(data)[names(data) == "X.303"] <- "Combien_Tens_NM"
+names(data)[names(data) == "X.304"] <- "Pas_efficace_Tens_NM"
+names(data)[names(data) == "X.305"] <- "ES_Tens_NM"
+names(data)[names(data) == "X.306"] <- "Cout_Tens_NM"
+names(data)[names(data) == "X.307"] <- "Autre_Cause_Fin_Tens_NM"
+names(data)[names(data) == "X.308"] <- "Douleur_Tens_NM"
+names(data)[names(data) == "X.309"] <- "Evolution_Tens_NM"
+names(data)[names(data) == "X.310"] <- "Pre_op_Tens_NM"
+names(data)[names(data) == "X.311"] <- "Post_op_Tens_NM"
+names(data)[names(data) == "X.312"] <- "Pas_op_Tens_NM"
+names(data)[names(data) == "X.313"] <- "Prise_Tens_NM"
+
+# Autres NM #
+names(data)[names(data) == "X.314"] <- "Autres_NM"
+names(data)[names(data) == "X.315"] <- "Lesquels_NM"
+
+### Questions finales ###
+names(data)[names(data) == "X.316"] <- "Remarques"
+names(data)[names(data) == "X.317"] <- "Email"
+
+
+```
+
+
+```{r}
+### Supression des deux premières lignes ###
+data <- data[-c(1:2), ]
+
+
+### Questions préliminaires ###
+data$Age = as.integer(data$Age)
+data$Stade <- factor(data$Stade, levels = c("Stade I (superficielle)", "Stade II (modérée)", "Stade III (moyenne)", "Stade IV (profonde)"), ordered = TRUE)
+data$Diagnostic = as.integer(data$Diagnostic)
+data$Tabac <- factor(data$Tabac, levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), ordered = TRUE)
+data$Alcool <- factor(data$Alcool, levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), ordered = TRUE)
+
+TH <- ifelse(data$TH == "X", "y", "n")
+data$TH <- factor(TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+CM <- ifelse(data$CM == "X", "y", "n")
+data$CM <- factor(CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+
+
+### Questions générales TH ###
+
+Depuis_TH <- ifelse(data$Depuis_TH == "", "0", data$Depuis_TH)
+data$Depuis_TH <- factor(Depuis_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_TH <- ifelse(data$Combien_TH == "", "0", data$Combien_TH)
+data$Combien_TH <- factor(Combien_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_TH <- factor(ifelse(is.na(data$Depuis_TH), as.character(data$Combien_TH), as.character(data$Depuis_TH)))
+
+Douleur_TH <- ifelse(data$Douleur_TH == "", "0", data$Douleur_TH)
+data$Douleur_TH <- factor(Douleur_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_TH <- ifelse(data$Evolution_TH == "", "0", data$Evolution_TH)
+data$Evolution_TH <- factor(Evolution_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+Tete_TH <- ifelse(data$Tete_TH == "X", "y", "n")
+data$Tete_TH <- factor(Tete_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Fatigue_TH <- ifelse(data$Fatigue_TH == "X", "y", "n")
+data$Fatigue_TH <- factor(Fatigue_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Nausee_TH <- ifelse(data$Nausee_TH == "X", "y", "n")
+data$Nausee_TH <- factor(Nausee_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Humeur_TH <- ifelse(data$Humeur_TH == "X", "y", "n")
+data$Humeur_TH <- factor(Humeur_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Libido_TH <- ifelse(data$Libido_TH == "X", "y", "n")
+data$Libido_TH <- factor(Libido_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Sang_TH <- ifelse(data$Sang_TH == "X", "y", "n")
+data$Sang_TH <- factor(Sang_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Poids_TH <- ifelse(data$Poids_TH == "X", "y", "n")
+data$Poids_TH <- factor(Poids_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Allergie_TH <- ifelse(data$Allergie_TH == "X", "y", "n")
+data$Allergie_TH <- factor(Allergie_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Thrombose_TH <- ifelse(data$Thrombose_TH == "X", "y", "n")
+data$Thrombose_TH <- factor(Thrombose_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+### Effets secondaires TH ###
+Subi_ES_TH <- ifelse(data$Subi_ES_TH == "", "0", data$Subi_ES_TH)
+data$Subi_ES_TH <- factor(Subi_ES_TH, levels = c("yes", "no"), ordered = TRUE)
+
+Apparition_Tete_TH <- ifelse(data$Apparition_Tete_TH == "", "0", data$Apparition_Tete_TH)
+data$Apparition_Tete_TH <- factor(Apparition_Tete_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Tete_TH <- ifelse(data$Frequence_Tete_TH == "", "0", data$Frequence_Tete_TH)
+data$Frequence_Tete_TH <- factor(Frequence_Tete_TH, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Fatigue_TH <- ifelse(data$Apparition_Fatigue_TH == "", "0", data$Apparition_Fatigue_TH)
+data$Apparition_Fatigue_TH <- factor(Apparition_Fatigue_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Fatigue_TH <- ifelse(data$Frequence_Fatigue_TH == "", "0", data$Frequence_Fatigue_TH)
+data$Frequence_Fatigue_TH <- factor(Frequence_Fatigue_TH, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Nausee_TH <- ifelse(data$Apparition_Nausee_TH == "", "0", data$Apparition_Nausee_TH)
+data$Apparition_Nausee_TH <- factor(Apparition_Nausee_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Nausee_TH <- ifelse(data$Frequence_Nausee_TH == "", "0", data$Frequence_Nausee_TH)
+data$Frequence_Nausee_TH <- factor(Frequence_Nausee_TH, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Humeur_TH <- ifelse(data$Apparition_Humeur_TH == "", "0", data$Apparition_Humeur_TH)
+data$Apparition_Humeur_TH <- factor(Apparition_Humeur_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Humeur_TH <- ifelse(data$Frequence_Humeur_TH == "", "0", data$Frequence_Humeur_TH)
+data$Frequence_Humeur_TH <- factor(Frequence_Humeur_TH, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Libido_TH <- ifelse(data$Apparition_Libido_TH == "", "0", data$Apparition_Libido_TH)
+data$Apparition_Libido_TH <- factor(Apparition_Libido_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Libido_TH <- ifelse(data$Frequence_Libido_TH == "", "0", data$Frequence_Libido_TH)
+data$Frequence_Libido_TH <- factor(Frequence_Libido_TH, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Sang_TH <- ifelse(data$Apparition_Sang_TH == "", "0", data$Apparition_Sang_TH)
+data$Apparition_Sang_TH <- factor(Apparition_Sang_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Sang_TH <- ifelse(data$Frequence_Sang_TH == "", "0", data$Frequence_Sang_TH)
+data$Frequence_Sang_TH <- factor(Frequence_Sang_TH, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Thrombose_TH <- ifelse(data$Apparition_Thrombose_TH == "", "0", data$Apparition_Thrombose_TH)
+data$Apparition_Thrombose_TH <- factor(Apparition_Thrombose_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+### Traitements non médicamenteux TH ###
+Mobilite_TH <- ifelse(data$Mobilite_TH == "X", "y", "n")
+data$Mobilite_TH <- factor(Mobilite_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Nutrition_TH <- ifelse(data$Nutrition_TH == "X", "y", "n")
+data$Nutrition_TH <- factor(Nutrition_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Stress_TH <- ifelse(data$Stress_TH == "X", "y", "n")
+data$Stress_TH <- factor(Stress_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Phyto_TH <- ifelse(data$Phyto_TH == "X", "y", "n")
+data$Phyto_TH <- factor(Phyto_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Acup_TH <- ifelse(data$Acup_TH == "X", "y", "n")
+data$Acup_TH <- factor(Acup_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Hypnose_TH <- ifelse(data$Hypnose_TH == "X", "y", "n")
+data$Hypnose_TH <- factor(Hypnose_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Bouillotte_TH <- ifelse(data$Bouillotte_TH == "X", "y", "n")
+data$Bouillotte_TH <- factor(Bouillotte_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+CBD_TH <- ifelse(data$CBD_TH == "X", "y", "n")
+data$CBD_TH <- factor(CBD_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Tens_TH <- ifelse(data$Tens_TH == "X", "y", "n")
+data$Tens_TH <- factor(Tens_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+Aucun_TH <- ifelse(data$Aucun_TH == "X", "y", "n")
+data$Aucun_TH <- factor(Aucun_TH, levels = c("y", "n"), labels = c("yes", "no"))
+
+# Mobilité TH #
+Combien_Mobilite_TH <- ifelse(data$Combien_Mobilite_TH == "", "0", data$Combien_Mobilite_TH)
+data$Combien_Mobilite_TH <- factor(Combien_Mobilite_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Mobilite_TH <- ifelse(data$Douleur_Mobilite_TH == "", "0", data$Douleur_Mobilite_TH)
+data$Douleur_Mobilite_TH <- factor(Douleur_Mobilite_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Mobilite_TH <- ifelse(data$Evolution_Mobilite_TH == "", "0", data$Evolution_Mobilite_TH)
+data$Evolution_Mobilite_TH <- factor(Evolution_Mobilite_TH, levels = c("Augmentation des lésions", "Pas d'impact sur les lésions", "Réduction des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Nutrition TH #
+Combien_Nutrition_TH <- ifelse(data$Combien_Nutrition_TH == "", "0", data$Combien_Nutrition_TH)
+data$Combien_Nutrition_TH <- factor(Combien_Nutrition_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Nutrition_TH <- ifelse(data$Douleur_Nutrition_TH == "", "0", data$Douleur_Nutrition_TH)
+data$Douleur_Nutrition_TH <- factor(Douleur_Nutrition_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Nutrition_TH <- ifelse(data$Evolution_Nutrition_TH == "", "0", data$Evolution_Nutrition_TH)
+data$Evolution_Nutrition_TH <- factor(Evolution_Nutrition_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Stress TH #
+Combien_Stress_TH <- ifelse(data$Combien_Stress_TH == "", "0", data$Combien_Stress_TH)
+data$Combien_Stress_TH <- factor(Combien_Stress_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Stress_TH <- ifelse(data$Douleur_Stress_TH == "", "0", data$Douleur_Stress_TH)
+data$Douleur_Stress_TH <- factor(Douleur_Stress_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Stress_TH <- ifelse(data$Evolution_Stress_TH == "", "0", data$Evolution_Stress_TH)
+data$Evolution_Stress_TH <- factor(Evolution_Stress_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Phyto TH #
+Combien_Phyto_TH <- ifelse(data$Combien_Phyto_TH == "", "0", data$Combien_Phyto_TH)
+data$Combien_Phyto_TH <- factor(Combien_Phyto_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Phyto_TH <- ifelse(data$Douleur_Phyto_TH == "", "0", data$Douleur_Phyto_TH)
+data$Douleur_Phyto_TH <- factor(Douleur_Phyto_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Phyto_TH <- ifelse(data$Evolution_Phyto_TH == "", "0", data$Evolution_Phyto_TH)
+data$Evolution_Phyto_TH <- factor(Evolution_Phyto_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Acup TH #
+Combien_Acup_TH <- ifelse(data$Combien_Acup_TH == "", "0", data$Combien_Acup_TH)
+data$Combien_Acup_TH <- factor(Combien_Acup_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Acup_TH <- ifelse(data$Douleur_Acup_TH == "", "0", data$Douleur_Acup_TH)
+data$Douleur_Acup_TH <- factor(Douleur_Acup_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Acup_TH <- ifelse(data$Evolution_Acup_TH == "", "0", data$Evolution_Acup_TH)
+data$Evolution_Acup_TH <- factor(Evolution_Acup_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+
+# Hypnose TH #
+Combien_Hypnose_TH <- ifelse(data$Combien_Hypnose_TH == "", "0", data$Combien_Hypnose_TH)
+data$Combien_Hypnose_TH <- factor(Combien_Hypnose_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Hypnose_TH <- ifelse(data$Douleur_Hypnose_TH == "", "0", data$Douleur_Hypnose_TH)
+data$Douleur_Hypnose_TH <- factor(Douleur_Hypnose_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Hypnose_TH <- ifelse(data$Evolution_Hypnose_TH == "", "0", data$Evolution_Hypnose_TH)
+data$Evolution_Hypnose_TH <- factor(Evolution_Hypnose_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Bouillotte TH #
+Combien_Bouillotte_TH <- ifelse(data$Combien_Bouillotte_TH == "", "0", data$Combien_Bouillotte_TH)
+data$Combien_Bouillotte_TH <- factor(Combien_Bouillotte_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Bouillotte_TH <- ifelse(data$Douleur_Bouillotte_TH == "", "0", data$Douleur_Bouillotte_TH)
+data$Douleur_Bouillotte_TH <- factor(Douleur_Bouillotte_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Bouillotte_TH <- ifelse(data$Evolution_Bouillotte_TH == "", "0", data$Evolution_Bouillotte_TH)
+data$Evolution_Bouillotte_TH <- factor(Evolution_Bouillotte_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# CBD TH #
+Combien_CBD_TH <- ifelse(data$Combien_CBD_TH == "", "0", data$Combien_CBD_TH)
+data$Combien_CBD_TH <- factor(Combien_CBD_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_CBD_TH <- ifelse(data$Douleur_CBD_TH == "", "0", data$Douleur_CBD_TH)
+data$Douleur_CBD_TH <- factor(Douleur_CBD_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_CBD_TH <- ifelse(data$Evolution_CBD_TH == "", "0", data$Evolution_CBD_TH)
+data$Evolution_CBD_TH <- factor(Evolution_CBD_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Tens TH #
+Combien_Tens_TH <- ifelse(data$Combien_Tens_TH == "", "0", data$Combien_Tens_TH)
+data$Combien_Tens_TH <- factor(Combien_Tens_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Tens_TH <- ifelse(data$Douleur_Tens_TH == "", "0", data$Douleur_Tens_TH)
+data$Douleur_Tens_TH <- factor(Douleur_Tens_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Tens_TH <- ifelse(data$Evolution_Tens_TH == "", "0", data$Evolution_Tens_TH)
+data$Evolution_Tens_TH <- factor(Evolution_Tens_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+Depuis_CM <- ifelse(data$Depuis_CM == "", "0", data$Depuis_CM)
+data$Depuis_CM <- factor(Depuis_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_CM <- ifelse(data$Combien_CM == "", "0", data$Combien_CM)
+data$Combien_CM <- factor(Combien_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_CM <- factor(ifelse(is.na(data$Depuis_CM), as.character(data$Combien_CM), as.character(data$Depuis_CM)))
+
+Douleur_CM <- ifelse(data$Douleur_CM == "", "0", data$Douleur_CM)
+data$Douleur_CM <- factor(Douleur_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_CM <- ifelse(data$Evolution_CM == "", "0", data$Evolution_CM)
+data$Evolution_CM <- factor(Evolution_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+### Effets secondaires CM ###
+Subi_ES_CM <- ifelse(data$Subi_ES_CM == "", "0", data$Subi_ES_CM)
+data$Subi_ES_CM <- factor(Subi_ES_CM, levels = c("yes", "no"), ordered = TRUE)
+
+Tete_CM <- ifelse(data$Tete_CM == "X", "y", "n")
+data$Tete_CM <- factor(Tete_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Fatigue_CM <- ifelse(data$Fatigue_CM == "X", "y", "n")
+data$Fatigue_CM <- factor(Fatigue_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Nausee_CM <- ifelse(data$Nausee_CM == "X", "y", "n")
+data$Nausee_CM <- factor(Nausee_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Humeur_CM <- ifelse(data$Humeur_CM == "X", "y", "n")
+data$Humeur_CM <- factor(Humeur_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Libido_CM <- ifelse(data$Libido_CM == "X", "y", "n")
+data$Libido_CM <- factor(Libido_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Sang_CM <- ifelse(data$Sang_CM == "X", "y", "n")
+data$Sang_CM <- factor(Sang_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Poids_CM <- ifelse(data$Poids_CM == "X", "y", "n")
+data$Poids_CM <- factor(Poids_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Allergie_CM <- ifelse(data$Allergie_CM == "X", "y", "n")
+data$Allergie_CM <- factor(Allergie_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Thrombose_CM <- ifelse(data$Thrombose_CM == "X", "y", "n")
+data$Thrombose_CM <- factor(Thrombose_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Apparition_Tete_CM <- ifelse(data$Apparition_Tete_CM == "", "0", data$Apparition_Tete_CM)
+data$Apparition_Tete_CM <- factor(Apparition_Tete_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Tete_CM <- ifelse(data$Frequence_Tete_CM == "", "0", data$Frequence_Tete_CM)
+data$Frequence_Tete_CM <- factor(Frequence_Tete_CM, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Fatigue_CM <- ifelse(data$Apparition_Fatigue_CM == "", "0", data$Apparition_Fatigue_CM)
+data$Apparition_Fatigue_CM <- factor(Apparition_Fatigue_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Fatigue_CM <- ifelse(data$Frequence_Fatigue_CM == "", "0", data$Frequence_Fatigue_CM)
+data$Frequence_Fatigue_CM <- factor(Frequence_Fatigue_CM, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Nausee_CM <- ifelse(data$Apparition_Nausee_CM == "", "0", data$Apparition_Nausee_CM)
+data$Apparition_Nausee_CM <- factor(Apparition_Nausee_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Nausee_CM <- ifelse(data$Frequence_Nausee_CM == "", "0", data$Frequence_Nausee_CM)
+data$Frequence_Nausee_CM <- factor(Frequence_Nausee_CM, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Humeur_CM <- ifelse(data$Apparition_Humeur_CM == "", "0", data$Apparition_Humeur_CM)
+data$Apparition_Humeur_CM <- factor(Apparition_Humeur_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Humeur_CM <- ifelse(data$Frequence_Humeur_CM == "", "0", data$Frequence_Humeur_CM)
+data$Frequence_Humeur_CM <- factor(Frequence_Humeur_CM, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Libido_CM <- ifelse(data$Apparition_Libido_CM == "", "0", data$Apparition_Libido_CM)
+data$Apparition_Libido_CM <- factor(Apparition_Libido_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Libido_CM <- ifelse(data$Frequence_Libido_CM == "", "0", data$Frequence_Libido_CM)
+data$Frequence_Libido_CM <- factor(Frequence_Libido_CM, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Sang_CM <- ifelse(data$Apparition_Sang_CM == "", "0", data$Apparition_Sang_CM)
+data$Apparition_Sang_CM <- factor(Apparition_Sang_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Frequence_Sang_CM <- ifelse(data$Frequence_Sang_CM == "", "0", data$Frequence_Sang_CM)
+data$Frequence_Sang_CM <- factor(Frequence_Sang_CM, levels = c("Plusieurs fois par jour", "Plusieurs fois par semaine", "Plusieurs fois par mois", "Plusieurs fois par an", "Moins d'une fois par an"), ordered = TRUE)
+
+Apparition_Thrombose_CM <- ifelse(data$Apparition_Thrombose_CM == "", "0", data$Apparition_Thrombose_CM)
+data$Apparition_Thrombose_CM <- factor(Apparition_Thrombose_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+### Traitements non médicamenteux CM ###
+Mobilite_CM <- ifelse(data$Mobilite_CM == "X", "y", "n")
+data$Mobilite_CM <- factor(Mobilite_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Nutrition_CM <- ifelse(data$Nutrition_CM == "X", "y", "n")
+data$Nutrition_CM <- factor(Nutrition_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Stress_CM <- ifelse(data$Stress_CM == "X", "y", "n")
+data$Stress_CM <- factor(Stress_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Phyto_CM <- ifelse(data$Phyto_CM == "X", "y", "n")
+data$Phyto_CM <- factor(Phyto_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Acup_CM <- ifelse(data$Acup_CM == "X", "y", "n")
+data$Acup_CM <- factor(Acup_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Hypnose_CM <- ifelse(data$Hypnose_CM == "X", "y", "n")
+data$Hypnose_CM <- factor(Hypnose_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Bouillotte_CM <- ifelse(data$Bouillotte_CM == "X", "y", "n")
+data$Bouillotte_CM <- factor(Bouillotte_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+CBD_CM <- ifelse(data$CBD_CM == "X", "y", "n")
+data$CBD_CM <- factor(CBD_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Tens_CM <- ifelse(data$Tens_CM == "X", "y", "n")
+data$Tens_CM <- factor(Tens_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Aucun_CM <- ifelse(data$Aucun_CM == "X", "y", "n")
+data$Aucun_CM <- factor(Aucun_CM, levels = c("y", "n"), labels = c("yes", "no"))
+
+# Mobilité CM #
+Combien_Mobilite_CM <- ifelse(data$Combien_Mobilite_CM == "", "0", data$Combien_Mobilite_CM)
+data$Combien_Mobilite_CM <- factor(Combien_Mobilite_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Mobilite_CM <- ifelse(data$Douleur_Mobilite_CM == "", "0", data$Douleur_Mobilite_CM)
+data$Douleur_Mobilite_CM <- factor(Douleur_Mobilite_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Mobilite_CM <- ifelse(data$Evolution_Mobilite_CM == "", "0", data$Evolution_Mobilite_CM)
+data$Evolution_Mobilite_CM <- factor(Evolution_Mobilite_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Nutrition CM #
+Combien_Nutrition_CM <- ifelse(data$Combien_Nutrition_CM == "", "0", data$Combien_Nutrition_CM)
+data$Combien_Nutrition_CM <- factor(Combien_Nutrition_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Nutrition_CM <- ifelse(data$Douleur_Nutrition_CM == "", "0", data$Douleur_Nutrition_CM)
+data$Douleur_Nutrition_CM <- factor(Douleur_Nutrition_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Nutrition_CM <- ifelse(data$Evolution_Nutrition_CM == "", "0", data$Evolution_Nutrition_CM)
+data$Evolution_Nutrition_CM <- factor(Evolution_Nutrition_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Stress CM #
+Combien_Stress_CM <- ifelse(data$Combien_Stress_CM == "", "0", data$Combien_Stress_CM)
+data$Combien_Stress_CM <- factor(Combien_Stress_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Stress_CM <- ifelse(data$Douleur_Stress_CM == "", "0", data$Douleur_Stress_CM)
+data$Douleur_Stress_CM <- factor(Douleur_Stress_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Stress_CM <- ifelse(data$Evolution_Stress_CM == "", "0", data$Evolution_Stress_CM)
+data$Evolution_Stress_CM <- factor(Evolution_Stress_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Phyto CM #
+Combien_Phyto_CM <- ifelse(data$Combien_Phyto_CM == "", "0", data$Combien_Phyto_CM)
+data$Combien_Phyto_CM <- factor(Combien_Phyto_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Phyto_CM <- ifelse(data$Douleur_Phyto_CM == "", "0", data$Douleur_Phyto_CM)
+data$Douleur_Phyto_CM <- factor(Douleur_Phyto_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Phyto_CM <- ifelse(data$Evolution_Phyto_CM == "", "0", data$Evolution_Phyto_CM)
+data$Evolution_Phyto_CM <- factor(Evolution_Phyto_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Acup CM #
+Combien_Acup_CM <- ifelse(data$Combien_Acup_CM == "", "0", data$Combien_Acup_CM)
+data$Combien_Acup_CM <- factor(Combien_Acup_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Acup_CM <- ifelse(data$Douleur_Acup_CM == "", "0", data$Douleur_Acup_CM)
+data$Douleur_Acup_CM <- factor(Douleur_Acup_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Acup_CM <- ifelse(data$Evolution_Acup_CM == "", "0", data$Evolution_Acup_CM)
+data$Evolution_Acup_CM <- factor(Evolution_Acup_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Hypnose CM #
+Combien_Hypnose_CM <- ifelse(data$Combien_Hypnose_CM == "", "0", data$Combien_Hypnose_CM)
+data$Combien_Hypnose_CM <- factor(Combien_Hypnose_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Hypnose_CM <- ifelse(data$Douleur_Hypnose_CM == "", "0", data$Douleur_Hypnose_CM)
+data$Douleur_Hypnose_CM <- factor(Douleur_Hypnose_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Hypnose_CM <- ifelse(data$Evolution_Hypnose_CM == "", "0", data$Evolution_Hypnose_CM)
+data$Evolution_Hypnose_CM <- factor(Evolution_Hypnose_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Bouillotte CM #
+Combien_Bouillotte_CM <- ifelse(data$Combien_Bouillotte_CM == "", "0", data$Combien_Bouillotte_CM)
+data$Combien_Bouillotte_CM <- factor(Combien_Bouillotte_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Bouillotte_CM <- ifelse(data$Douleur_Bouillotte_CM == "", "0", data$Douleur_Bouillotte_CM)
+data$Douleur_Bouillotte_CM <- factor(Douleur_Bouillotte_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Bouillotte_CM <- ifelse(data$Evolution_Bouillotte_CM == "", "0", data$Evolution_Bouillotte_CM)
+data$Evolution_Bouillotte_CM <- factor(Evolution_Bouillotte_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# CBD CM #
+Combien_CBD_CM <- ifelse(data$Combien_CBD_CM == "", "0", data$Combien_CBD_CM)
+data$Combien_CBD_CM <- factor(Combien_CBD_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_CBD_CM <- ifelse(data$Douleur_CBD_CM == "", "0", data$Douleur_CBD_CM)
+data$Douleur_CBD_CM <- factor(Douleur_CBD_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_CBD_CM <- ifelse(data$Evolution_CBD_CM == "", "0", data$Evolution_CBD_CM)
+data$Evolution_CBD_CM <- factor(Evolution_CBD_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Tens CM #
+Combien_Tens_CM <- ifelse(data$Combien_Tens_CM == "", "0", data$Combien_Tens_CM)
+data$Combien_Tens_CM <- factor(Combien_Tens_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Douleur_Tens_CM <- ifelse(data$Douleur_Tens_CM == "", "0", data$Douleur_Tens_CM)
+data$Douleur_Tens_CM <- factor(Douleur_Tens_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
+
+Evolution_Tens_CM <- ifelse(data$Evolution_Tens_CM == "", "0", data$Evolution_Tens_CM)
+data$Evolution_Tens_CM <- factor(Evolution_Tens_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+### Traitements non médicamenteux seuls ###
+Mobilite_NM <- ifelse(data$Mobilite_NM == "X", "y", "n")
+data$Mobilite_NM <- factor(Mobilite_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Nutrition_NM <- ifelse(data$Nutrition_NM == "X", "y", "n")
+data$Nutrition_NM <- factor(Nutrition_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Stress_NM <- ifelse(data$Stress_NM == "X", "y", "n")
+data$Stress_NM <- factor(Stress_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Phyto_NM <- ifelse(data$Phyto_NM == "X", "y", "n")
+data$Phyto_NM <- factor(Phyto_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Acup_NM <- ifelse(data$Acup_NM == "X", "y", "n")
+data$Acup_NM <- factor(Acup_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Hypnose_NM <- ifelse(data$Hypnose_NM == "X", "y", "n")
+data$Hypnose_NM <- factor(Hypnose_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Bouillotte_NM <- ifelse(data$Bouillotte_NM == "X", "y", "n")
+data$Bouillotte_NM <- factor(Bouillotte_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+CBD_NM <- ifelse(data$CBD_NM == "X", "y", "n")
+data$CBD_NM <- factor(CBD_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Tens_NM <- ifelse(data$Tens_NM == "X", "y", "n")
+data$Tens_NM <- factor(Tens_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+Aucun_NM <- ifelse(data$Aucun_NM == "X", "y", "n")
+data$Aucun_NM <- factor(Aucun_NM, levels = c("y", "n"), labels = c("yes", "no"))
+
+
+# Mobilité NM #
+
+Depuis_Mobilite_NM <- ifelse(data$Depuis_Mobilite_NM == "", "0", data$Depuis_Mobilite_NM)
+data$Depuis_Mobilite_NM <- factor(Depuis_Mobilite_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_Mobilite_NM <- ifelse(data$Combien_Mobilite_NM == "", "0", data$Combien_Mobilite_NM)
+data$Combien_Mobilite_NM <- factor(Combien_Mobilite_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_M <- factor(ifelse(is.na(data$Depuis_Mobilite_NM), as.character(data$Combien_Mobilite_NM), as.character(data$Depuis_Mobilite_NM)))
+
+Douleur_Mobilite_NM <- ifelse(data$Douleur_Mobilite_NM == "", "0", data$Douleur_Mobilite_NM)
+data$Douleur_Mobilite_NM <- factor(Douleur_Mobilite_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_Mobilite_NM <- ifelse(data$Evolution_Mobilite_NM == "", "0", data$Evolution_Mobilite_NM)
+data$Evolution_Mobilite_NM <- factor(Evolution_Mobilite_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+# Nutrition NM #
+
+Depuis_Nutrition_NM <- ifelse(data$Depuis_Nutrition_NM == "", "0", data$Depuis_Nutrition_NM)
+data$Depuis_Nutrition_NM <- factor(Depuis_Nutrition_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_Nutrition_NM <- ifelse(data$Combien_Nutrition_NM == "", "0", data$Combien_Nutrition_NM)
+data$Combien_Nutrition_NM <- factor(Combien_Nutrition_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_N <- factor(ifelse(is.na(data$Depuis_Nutrition_NM), as.character(data$Combien_Nutrition_NM), as.character(data$Depuis_Nutrition_NM)))
+
+Douleur_Nutrition_NM <- ifelse(data$Douleur_Nutrition_NM == "", "0", data$Douleur_Nutrition_NM)
+data$Douleur_Nutrition_NM <- factor(Douleur_Nutrition_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_Nutrition_NM <- ifelse(data$Evolution_Nutrition_NM == "", "0", data$Evolution_Nutrition_NM)
+data$Evolution_Nutrition_NM <- factor(Evolution_Nutrition_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Stress NM #
+
+Depuis_Stress_NM <- ifelse(data$Depuis_Stress_NM == "", "0", data$Depuis_Stress_NM)
+data$Depuis_Stress_NM <- factor(Depuis_Stress_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_Stress_NM <- ifelse(data$Combien_Stress_NM == "", "0", data$Combien_Stress_NM)
+data$Combien_Stress_NM <- factor(Combien_Stress_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_S <- factor(ifelse(is.na(data$Depuis_Stress_NM), as.character(data$Combien_Stress_NM), as.character(data$Depuis_Stress_NM)))
+
+Douleur_Stress_NM <- ifelse(data$Douleur_Stress_NM == "", "0", data$Douleur_Stress_NM)
+data$Douleur_Stress_NM <- factor(Douleur_Stress_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_Stress_NM <- ifelse(data$Evolution_Stress_NM == "", "0", data$Evolution_Stress_NM)
+data$Evolution_Stress_NM <- factor(Evolution_Stress_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Phyto NM #
+
+Depuis_Phyto_NM <- ifelse(data$Depuis_Phyto_NM == "", "0", data$Depuis_Phyto_NM)
+data$Depuis_Phyto_NM <- factor(Depuis_Phyto_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_Phyto_NM <- ifelse(data$Combien_Phyto_NM == "", "0", data$Combien_Phyto_NM)
+data$Combien_Phyto_NM <- factor(Combien_Phyto_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_P <- factor(ifelse(is.na(data$Depuis_Phyto_NM), as.character(data$Combien_Phyto_NM), as.character(data$Depuis_Phyto_NM)))
+
+Douleur_Phyto_NM <- ifelse(data$Douleur_Phyto_NM == "", "0", data$Douleur_Phyto_NM)
+data$Douleur_Phyto_NM <- factor(Douleur_Phyto_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_Phyto_NM <- ifelse(data$Evolution_Phyto_NM == "", "0", data$Evolution_Phyto_NM)
+data$Evolution_Phyto_NM <- factor(Evolution_Phyto_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Acup NM #
+
+Depuis_Acup_NM <- ifelse(data$Depuis_Acup_NM == "", "0", data$Depuis_Acup_NM)
+data$Depuis_Acup_NM <- factor(Depuis_Acup_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_Acup_NM <- ifelse(data$Combien_Acup_NM == "", "0", data$Combien_Acup_NM)
+data$Combien_Acup_NM <- factor(Combien_Acup_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_A <- factor(ifelse(is.na(data$Depuis_Acup_NM), as.character(data$Combien_Acup_NM), as.character(data$Depuis_Acup_NM)))
+
+Douleur_Acup_NM <- ifelse(data$Douleur_Acup_NM == "", "0", data$Douleur_Acup_NM)
+data$Douleur_Acup_NM <- factor(Douleur_Acup_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_Acup_NM <- ifelse(data$Evolution_Acup_NM == "", "0", data$Evolution_Acup_NM)
+data$Evolution_Acup_NM <- factor(Evolution_Acup_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Hypnose NM #
+
+Depuis_Hypnose_NM <- ifelse(data$Depuis_Hypnose_NM == "", "0", data$Depuis_Hypnose_NM)
+data$Depuis_Hypnose_NM <- factor(Depuis_Hypnose_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_Hypnose_NM <- ifelse(data$Combien_Hypnose_NM == "", "0", data$Combien_Hypnose_NM)
+data$Combien_Hypnose_NM <- factor(Combien_Hypnose_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_H <- factor(ifelse(is.na(data$Depuis_Hypnose_NM), as.character(data$Combien_Hypnose_NM), as.character(data$Depuis_Hypnose_NM)))
+
+Douleur_Hypnose_NM <- ifelse(data$Douleur_Hypnose_NM == "", "0", data$Douleur_Hypnose_NM)
+data$Douleur_Hypnose_NM <- factor(Douleur_Hypnose_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_Hypnose_NM <- ifelse(data$Evolution_Hypnose_NM == "", "0", data$Evolution_Hypnose_NM)
+data$Evolution_Hypnose_NM <- factor(Evolution_Hypnose_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Bouillotte NM #
+
+Depuis_Bouillotte_NM <- ifelse(data$Depuis_Bouillotte_NM == "", "0", data$Depuis_Bouillotte_NM)
+data$Depuis_Bouillotte_NM <- factor(Depuis_Bouillotte_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_Bouillotte_NM <- ifelse(data$Combien_Bouillotte_NM == "", "0", data$Combien_Bouillotte_NM)
+data$Combien_Bouillotte_NM <- factor(Combien_Bouillotte_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_B <- factor(ifelse(is.na(data$Depuis_Bouillotte_NM), as.character(data$Combien_Bouillotte_NM), as.character(data$Depuis_Bouillotte_NM)))
+
+Douleur_Bouillotte_NM <- ifelse(data$Douleur_Bouillotte_NM == "", "0", data$Douleur_Bouillotte_NM)
+data$Douleur_Bouillotte_NM <- factor(Douleur_Bouillotte_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_Bouillotte_NM <- ifelse(data$Evolution_Bouillotte_NM == "", "0", data$Evolution_Bouillotte_NM)
+data$Evolution_Bouillotte_NM <- factor(Evolution_Bouillotte_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# CBD NM #
+
+Depuis_CBD_NM <- ifelse(data$Depuis_CBD_NM == "", "0", data$Depuis_CBD_NM)
+data$Depuis_CBD_NM <- factor(Depuis_CBD_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_CBD_NM <- ifelse(data$Combien_CBD_NM == "", "0", data$Combien_CBD_NM)
+data$Combien_CBD_NM <- factor(Combien_CBD_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_C <- factor(ifelse(is.na(data$Depuis_CBD_NM), as.character(data$Combien_CBD_NM), as.character(data$Depuis_CBD_NM)))
+
+Douleur_CBD_NM <- ifelse(data$Douleur_CBD_NM == "", "0", data$Douleur_CBD_NM)
+data$Douleur_CBD_NM <- factor(Douleur_CBD_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_CBD_NM <- ifelse(data$Evolution_CBD_NM == "", "0", data$Evolution_CBD_NM)
+data$Evolution_CBD_NM <- factor(Evolution_CBD_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+
+
+# Tens NM #
+
+Depuis_Tens_NM <- ifelse(data$Depuis_Tens_NM == "", "0", data$Depuis_Tens_NM)
+data$Depuis_Tens_NM <- factor(Depuis_Tens_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Combien_Tens_NM <- ifelse(data$Combien_Tens_NM == "", "0", data$Combien_Tens_NM)
+data$Combien_Tens_NM <- factor(Combien_Tens_NM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
+
+Duree_T <- factor(ifelse(is.na(data$Depuis_Tens_NM), as.character(data$Combien_Tens_NM), as.character(data$Depuis_Tens_NM)))
+
+Douleur_Tens_NM <- ifelse(data$Douleur_Tens_NM == "", "0", data$Douleur_Tens_NM)
+data$Douleur_Tens_NM <- factor(Douleur_Tens_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+
+Evolution_Tens_NM <- ifelse(data$Evolution_Tens_NM == "", "0", data$Evolution_Tens_NM)
+data$Evolution_Tens_NM <- factor(Evolution_Tens_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+```
+
+
+
+
