@@ -8,7 +8,8 @@ output:
     df_print: paged
 ---
 
-# Librairies
+# Introduction
+## Librairies
 ```{r, echo=FALSE}
 # Définir un miroir CRAN
 options(repos = "https://cloud.r-project.org")
@@ -28,7 +29,7 @@ library(dplyr)
 library(tidyverse)
 ```
 
-# Mise en forme des données
+## Mise en forme des données
 ```{r, echo=FALSE}
 # Renommer toutes les variables
 
@@ -1502,7 +1503,8 @@ print(nrow(data3))
 
 
 # Analyse Exploratoire
-## Pyramide des âges de la bdd
+## Âge
+### Pyramide des âges de la bdd
 ```{r}
 ### Age ###
 
@@ -1521,7 +1523,7 @@ ggplot(df_age_counts, aes(x = age, y = count)) +
   theme_minimal()
 ```
 
-## Pyramide des âges de la pop française 
+### Pyramide des âges de la pop française 
 ```{r}
 # Lecture du fichier Excel et importation en tant que data frame
 data_pop <- read_excel("demo-pop-pyram.xlsx")
@@ -1552,7 +1554,7 @@ ggplot(df_age_counts_bis, aes(x = age, y = count)) +
   theme_minimal()
 ```
 
-## Pyramides des âges côte à côte
+### Pyramides des âges côte à côte
 ```{r}
 library(gridExtra)
 
@@ -1572,7 +1574,7 @@ plot2 <- ggplot(df_age_counts_bis_filtre, aes(x = age, y = count)) +
 grid.arrange(plot1, plot2, nrow = 1)
 ```
 
-## Tentative d'afficher les pyramides une sur l'autre
+### Tentative d'afficher les pyramides une sur l'autre
 ```{r}
 # afficher nos âges par dessus la pyramide des âges (pas réussi)
 
@@ -1587,7 +1589,7 @@ grid.arrange(plot1, plot2, nrow = 1)
 #  geom_line(data = df_age_counts_bis, color = "red")
 ```
 
-## Regroupement en tranches d'âges
+### Regroupement en tranches d'âges
 ```{r}
 tranches_age <- cut(data$Age, breaks = 5)
 tranches_age_pyramide = cut(df_age_counts_bis_filtre$count, breaks = 5)
@@ -1610,7 +1612,7 @@ grid.arrange(plot1, plot2, nrow = 1)
 length(df_age_counts_bis_filtre$age)
 ```
 
-## Test khi2 d'adéquation des âges
+### Test khi2 d'adéquation des âges
 ```{r}
 # Effectuer un test du khi-deux pour comparer les distributions d'âge
 
@@ -1623,7 +1625,8 @@ p-value = 0.2376 > 0.05 (alpha=5%)
 Il ne semble donc pas y avoir de différence significative entre les distributions d'âge des deux groupes (ie les femmes ayant répondu au sondage et l'ensemble des Françaises recensées en 2024).
 
 RESTE À FAIRE : REFAIRE LE TEST EN FAISANT DES REGROUPEMENTS DES ÂGES
-## Test khi2 d'adéquation des tranches d'âges 
+
+### Test khi2 d'adéquation des tranches d'âges 
 ```{r}
 # Effectuer un test du khi-deux pour comparer les distributions d'âge
 
@@ -1633,8 +1636,8 @@ length(df_age_counts_bis$age[19:54])
 ?chisq.test
 ```
 
-# Evolution de la douleur en fonction de la durée de prise du traitement
-## Mosaic plots
+
+## Evolution de la douleur en fonction de la durée de prise du traitement (Mosaic plots)
 
 ```{r}
 ##### Evolution de la douleur en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non) #####
@@ -1747,7 +1750,7 @@ mosaicplot(table_contingence_duree_douleur_P, main = "Mosaïque Douleur x Duree 
 
 dataA <- data3[which(data3$Acup_NM==1),] # Récupération de tous les individus ayant expérimenté l'acupuncture hors traitement médicamenteux
 
-Duree_A <- factor(ifelse(dataA$Depuis_Acup == "0", as.character(dataA$Combien_Acup_NM), as.character(dataA$Depuis_Acup_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
+Duree_A <- factor(ifelse(dataA$Depuis_Acup_NM == "0", as.character(dataA$Combien_Acup_NM), as.character(dataA$Depuis_Acup_NM)), levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), labels = c(".          - 3 mois", "3 mois /\n6 mois  ", "6 mois /\n2 ans  ", "2 ans /\n5 ans  ", ".          + 5 ans"), ordered = TRUE)
 
 table_contingence_duree_douleur_A <- table(Duree_A, dataA$Douleur_Acup_NM[dataA$Douleur_Acup_NM != "0"])
 
@@ -1839,8 +1842,7 @@ Pour TH, CM, Mobilite?, Phyto, Tens : prendre le traitement + de 6 mois semble a
 Pour CBD : il semble que plus le traitement est pris, + il y a réduction de la douleur
 Pour les autres : pas de déduction par rapport à la durée de prise du traitement
 
-# Evolution de la maladie en fonction de la durée de prise du traitement
-## Mosaic plots 
+## Evolution de la maladie en fonction de la durée de prise du traitement (Mosaic plots)
 
 ```{r}
 ##### Evolution de la maladie en fonction de la duree de prise du traitement TH (qu'il y ait eu arrêt ou non) #####
@@ -2009,8 +2011,7 @@ mosaicplot(table_contingence_duree_evol_Tens[,1:5], main = "Mosaïque Evolution 
 ```
 Pour TH : semble avoir une inluence positive sur la résorption des lésions au-delà de 6 mois
 
-# Evolution de la douleur en fonction de la consommation de tabac
-## Mosaic plots 
+## Evolution de la douleur en fonction de la consommation de tabac (Mosaic plots)
 ```{r}
 ##### Efficacite douleur TH Tabac #####
 
@@ -2169,8 +2170,7 @@ mosaicplot(table_contingence_tabac_douleur_Tens, main = "Mosaïque Douleur x Tab
 
 ```
 
-# Evolution de la douleur en fonction de la consommation d'alcool
-## Mosaic plots 
+## Evolution de la douleur en fonction de la consommation d'alcool (Mosaic plots)
 ```{r}
 ##### Efficacite douleur TH Alcool #####
 
