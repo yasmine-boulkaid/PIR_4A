@@ -3445,6 +3445,13 @@ En revanche, aucune confirmation pour le CBD.
 ## Test de Chi_deux Tabac x Douleur
 
 ```{r}
+test = chisq.test(table_contingence_tabac_douleur_TH)
+test$expected
+```
+
+
+```{r}
+
 
 # TH
 
@@ -3843,13 +3850,17 @@ head(res.mca$eig)
 
 fviz_screeplot(res.mca, addlabels=TRUE, ncp=20)
 
-fviz_mca_biplot(res.mca)
+fviz_mca_biplot(res.mca,select.var = list(cos2=0.5, contrib =10), repel = TRUE, label = "var")
 
-fviz_mca_var(res.mca, choice="mca.cor", repel=TRUE)
+fviz_mca_var(res.mca, choice="mca.cor")
 
+help(fviz_mca_biplot)
 ```
 
 
+```{r}
+str(data)
+```
 
 
 
