@@ -38,75 +38,6 @@ n <- length(data)
 head(data)
 ```
 
-# Test fonction renommage
-
-```{r}
-
-### Questions préliminaires ###
-names(data)[names(data) == "Étude.sur.les.traitements.de.l.endométriose"] <- "ID"
-names(data)[names(data) == "X"] <- "Age"
-names(data)[names(data) == "X.1"] <- "Stade"
-names(data)[names(data) == "X.2"] <- "Diagnostic"
-names(data)[names(data) == "X.3"] <- "Tabac"
-names(data)[names(data) == "X.4"] <- "Alcool"
-names(data)[names(data) == "X.5"] <- "TH"
-names(data)[names(data) == "X.6"] <- "CM"
-names(data)[names(data) == "X.7"] <- "Autre"
-names(data)[names(data) == "X.8"] <- "Aucun"
-names(data)[names(data) == "X.9"] <- "Lesquels_M"
-
-Renommage <- function(data,TM,ES){
-  
-  ### Questions générales ###
-  names(data)[names(data) == "X.10"] <- paste("Encore_", TM, sep="")
-  names(data)[names(data) == "X.11"] <- paste("Depuis_", TM, sep="")
-  names(data)[names(data) == "X.12"] <- paste("Debut_", TM, sep="")
-  names(data)[names(data) == "X.13"] <- paste("Combien_", TM, sep="")
-  names(data)[names(data) == "X.14"] <- paste("Pas_efficace_", TM, sep="")
-  names(data)[names(data) == "X.15"] <- paste("ES_", TM, sep="")
-  names(data)[names(data) == "X.16"] <- paste("Cout_", TM, sep="")
-  names(data)[names(data) == "X.17"] <- paste("Autre_Cause_Fin_", TM, sep="")
-  names(data)[names(data) == "X.18"] <- paste("Douleur_", TM, sep="")
-  names(data)[names(data) == "X.19"] <- paste("Evolution_", TM, sep="")
-  names(data)[names(data) == "X.20"] <- paste("Pre_op_", TM, sep="")
-  names(data)[names(data) == "X.21"] <- paste("Post_op_", TM, sep="")
-  names(data)[names(data) == "X.22"] <- paste("Pas_op_", TM, sep="")
-  names(data)[names(data) == "X.23"] <- paste("Prise_", TM, sep="")
-  
-  ### Effets secondaires ###
-  names(data)[names(data) == "X.24"] <- paste("Subi_ES_", TM, sep="")
-  names(data)[names(data) == "X.25"] <- paste("Tete_", TM, sep="")
-  names(data)[names(data) == "X.26"] <- paste("Fatigue_", TM, sep="")
-  names(data)[names(data) == "X.27"] <- paste("Nausee_", TM, sep="")
-  names(data)[names(data) == "X.28"] <- paste("Humeur_", TM, sep="")
-  names(data)[names(data) == "X.29"] <- paste("Libido_", TM, sep="")
-  names(data)[names(data) == "X.30"] <- paste("Sang_", TM, sep="")
-  names(data)[names(data) == "X.31"] <- paste("Poids_", TM, sep="")
-  names(data)[names(data) == "X.32"] <- paste("Allergie_", TM, sep="")
-  names(data)[names(data) == "X.33"] <- paste("Thrombose_", TM, sep="")
-  names(data)[names(data) == "X.34"] <- paste("Autre_ES_", TM, sep="")
-  
-  for (i in seq_along(ES)){
-    es <- ES[i]
-    names(data)[names(data) == paste("X.",35+(i-1)*2, sep="")] <- paste("Apparition_",es,"_",TM, sep="")
-    if (es != "Thrombose"){
-      names(data)[names(data) == paste("X.",36+(i-1)*2, sep="")] <- paste("Frequence_",es,"_",TM, sep="")
-    }
-  }
-  
-  return(data)
-}
-
-data <- Renommage(data,"TH",c("Tete","Fatigue","Nausee","Humeur","Libido","Sang","Poids","Allergie","Thrombose"))
-
-```
-
-```{r}
-head(data)
-
-```
-
-
 # On renomme les variables
 
 ```{r}
@@ -124,223 +55,100 @@ names(data)[names(data) == "X.7"] <- "Autre"
 names(data)[names(data) == "X.8"] <- "Aucun"
 names(data)[names(data) == "X.9"] <- "Lesquels_M"
 
-### Questions générales TH ###
-names(data)[names(data) == "X.10"] <- "Encore_TH"
-names(data)[names(data) == "X.11"] <- "Depuis_TH"
-names(data)[names(data) == "X.12"] <- "Debut_TH"
-names(data)[names(data) == "X.13"] <- "Combien_TH"
-names(data)[names(data) == "X.14"] <- "Pas_efficace_TH"
-names(data)[names(data) == "X.15"] <- "ES_TH"
-names(data)[names(data) == "X.16"] <- "Cout_TH"
-names(data)[names(data) == "X.17"] <- "Autre_Cause_Fin_TH"
-names(data)[names(data) == "X.18"] <- "Douleur_TH"
-names(data)[names(data) == "X.19"] <- "Evolution_TH"
-names(data)[names(data) == "X.20"] <- "Pre_op_TH"
-names(data)[names(data) == "X.21"] <- "Post_op_TH"
-names(data)[names(data) == "X.22"] <- "Pas_op_TH"
-names(data)[names(data) == "X.23"] <- "Prise_TH"
 
-### Effets secondaires TH ###
-names(data)[names(data) == "X.24"] <- "Subi_ES_TH"
-names(data)[names(data) == "X.25"] <- "Tete_TH"
-names(data)[names(data) == "X.26"] <- "Fatigue_TH"
-names(data)[names(data) == "X.27"] <- "Nausee_TH"
-names(data)[names(data) == "X.28"] <- "Humeur_TH"
-names(data)[names(data) == "X.29"] <- "Libido_TH"
-names(data)[names(data) == "X.30"] <- "Sang_TH"
-names(data)[names(data) == "X.31"] <- "Poids_TH"
-names(data)[names(data) == "X.32"] <- "Allergie_TH"
-names(data)[names(data) == "X.33"] <- "Thrombose_TH"
-names(data)[names(data) == "X.34"] <- "Autre_ES_TH"
-names(data)[names(data) == "X.35"] <- "Apparition_Tete_TH"
-names(data)[names(data) == "X.36"] <- "Frequence_Tete_TH"
-names(data)[names(data) == "X.37"] <- "Apparition_Fatigue_TH"
-names(data)[names(data) == "X.38"] <- "Frequence_Fatigue_TH"
-names(data)[names(data) == "X.39"] <- "Apparition_Nausee_TH"
-names(data)[names(data) == "X.40"] <- "Frequence_Nausee_TH"
-names(data)[names(data) == "X.41"] <- "Apparition_Humeur_TH"
-names(data)[names(data) == "X.42"] <- "Frequence_Humeur_TH"
-names(data)[names(data) == "X.43"] <- "Apparition_Libido_TH"
-names(data)[names(data) == "X.44"] <- "Frequence_Libido_TH"
-names(data)[names(data) == "X.45"] <- "Apparition_Sang_TH"
-names(data)[names(data) == "X.46"] <- "Frequence_Sang_TH"
-names(data)[names(data) == "X.47"] <- "Apparition_Thrombose_TH"
+### Questions générales ###
+Questions_Generales <- function(data,nb,TM){
+  names(data)[names(data) == paste("X.", nb, sep="")] <- paste("Encore_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+1, sep="")] <- paste("Depuis_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+2, sep="")] <- paste("Debut_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+3, sep="")] <- paste("Combien_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+4, sep="")] <- paste("Pas_efficace_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+5, sep="")] <- paste("ES_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+6, sep="")] <- paste("Cout_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+7, sep="")] <- paste("Autre_Cause_Fin_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+8, sep="")] <- paste("Douleur_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+9, sep="")] <- paste("Evolution_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+10, sep="")] <- paste("Pre_op_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+11, sep="")] <- paste("Post_op_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+12, sep="")] <- paste("Pas_op_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+13, sep="")] <- paste("Prise_", TM, sep="")
+  return(data)
+}
+  
 
-### Traitements non médicamenteux TH ###
-names(data)[names(data) == "X.48"] <- "Mobilite_TH"
-names(data)[names(data) == "X.49"] <- "Nutrition_TH"
-names(data)[names(data) == "X.50"] <- "Stress_TH"
-names(data)[names(data) == "X.51"] <- "Phyto_TH"
-names(data)[names(data) == "X.52"] <- "Acup_TH"
-names(data)[names(data) == "X.53"] <- "Hypnose_TH"
-names(data)[names(data) == "X.54"] <- "Bouillotte_TH"
-names(data)[names(data) == "X.55"] <- "CBD_TH"
-names(data)[names(data) == "X.56"] <- "Tens_TH"
-names(data)[names(data) == "X.57"] <- "Aucun_TH"
+### Effets secondaires ###
+Effets_Secondaires <- function(data,nb,TM,ES){
+  names(data)[names(data) == paste("X.", nb+14, sep="")] <- paste("Subi_ES_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+15, sep="")] <- paste("Tete_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+16, sep="")] <- paste("Fatigue_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+17, sep="")] <- paste("Nausee_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+18, sep="")] <- paste("Humeur_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+19, sep="")] <- paste("Libido_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+20, sep="")] <- paste("Sang_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+21, sep="")] <- paste("Poids_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+22, sep="")] <- paste("Allergie_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+23, sep="")] <- paste("Thrombose_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+24, sep="")] <- paste("Autre_ES_", TM, sep="")
+  
+  a = 0
+  f = 0
+  
+  for (i in seq_along(ES)){
+    es <- ES[i]
+    if (es != "Poids" && es != "Allergie"){
+      names(data)[names(data) == paste("X.",nb+25+a*2, sep="")] <- paste("Apparition_",es,"_",TM, sep="")
+      a <- a+1
+    }
+    if (es != "Thrombose" && es != "Poids" && es != "Allergie"){
+      names(data)[names(data) == paste("X.",nb+26+f*2, sep="")] <- paste("Frequence_",es,"_",TM, sep="")
+      f <- f+1
+    }
+  }
+  return(data)
+}
 
-# Mobilité TH #
-names(data)[names(data) == "X.58"] <- "Combien_Mobilite_TH"
-names(data)[names(data) == "X.59"] <- "Douleur_Mobilite_TH"
-names(data)[names(data) == "X.60"] <- "Evolution_Mobilite_TH"
-names(data)[names(data) == "X.61"] <- "Prise_Mobilite_TH"
 
-# Nutrition TH #
-names(data)[names(data) == "X.62"] <- "Combien_Nutrition_TH"
-names(data)[names(data) == "X.63"] <- "Douleur_Nutrition_TH"
-names(data)[names(data) == "X.64"] <- "Evolution_Nutrition_TH"
-names(data)[names(data) == "X.65"] <- "Prise_Nutrition_TH"
+### Traitements non médicamenteux ###
+Pris_En_Parallele <- function(data,nb,TM,TNM){
+  names(data)[names(data) == paste("X.", nb+38, sep="")] <- paste("Mobilite_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+39, sep="")] <- paste("Nutrition_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+40, sep="")] <- paste("Stress_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+41, sep="")] <- paste("Phyto_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+42, sep="")] <- paste("Acup_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+43, sep="")] <- paste("Hypnose_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+44, sep="")] <- paste("Bouillotte_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+45, sep="")] <- paste("CBD_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+46, sep="")] <- paste("Tens_", TM, sep="")
+  names(data)[names(data) == paste("X.", nb+47, sep="")] <- paste("Aucun_", TM, sep="")
+  
+    for (i in seq_along(TNM)){
+    tnm <- TNM[i]
+    names(data)[names(data) == paste("X.",nb+48+(i-1)*4, sep="")] <- paste("Combien_",tnm,"_", TM, sep="")
+    names(data)[names(data) == paste("X.",nb+49+(i-1)*4, sep="")] <- paste("Douleur_",tnm,"_", TM, sep="")
+    names(data)[names(data) == paste("X.",nb+50+(i-1)*4, sep="")] <- paste("Evolution_",tnm,"_", TM, sep="")
+    names(data)[names(data) == paste("X.",nb+51+(i-1)*4, sep="")] <- paste("Prise_",tnm,"_", TM, sep="")
+    }
+  return(data)
+}
 
-# Stress TH #
-names(data)[names(data) == "X.66"] <- "Combien_Stress_TH"
-names(data)[names(data) == "X.67"] <- "Douleur_Stress_TH"
-names(data)[names(data) == "X.68"] <- "Evolution_Stress_TH"
-names(data)[names(data) == "X.69"] <- "Prise_Stress_TH"
 
-# Phyto TH #
-names(data)[names(data) == "X.70"] <- "Combien_Phyto_TH"
-names(data)[names(data) == "X.71"] <- "Douleur_Phyto_TH"
-names(data)[names(data) == "X.72"] <- "Evolution_Phyto_TH"
-names(data)[names(data) == "X.73"] <- "Prise_Phyto_TH"
+## Traitement Hormonal ##
+data <- Questions_Generales(data,10,"TH")
 
-# Acup TH #
-names(data)[names(data) == "X.74"] <- "Combien_Acup_TH"
-names(data)[names(data) == "X.75"] <- "Douleur_Acup_TH"
-names(data)[names(data) == "X.76"] <- "Evolution_Acup_TH"
-names(data)[names(data) == "X.77"] <- "Prise_Acup_TH"
+data <- Effets_Secondaires(data,10,"TH",c("Tete","Fatigue","Nausee","Humeur","Libido","Sang","Poids","Allergie","Thrombose"))
 
-# Hypnose TH #
-names(data)[names(data) == "X.78"] <- "Combien_Hypnose_TH"
-names(data)[names(data) == "X.79"] <- "Douleur_Hypnose_TH"
-names(data)[names(data) == "X.80"] <- "Evolution_Hypnose_TH"
-names(data)[names(data) == "X.81"] <- "Prise_Hypnose_TH"
+data <- Pris_En_Parallele(data,10,"TH",c("Mobilite","Nutrition","Stress","Phyto","Acup","Hypnose","Bouillotte","CBD","Tens"))
 
-# Bouillotte TH #
-names(data)[names(data) == "X.82"] <- "Combien_Bouillotte_TH"
-names(data)[names(data) == "X.83"] <- "Douleur_Bouillotte_TH"
-names(data)[names(data) == "X.84"] <- "Evolution_Bouillotte_TH"
-names(data)[names(data) == "X.85"] <- "Prise_Bouillotte_TH"
 
-# CBD TH #
-names(data)[names(data) == "X.86"] <- "Combien_CBD_TH"
-names(data)[names(data) == "X.87"] <- "Douleur_CBD_TH"
-names(data)[names(data) == "X.88"] <- "Evolution_CBD_TH"
-names(data)[names(data) == "X.89"] <- "Prise_CBD_TH"
+## Cure de Ménopause Artificielle ##
+data <- Questions_Generales(data,94,"CM")
 
-# Tens TH #
-names(data)[names(data) == "X.90"] <- "Combien_Tens_TH"
-names(data)[names(data) == "X.91"] <- "Douleur_Tens_TH"
-names(data)[names(data) == "X.92"] <- "Evolution_Tens_TH"
-names(data)[names(data) == "X.93"] <- "Prise_Tens_TH"
+data <- Effets_Secondaires(data,94,"CM",c("Tete","Fatigue","Nausee","Humeur","Libido","Sang","Poids","Allergie","Thrombose"))
 
-### Questions générales CM ###
-names(data)[names(data) == "X.94"] <- "Encore_CM"
-names(data)[names(data) == "X.95"] <- "Depuis_CM"
-names(data)[names(data) == "X.96"] <- "Debut_CM"
-names(data)[names(data) == "X.97"] <- "Combien_CM"
-names(data)[names(data) == "X.98"] <- "Pas_efficace_CM"
-names(data)[names(data) == "X.99"] <- "ES_CM"
-names(data)[names(data) == "X.100"] <- "Cout_CM"
-names(data)[names(data) == "X.101"] <- "Autre_Cause_Fin_CM"
-names(data)[names(data) == "X.102"] <- "Douleur_CM"
-names(data)[names(data) == "X.103"] <- "Evolution_CM"
-names(data)[names(data) == "X.104"] <- "Pre_op_CM"
-names(data)[names(data) == "X.105"] <- "Post_op_CM"
-names(data)[names(data) == "X.106"] <- "Pas_op_CM"
-names(data)[names(data) == "X.107"] <- "Prise_CM"
+data <- Pris_En_Parallele(data,94,"CM",c("Mobilite","Nutrition","Stress","Phyto","Acup","Hypnose","Bouillotte","CBD","Tens"))
 
-### Effets secondaires CM ###
-names(data)[names(data) == "X.108"] <- "Subi_ES_CM"
-names(data)[names(data) == "X.109"] <- "Tete_CM"
-names(data)[names(data) == "X.110"] <- "Fatigue_CM"
-names(data)[names(data) == "X.111"] <- "Nausee_CM"
-names(data)[names(data) == "X.112"] <- "Humeur_CM"
-names(data)[names(data) == "X.113"] <- "Libido_CM"
-names(data)[names(data) == "X.114"] <- "Sang_CM"
-names(data)[names(data) == "X.115"] <- "Poids_CM"
-names(data)[names(data) == "X.116"] <- "Allergie_CM"
-names(data)[names(data) == "X.117"] <- "Thrombose_CM"
-names(data)[names(data) == "X.118"] <- "Autre_ES_CM"
-names(data)[names(data) == "X.119"] <- "Apparition_Tete_CM"
-names(data)[names(data) == "X.120"] <- "Frequence_Tete_CM"
-names(data)[names(data) == "X.121"] <- "Apparition_Fatigue_CM"
-names(data)[names(data) == "X.122"] <- "Frequence_Fatigue_CM"
-names(data)[names(data) == "X.123"] <- "Apparition_Nausee_CM"
-names(data)[names(data) == "X.124"] <- "Frequence_Nausee_CM"
-names(data)[names(data) == "X.125"] <- "Apparition_Humeur_CM"
-names(data)[names(data) == "X.126"] <- "Frequence_Humeur_CM"
-names(data)[names(data) == "X.127"] <- "Apparition_Libido_CM"
-names(data)[names(data) == "X.128"] <- "Frequence_Libido_CM"
-names(data)[names(data) == "X.129"] <- "Apparition_Sang_CM"
-names(data)[names(data) == "X.130"] <- "Frequence_Sang_CM"
-names(data)[names(data) == "X.131"] <- "Apparition_Thrombose_CM"
 
-### Traitements non médicamenteux CM ###
-names(data)[names(data) == "X.132"] <- "Mobilite_CM"
-names(data)[names(data) == "X.133"] <- "Nutrition_CM"
-names(data)[names(data) == "X.134"] <- "Stress_CM"
-names(data)[names(data) == "X.135"] <- "Phyto_CM"
-names(data)[names(data) == "X.136"] <- "Acup_CM"
-names(data)[names(data) == "X.137"] <- "Hypnose_CM"
-names(data)[names(data) == "X.138"] <- "Bouillotte_CM"
-names(data)[names(data) == "X.139"] <- "CBD_CM"
-names(data)[names(data) == "X.140"] <- "Tens_CM"
-names(data)[names(data) == "X.141"] <- "Aucun_CM"
-
-# Mobilite CM #
-names(data)[names(data) == "X.142"] <- "Combien_Mobilite_CM"
-names(data)[names(data) == "X.143"] <- "Douleur_Mobilite_CM"
-names(data)[names(data) == "X.144"] <- "Evolution_Mobilite_CM"
-names(data)[names(data) == "X.145"] <- "Prise_Mobilite_CM"
-
-# Nutrition CM #
-names(data)[names(data) == "X.146"] <- "Combien_Nutrition_CM"
-names(data)[names(data) == "X.147"] <- "Douleur_Nutrition_CM"
-names(data)[names(data) == "X.148"] <- "Evolution_Nutrition_CM"
-names(data)[names(data) == "X.149"] <- "Prise_Nutrition_CM"
-
-# Stress CM #
-names(data)[names(data) == "X.150"] <- "Combien_Stress_CM"
-names(data)[names(data) == "X.151"] <- "Douleur_Stress_CM"
-names(data)[names(data) == "X.152"] <- "Evolution_Stress_CM"
-names(data)[names(data) == "X.153"] <- "Prise_Stress_CM"
-
-# Phyto CM #
-names(data)[names(data) == "X.154"] <- "Combien_Phyto_CM"
-names(data)[names(data) == "X.155"] <- "Douleur_Phyto_CM"
-names(data)[names(data) == "X.156"] <- "Evolution_Phyto_CM"
-names(data)[names(data) == "X.157"] <- "Prise_Phyto_CM"
-
-# Acup CM #
-names(data)[names(data) == "X.158"] <- "Combien_Acup_CM"
-names(data)[names(data) == "X.159"] <- "Douleur_Acup_CM"
-names(data)[names(data) == "X.160"] <- "Evolution_Acup_CM"
-names(data)[names(data) == "X.161"] <- "Prise_Acup_CM"
-
-# Hypnose CM #
-names(data)[names(data) == "X.162"] <- "Combien_Hypnose_CM"
-names(data)[names(data) == "X.163"] <- "Douleur_Hypnose_CM"
-names(data)[names(data) == "X.164"] <- "Evolution_Hypnose_CM"
-names(data)[names(data) == "X.165"] <- "Prise_Hypnose_CM"
-
-# Bouillotte CM #
-names(data)[names(data) == "X.166"] <- "Combien_Bouillotte_CM"
-names(data)[names(data) == "X.167"] <- "Douleur_Bouillotte_CM"
-names(data)[names(data) == "X.168"] <- "Evolution_Bouillotte_CM"
-names(data)[names(data) == "X.169"] <- "Prise_Bouillotte_CM"
-
-# CBD CM #
-names(data)[names(data) == "X.170"] <- "Combien_CBD_CM"
-names(data)[names(data) == "X.171"] <- "Douleur_CBD_CM"
-names(data)[names(data) == "X.172"] <- "Evolution_CBD_CM"
-names(data)[names(data) == "X.173"] <- "Prise_CBD_CM"
-
-# Tens CM #
-names(data)[names(data) == "X.174"] <- "Combien_Tens_CM"
-names(data)[names(data) == "X.175"] <- "Douleur_Tens_CM"
-names(data)[names(data) == "X.176"] <- "Evolution_Tens_CM"
-names(data)[names(data) == "X.177"] <- "Prise_Tens_CM"
-
-### Traitements non médicamenteux seuls ###
+## Traitements Non Médicamenteux Seuls ##
 names(data)[names(data) == "X.178"] <- "Mobilite_NM"
 names(data)[names(data) == "X.179"] <- "Nutrition_NM"
 names(data)[names(data) == "X.180"] <- "Stress_NM"
@@ -352,158 +160,27 @@ names(data)[names(data) == "X.185"] <- "CBD_NM"
 names(data)[names(data) == "X.186"] <- "Tens_NM"
 names(data)[names(data) == "X.187"] <- "Aucun_NM"
 
-# Mobilite NM #
-names(data)[names(data) == "X.188"] <- "Encore_Mobilite_NM"
-names(data)[names(data) == "X.189"] <- "Depuis_Mobilite_NM"
-names(data)[names(data) == "X.190"] <- "Debut_Mobilite_NM"
-names(data)[names(data) == "X.191"] <- "Combien_Mobilite_NM"
-names(data)[names(data) == "X.192"] <- "Pas_efficace_Mobilite_NM"
-names(data)[names(data) == "X.193"] <- "ES_Mobilite_NM"
-names(data)[names(data) == "X.194"] <- "Cout_Mobilite_NM"
-names(data)[names(data) == "X.195"] <- "Autre_Cause_Fin_Mobilite_NM"
-names(data)[names(data) == "X.196"] <- "Douleur_Mobilite_NM"
-names(data)[names(data) == "X.197"] <- "Evolution_Mobilite_NM"
-names(data)[names(data) == "X.198"] <- "Pre_op_Mobilite_NM"
-names(data)[names(data) == "X.199"] <- "Post_op_Mobilite_NM"
-names(data)[names(data) == "X.200"] <- "Pas_op_Mobilite_NM"
-names(data)[names(data) == "X.201"] <- "Prise_Mobilite_NM"
+data <- Questions_Generales(data,188,"Mobilite_NM")
+data <- Questions_Generales(data,202,"Nutrition_NM")
+data <- Questions_Generales(data,216,"Stress_NM")
+data <- Questions_Generales(data,230,"Phyto_NM")
+data <- Questions_Generales(data,244,"Acup_NM")
+data <- Questions_Generales(data,258,"Hypnose_NM")
+data <- Questions_Generales(data,272,"Bouillotte_NM")
+data <- Questions_Generales(data,286,"CBD_NM")
+data <- Questions_Generales(data,300,"Tens_NM")
 
-# Nutrition NM #
-names(data)[names(data) == "X.202"] <- "Encore_Nutrition_NM"
-names(data)[names(data) == "X.203"] <- "Depuis_Nutrition_NM"
-names(data)[names(data) == "X.204"] <- "Debut_Nutrition_NM"
-names(data)[names(data) == "X.205"] <- "Combien_Nutrition_NM"
-names(data)[names(data) == "X.206"] <- "Pas_efficace_Nutrition_NM"
-names(data)[names(data) == "X.207"] <- "ES_Nutrition_NM"
-names(data)[names(data) == "X.208"] <- "Cout_Nutrition_NM"
-names(data)[names(data) == "X.209"] <- "Autre_Cause_Fin_Nutrition_NM"
-names(data)[names(data) == "X.210"] <- "Douleur_Nutrition_NM"
-names(data)[names(data) == "X.211"] <- "Evolution_Nutrition_NM"
-names(data)[names(data) == "X.212"] <- "Pre_op_Nutrition_NM"
-names(data)[names(data) == "X.213"] <- "Post_op_Nutrition_NM"
-names(data)[names(data) == "X.214"] <- "Pas_op_Nutrition_NM"
-names(data)[names(data) == "X.215"] <- "Prise_Nutrition_NM"
-
-# Stress NM #
-names(data)[names(data) == "X.216"] <- "Encore_Stress_NM"
-names(data)[names(data) == "X.217"] <- "Depuis_Stress_NM"
-names(data)[names(data) == "X.218"] <- "Debut_Stress_NM"
-names(data)[names(data) == "X.219"] <- "Combien_Stress_NM"
-names(data)[names(data) == "X.220"] <- "Pas_efficace_Stress_NM"
-names(data)[names(data) == "X.221"] <- "ES_Stress_NM"
-names(data)[names(data) == "X.222"] <- "Cout_Stress_NM"
-names(data)[names(data) == "X.223"] <- "Autre_Cause_Fin_Stress_NM"
-names(data)[names(data) == "X.224"] <- "Douleur_Stress_NM"
-names(data)[names(data) == "X.225"] <- "Evolution_Stress_NM"
-names(data)[names(data) == "X.226"] <- "Pre_op_Stress_NM"
-names(data)[names(data) == "X.227"] <- "Post_op_Stress_NM"
-names(data)[names(data) == "X.228"] <- "Pas_op_Stress_NM"
-names(data)[names(data) == "X.229"] <- "Prise_Stress_NM"
-
-# Phyto NM #
-names(data)[names(data) == "X.230"] <- "Encore_Phyto_NM"
-names(data)[names(data) == "X.231"] <- "Depuis_Phyto_NM"
-names(data)[names(data) == "X.232"] <- "Debut_Phyto_NM"
-names(data)[names(data) == "X.233"] <- "Combien_Phyto_NM"
-names(data)[names(data) == "X.234"] <- "Pas_efficace_Phyto_NM"
-names(data)[names(data) == "X.235"] <- "ES_Phyto_NM"
-names(data)[names(data) == "X.236"] <- "Cout_Phyto_NM"
-names(data)[names(data) == "X.237"] <- "Autre_Cause_Fin_Phyto_NM"
-names(data)[names(data) == "X.238"] <- "Douleur_Phyto_NM"
-names(data)[names(data) == "X.239"] <- "Evolution_Phyto_NM"
-names(data)[names(data) == "X.240"] <- "Pre_op_Phyto_NM"
-names(data)[names(data) == "X.241"] <- "Post_op_Phyto_NM"
-names(data)[names(data) == "X.242"] <- "Pas_op_Phyto_NM"
-names(data)[names(data) == "X.243"] <- "Prise_Phyto_NM"
-
-# Acup NM #
-names(data)[names(data) == "X.244"] <- "Encore_Acup_NM"
-names(data)[names(data) == "X.245"] <- "Depuis_Acup_NM"
-names(data)[names(data) == "X.246"] <- "Debut_Acup_NM"
-names(data)[names(data) == "X.247"] <- "Combien_Acup_NM"
-names(data)[names(data) == "X.248"] <- "Pas_efficace_Acup_NM"
-names(data)[names(data) == "X.249"] <- "ES_Acup_NM"
-names(data)[names(data) == "X.250"] <- "Cout_Acup_NM"
-names(data)[names(data) == "X.251"] <- "Autre_Cause_Fin_Acup_NM"
-names(data)[names(data) == "X.252"] <- "Douleur_Acup_NM"
-names(data)[names(data) == "X.253"] <- "Evolution_Acup_NM"
-names(data)[names(data) == "X.254"] <- "Pre_op_Acup_NM"
-names(data)[names(data) == "X.255"] <- "Post_op_Acup_NM"
-names(data)[names(data) == "X.256"] <- "Pas_op_Acup_NM"
-names(data)[names(data) == "X.257"] <- "Prise_Acup_NM"
-
-# Hypnose NM #
-names(data)[names(data) == "X.258"] <- "Encore_Hypnose_NM"
-names(data)[names(data) == "X.259"] <- "Depuis_Hypnose_NM"
-names(data)[names(data) == "X.260"] <- "Debut_Hypnose_NM"
-names(data)[names(data) == "X.261"] <- "Combien_Hypnose_NM"
-names(data)[names(data) == "X.262"] <- "Pas_efficace_Hypnose_NM"
-names(data)[names(data) == "X.263"] <- "ES_Hypnose_NM"
-names(data)[names(data) == "X.264"] <- "Cout_Hypnose_NM"
-names(data)[names(data) == "X.265"] <- "Autre_Cause_Fin_Hypnose_NM"
-names(data)[names(data) == "X.266"] <- "Douleur_Hypnose_NM"
-names(data)[names(data) == "X.267"] <- "Evolution_Hypnose_NM"
-names(data)[names(data) == "X.268"] <- "Pre_op_Hypnose_NM"
-names(data)[names(data) == "X.269"] <- "Post_op_Hypnose_NM"
-names(data)[names(data) == "X.270"] <- "Pas_op_Hypnose_NM"
-names(data)[names(data) == "X.271"] <- "Prise_Hypnose_NM"
-
-# Bouillotte NM #
-names(data)[names(data) == "X.272"] <- "Encore_Bouillotte_NM"
-names(data)[names(data) == "X.273"] <- "Depuis_Bouillotte_NM"
-names(data)[names(data) == "X.274"] <- "Debut_Bouillotte_NM"
-names(data)[names(data) == "X.275"] <- "Combien_Bouillotte_NM"
-names(data)[names(data) == "X.276"] <- "Pas_efficace_Bouillotte_NM"
-names(data)[names(data) == "X.277"] <- "ES_Bouillotte_NM"
-names(data)[names(data) == "X.278"] <- "Cout_Bouillotte_NM"
-names(data)[names(data) == "X.279"] <- "Autre_Cause_Fin_Bouillotte_NM"
-names(data)[names(data) == "X.280"] <- "Douleur_Bouillotte_NM"
-names(data)[names(data) == "X.281"] <- "Evolution_Bouillotte_NM"
-names(data)[names(data) == "X.282"] <- "Pre_op_Bouillotte_NM"
-names(data)[names(data) == "X.283"] <- "Post_op_Bouillotte_NM"
-names(data)[names(data) == "X.284"] <- "Pas_op_Bouillotte_NM"
-names(data)[names(data) == "X.285"] <- "Prise_Bouillotte_NM"
-
-# CBD NM #
-names(data)[names(data) == "X.286"] <- "Encore_CBD_NM"
-names(data)[names(data) == "X.287"] <- "Depuis_CBD_NM"
-names(data)[names(data) == "X.288"] <- "Debut_CBD_NM"
-names(data)[names(data) == "X.289"] <- "Combien_CBD_NM"
-names(data)[names(data) == "X.290"] <- "Pas_efficace_CBD_NM"
-names(data)[names(data) == "X.291"] <- "ES_CBD_NM"
-names(data)[names(data) == "X.292"] <- "Cout_CBD_NM"
-names(data)[names(data) == "X.293"] <- "Autre_Cause_Fin_CBD_NM"
-names(data)[names(data) == "X.294"] <- "Douleur_CBD_NM"
-names(data)[names(data) == "X.295"] <- "Evolution_CBD_NM"
-names(data)[names(data) == "X.296"] <- "Pre_op_CBD_NM"
-names(data)[names(data) == "X.297"] <- "Post_op_CBD_NM"
-names(data)[names(data) == "X.298"] <- "Pas_op_CBD_NM"
-names(data)[names(data) == "X.299"] <- "Prise_CBD_NM"
-
-# Tens NM #
-names(data)[names(data) == "X.300"] <- "Encore_Tens_NM"
-names(data)[names(data) == "X.301"] <- "Depuis_Tens_NM"
-names(data)[names(data) == "X.302"] <- "Debut_Tens_NM"
-names(data)[names(data) == "X.303"] <- "Combien_Tens_NM"
-names(data)[names(data) == "X.304"] <- "Pas_efficace_Tens_NM"
-names(data)[names(data) == "X.305"] <- "ES_Tens_NM"
-names(data)[names(data) == "X.306"] <- "Cout_Tens_NM"
-names(data)[names(data) == "X.307"] <- "Autre_Cause_Fin_Tens_NM"
-names(data)[names(data) == "X.308"] <- "Douleur_Tens_NM"
-names(data)[names(data) == "X.309"] <- "Evolution_Tens_NM"
-names(data)[names(data) == "X.310"] <- "Pre_op_Tens_NM"
-names(data)[names(data) == "X.311"] <- "Post_op_Tens_NM"
-names(data)[names(data) == "X.312"] <- "Pas_op_Tens_NM"
-names(data)[names(data) == "X.313"] <- "Prise_Tens_NM"
 
 # Autres NM #
 names(data)[names(data) == "X.314"] <- "Autres_NM"
 names(data)[names(data) == "X.315"] <- "Lesquels_NM"
 
+
 ### Questions finales ###
 names(data)[names(data) == "X.316"] <- "Remarques"
 names(data)[names(data) == "X.317"] <- "Email"
 
+head(data)
 
 ```
 
