@@ -9,7 +9,6 @@ output:
 ---
 
 #Librairies
-
 ```{r, echo=FALSE}
 # Définir un miroir CRAN
 options(repos = "https://cloud.r-project.org")
@@ -29,8 +28,8 @@ library(dplyr)
 library(tidyverse)
 ```
 
-#Mise en forme des donnees 
 
+#Mise en forme des donnees 
 ```{r}
 data <- read.csv("etude_sur_les_traitements_de_lendometriose_bis.csv")
 n <- length(data)
@@ -39,7 +38,6 @@ head(data)
 ```
 
 # On renomme les variables
-
 ```{r}
 
 ### Questions préliminaires ###
@@ -57,7 +55,7 @@ names(data)[names(data) == "X.9"] <- "Lesquels_M"
 
 
 ### Questions générales ###
-Questions_Generales <- function(data,nb,TM){
+Renommage_Questions_Generales <- function(data,nb,TM){
   names(data)[names(data) == paste("X.", nb, sep="")] <- paste("Encore_", TM, sep="")
   names(data)[names(data) == paste("X.", nb+1, sep="")] <- paste("Depuis_", TM, sep="")
   names(data)[names(data) == paste("X.", nb+2, sep="")] <- paste("Debut_", TM, sep="")
@@ -77,7 +75,7 @@ Questions_Generales <- function(data,nb,TM){
   
 
 ### Effets secondaires ###
-Effets_Secondaires <- function(data,nb,TM,ES){
+Renommage_Effets_Secondaires <- function(data,nb,TM,ES){
   names(data)[names(data) == paste("X.", nb+14, sep="")] <- paste("Subi_ES_", TM, sep="")
   names(data)[names(data) == paste("X.", nb+15, sep="")] <- paste("Tete_", TM, sep="")
   names(data)[names(data) == paste("X.", nb+16, sep="")] <- paste("Fatigue_", TM, sep="")
@@ -109,7 +107,7 @@ Effets_Secondaires <- function(data,nb,TM,ES){
 
 
 ### Traitements non médicamenteux ###
-Pris_En_Parallele <- function(data,nb,TM,TNM){
+Renommage_Pris_En_Parallele <- function(data,nb,TM,TNM){
   names(data)[names(data) == paste("X.", nb+38, sep="")] <- paste("Mobilite_", TM, sep="")
   names(data)[names(data) == paste("X.", nb+39, sep="")] <- paste("Nutrition_", TM, sep="")
   names(data)[names(data) == paste("X.", nb+40, sep="")] <- paste("Stress_", TM, sep="")
@@ -133,19 +131,19 @@ Pris_En_Parallele <- function(data,nb,TM,TNM){
 
 
 ## Traitement Hormonal ##
-data <- Questions_Generales(data,10,"TH")
+data <- Renommage_Questions_Generales(data,10,"TH")
 
-data <- Effets_Secondaires(data,10,"TH",c("Tete","Fatigue","Nausee","Humeur","Libido","Sang","Poids","Allergie","Thrombose"))
+data <- Renommage_Effets_Secondaires(data,10,"TH",c("Tete","Fatigue","Nausee","Humeur","Libido","Sang","Poids","Allergie","Thrombose"))
 
-data <- Pris_En_Parallele(data,10,"TH",c("Mobilite","Nutrition","Stress","Phyto","Acup","Hypnose","Bouillotte","CBD","Tens"))
+data <- Renommage_Pris_En_Parallele(data,10,"TH",c("Mobilite","Nutrition","Stress","Phyto","Acup","Hypnose","Bouillotte","CBD","Tens"))
 
 
 ## Cure de Ménopause Artificielle ##
-data <- Questions_Generales(data,94,"CM")
+data <- Renommage_Questions_Generales(data,94,"CM")
 
-data <- Effets_Secondaires(data,94,"CM",c("Tete","Fatigue","Nausee","Humeur","Libido","Sang","Poids","Allergie","Thrombose"))
+data <- Renommage_Effets_Secondaires(data,94,"CM",c("Tete","Fatigue","Nausee","Humeur","Libido","Sang","Poids","Allergie","Thrombose"))
 
-data <- Pris_En_Parallele(data,94,"CM",c("Mobilite","Nutrition","Stress","Phyto","Acup","Hypnose","Bouillotte","CBD","Tens"))
+data <- Renommage_Pris_En_Parallele(data,94,"CM",c("Mobilite","Nutrition","Stress","Phyto","Acup","Hypnose","Bouillotte","CBD","Tens"))
 
 
 ## Traitements Non Médicamenteux Seuls ##
@@ -160,15 +158,15 @@ names(data)[names(data) == "X.185"] <- "CBD_NM"
 names(data)[names(data) == "X.186"] <- "Tens_NM"
 names(data)[names(data) == "X.187"] <- "Aucun_NM"
 
-data <- Questions_Generales(data,188,"Mobilite_NM")
-data <- Questions_Generales(data,202,"Nutrition_NM")
-data <- Questions_Generales(data,216,"Stress_NM")
-data <- Questions_Generales(data,230,"Phyto_NM")
-data <- Questions_Generales(data,244,"Acup_NM")
-data <- Questions_Generales(data,258,"Hypnose_NM")
-data <- Questions_Generales(data,272,"Bouillotte_NM")
-data <- Questions_Generales(data,286,"CBD_NM")
-data <- Questions_Generales(data,300,"Tens_NM")
+data <- Renommage_Questions_Generales(data,188,"Mobilite_NM")
+data <- Renommage_Questions_Generales(data,202,"Nutrition_NM")
+data <- Renommage_Questions_Generales(data,216,"Stress_NM")
+data <- Renommage_Questions_Generales(data,230,"Phyto_NM")
+data <- Renommage_Questions_Generales(data,244,"Acup_NM")
+data <- Renommage_Questions_Generales(data,258,"Hypnose_NM")
+data <- Renommage_Questions_Generales(data,272,"Bouillotte_NM")
+data <- Renommage_Questions_Generales(data,286,"CBD_NM")
+data <- Renommage_Questions_Generales(data,300,"Tens_NM")
 
 
 # Autres NM #
@@ -186,7 +184,6 @@ head(data)
 
 
 #Changement de la nature des variables
-
 ```{r}
 ### Supression des deux premières lignes ###
 data <- data[-c(1:2), ]
@@ -806,7 +803,6 @@ data$Evolution_Tens_NM <- factor(Evolution_Tens_NM, levels = c("Apparition de no
 
 
 ### Ajout des ID #####
-
 ```{r}
 library(dplyr)
 
@@ -817,8 +813,24 @@ data <- data %>%
 
 data$ID <- as.integer(data$ID)
 
+head(data)
 ```
 
+
+### Ajout d'un compteur ###
+```{r}
+data <- data %>%
+  mutate(Compt = 1) %>%
+  select(ID, Compt, everything())
+
+for (i in 1:nrow(data)){
+  if(data[i,"TH"] == 'yes' & data[i,"CM"] == 'yes'){
+    data[i,"Compt"] <- data[i,"Compt"] + 1
+  }
+}
+
+head(data)
+```
 
 
 ### Creation de 3 dataframes pour les trois types d'individus : TH, CM, NM ####
@@ -1089,6 +1101,7 @@ data3 <- data.frame(
 
 ```{r}
 Data_AMC_test <- bind_rows(data1,data2,data3)
+
 ```
 
 
