@@ -934,7 +934,7 @@ data1 <- data.frame(
   Bouillotte = Data1$Bouillotte_TH,
   Duree_Bouillotte = Data1$Combien_Hypnose_TH,
   Douleur_Bouillotte = Data1$Douleur_Bouillotte_TH,
-  Evolution_Hypnose = Data1$Evolution_Bouillotte_TH,
+  Evolution_Bouillotte= Data1$Evolution_Bouillotte_TH,
   CBD = Data1$CBD_TH,
   Duree_CBD = Data1$Combien_CBD_TH,
   Douleur_CBD = Data1$Douleur_CBD_TH,
@@ -1101,6 +1101,191 @@ data3 <- data.frame(
 
 ```{r}
 Data_AMC_test <- bind_rows(data1,data2,data3)
+
+```
+
+### Ajout d'un compteur ###
+
+```{r}
+compteur <- integer(nrow(Data_AMC_test))
+
+# Initialiser un dictionnaire pour suivre le nombre d'occurrences de chaque identifiant
+occurrences <- list()
+
+# Parcourir les identifiants et mettre à jour les compteurs
+for (i in 1:nrow(Data_AMC_test)) {
+  id <- Data_AMC_test$ID[i]
+  if (is.null(occurrences[[as.character(id)]])) {
+    occurrences[[as.character(id)]] <- 1
+  } else {
+    occurrences[[as.character(id)]] <- occurrences[[as.character(id)]] + 1
+  }
+  compteur[i] <- occurrences[[as.character(id)]]
+}
+
+# Ajouter la colonne de compteurs au dataframe
+Data_AMC_test$compteur <- compteur
+
+```
+
+### Echelles de douleur ###
+
+```{r}
+print(levels(Data_AMC_test$Douleur_TM))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_Mobilite))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_Nutrition))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_Stress))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_Phyto))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_Hypnose))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_Acup))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_Bouillotte))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_CBD))
+```
+```{r}
+print(levels(Data_AMC_test$Douleur_Tens))
+```
+
+### Creation des variables combinatoires entre traitements medicamenteux et non medicamenteux ###
+
+```{r}
+# Mobilite
+
+Data_AMC_test$TH_Mob <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$Mobilite == "yes", "yes", "no")
+Data_AMC_test$CM_Mob <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$Mobilite == "yes", "yes", "no")
+Data_AMC_test$NM_Mob <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$Mobilite == "yes", "yes", "no")
+
+# Nutrition
+
+Data_AMC_test$TH_Nut <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$Nutrition == "yes", "yes", "no")
+Data_AMC_test$CM_Nut <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$Nutrition == "yes", "yes", "no")
+Data_AMC_test$NM_Nut <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$Nutrition == "yes", "yes", "no")
+
+# Stress
+
+Data_AMC_test$TH_Str <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$Stress == "yes", "yes", "no")
+Data_AMC_test$CM_Str <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$Stress == "yes", "yes", "no")
+Data_AMC_test$NM_Str <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$Stress == "yes", "yes", "no")
+
+# Phytothérapie
+
+Data_AMC_test$TH_Phyto <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$Phyto == "yes", "yes", "no")
+Data_AMC_test$CM_Phyto <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$Phyto == "yes", "yes", "no")
+Data_AMC_test$NM_Phyto <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$Phyto == "yes", "yes", "no")
+
+# Hypnose
+
+Data_AMC_test$TH_Hyp <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$Hypnose == "yes", "yes", "no")
+Data_AMC_test$CM_Hyp <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$Hypnose == "yes", "yes", "no")
+Data_AMC_test$NM_Hyp <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$Hypnose == "yes", "yes", "no")
+
+# Acupuncture
+
+Data_AMC_test$TH_Acup <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$Acup == "yes", "yes", "no")
+Data_AMC_test$CM_Acup <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$Acup == "yes", "yes", "no")
+Data_AMC_test$NM_Acup <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$Acup == "yes", "yes", "no")
+
+# Bouillotte
+
+Data_AMC_test$TH_Bou <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$Bouillotte == "yes", "yes", "no")
+Data_AMC_test$CM_Bou <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$Bouillotte == "yes", "yes", "no")
+Data_AMC_test$NM_Bou <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$Bouillotte == "yes", "yes", "no")
+
+# CBD
+
+Data_AMC_test$TH_CBD <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$CBD == "yes", "yes", "no")
+Data_AMC_test$CM_CBD <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$CBD == "yes", "yes", "no")
+Data_AMC_test$NM_CBD <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$CBD == "yes", "yes", "no")
+
+# Tens
+
+Data_AMC_test$TH_Tens <- ifelse(Data_AMC_test$TM == "TH" & Data_AMC_test$Tens == "yes", "yes", "no")
+Data_AMC_test$CM_Tens <- ifelse(Data_AMC_test$TM == "CM" & Data_AMC_test$Tens == "yes", "yes", "no")
+Data_AMC_test$NM_Tens <- ifelse(Data_AMC_test$TM == "NM" & Data_AMC_test$Tens == "yes", "yes", "no")
+
+```
+
+```{r}
+Data_AMC_test$TH_seul <- ifelse(
+  Data_AMC_test$TH_Mob == "no" & 
+  Data_AMC_test$TH_Nut == "no" & 
+  Data_AMC_test$TH_Str == "no" & 
+  Data_AMC_test$TH_Phyto == "no" & 
+  Data_AMC_test$TH_Hyp == "no" & 
+  Data_AMC_test$TH_Acup == "no" & 
+  Data_AMC_test$TH_Bou == "no" & 
+  Data_AMC_test$TH_CBD == "no" & 
+  Data_AMC_test$TH_Tens == "no", 
+  "yes", 
+  "no"
+)
+
+Data_AMC_test$CM_seul <- ifelse(
+  Data_AMC_test$CM_Mob == "no" & 
+  Data_AMC_test$CM_Nut == "no" & 
+  Data_AMC_test$CM_Str == "no" & 
+  Data_AMC_test$CM_Phyto == "no" & 
+  Data_AMC_test$CM_Hyp == "no" & 
+  Data_AMC_test$CM_Acup == "no" & 
+  Data_AMC_test$CM_Bou == "no" & 
+  Data_AMC_test$CM_CBD == "no" & 
+  Data_AMC_test$CM_Tens == "no", 
+  "yes", 
+  "no"
+)
+```
+
+
+### ACM de tous les combos et habillages selon les effets secondaires (ES) ###
+
+```{r}
+Data_AMC_TM = subset(Data_AMC_test, TM != "NM")
+
+# Variables utilisees pour l'AMC sans les quali sup
+colonnes_combos_TM <- which(seq_along(Data_AMC_TM) %in% c(70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97,98)) #83 retiree CM_Hyp car une seule modalite
+
+# Variables utilisees pour l'AMC avec les quali sup
+colonnes_combos_TM_ES <- which(seq_along(Data_AMC_TM) %in% c(11, 14, 17, 20, 23, 26, 29, 30, 31, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97,98))
+
+#AMC sans les ES
+mca.combos= MCA(Data_AMC_TM[colonnes_combos_TM], graph=FALSE)
+fviz_mca_biplot(mca.combos)
+
+#AMC avec les ES
+mca.combos.ES = MCA(Data_AMC_TM[colonnes_combos_TM_ES],quali.sup=1:9, graph=FALSE)
+fviz_mca_biplot(mca.combos.ES)
+
+```
+
+```{r}
+fviz_mca_var(mca.combos, 
+             col.var = rep(c("no","yes"),19), 
+             title = "Graph of variables",
+             repel = TRUE)
+
+```
+```{r}
+fviz_cos2(mca.combos, choice = "var", axes = 1:2)
+```
+```{r}
+for (i in 1:9){
+  print(fviz_mca_biplot(mca.combos.ES, invisible=c("var","quali.sup"), habillage = i, repel = FALSE))
+}
 
 ```
 
