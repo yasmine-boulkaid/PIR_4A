@@ -1230,7 +1230,8 @@ Data_AMC_test$TH_seul <- ifelse(
   Data_AMC_test$TH_Acup == "no" & 
   Data_AMC_test$TH_Bou == "no" & 
   Data_AMC_test$TH_CBD == "no" & 
-  Data_AMC_test$TH_Tens == "no", 
+  Data_AMC_test$TH_Tens == "no" &
+  Data_AMC_test$TM == "TH",
   "yes", 
   "no"
 )
@@ -1244,7 +1245,8 @@ Data_AMC_test$CM_seul <- ifelse(
   Data_AMC_test$CM_Acup == "no" & 
   Data_AMC_test$CM_Bou == "no" & 
   Data_AMC_test$CM_CBD == "no" & 
-  Data_AMC_test$CM_Tens == "no", 
+  Data_AMC_test$CM_Tens == "no" &
+  Data_AMC_test$TM == "CM",
   "yes", 
   "no"
 )
@@ -1257,10 +1259,13 @@ Data_AMC_test$CM_seul <- ifelse(
 Data_AMC_TM = subset(Data_AMC_test, TM != "NM")
 
 # Variables utilisees pour l'AMC sans les quali sup
-colonnes_combos_TM <- which(seq_along(Data_AMC_TM) %in% c(70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97,98)) #83 retiree CM_Hyp car une seule modalite
+colonnes_combos_TM <- which(seq_along(Data_AMC_TM) %in% c(70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97, 98)) #83 retiree CM_Hyp car une seule modalite
 
 # Variables utilisees pour l'AMC avec les quali sup
-colonnes_combos_TM_ES <- which(seq_along(Data_AMC_TM) %in% c(11, 14, 17, 20, 23, 26, 29, 30, 31, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97,98))
+colonnes_combos_TM_ES <- which(seq_along(Data_AMC_TM) %in% c(11, 14, 17, 20, 23, 26, 29, 30, 31, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97, 98))
+
+# Variables utilisees pour l'AMC sans les quali sup focus sur TH/CM
+colonnes_combos_focus_TM <- which(seq_along(Data_AMC_TM) %in% c(6, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97, 98))
 
 #AMC sans les ES
 mca.combos= MCA(Data_AMC_TM[colonnes_combos_TM], graph=FALSE)
@@ -1270,6 +1275,10 @@ fviz_mca_biplot(mca.combos)
 mca.combos.ES = MCA(Data_AMC_TM[colonnes_combos_TM_ES],quali.sup=1:9, graph=FALSE)
 fviz_mca_biplot(mca.combos.ES)
 
+#AMC sans les ES focus sur TH/CM
+mca.combos.focus = MCA(Data_AMC_TM[colonnes_combos_focus_TM], quali.sup=1, graph=FALSE)
+fviz_mca_biplot(mca.combos)
+
 ```
 
 ```{r}
@@ -1277,8 +1286,13 @@ fviz_mca_var(mca.combos,
              col.var = rep(c("no","yes"),19), 
              title = "Graph of variables",
              repel = TRUE)
-
 ```
+
+```{r}
+print(fviz_mca_biplot(mca.combos.focus, invisible=c("var"), habillage = 1, repel = FALSE))
+```
+
+
 ```{r}
 fviz_cos2(mca.combos, choice = "var", axes = 1:2)
 ```
@@ -1286,9 +1300,150 @@ fviz_cos2(mca.combos, choice = "var", axes = 1:2)
 for (i in 1:9){
   print(fviz_mca_biplot(mca.combos.ES, invisible=c("var","quali.sup"), habillage = i, repel = FALSE))
 }
+```
+```{r}
+# Douleur Mobilité
+Data_AMC_test$D_Mob <- ifelse(Data_AMC_test$Douleur_Mobilite == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_Mobilite == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_Mobilite == "Diminution de la douleur" | Data_AMC_test$Douleur_Mobilite == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Mobilite == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Mobilite)))
 
+# Douleur Nutrition
+Data_AMC_test$D_Nut <- ifelse(Data_AMC_test$Douleur_Nutrition == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_Nutrition == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_Nutrition == "Diminution de la douleur" | Data_AMC_test$Douleur_Nutrition == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Nutrition == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Nutrition)))
+
+# Douleur Stress
+Data_AMC_test$D_Str <- ifelse(Data_AMC_test$Douleur_Stress == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_Stress == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_Stress == "Diminution de la douleur" | Data_AMC_test$Douleur_Stress == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Stress == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Stress)))
+
+# Douleur Phytothérapie
+Data_AMC_test$D_Phyto <- ifelse(Data_AMC_test$Douleur_Phyto == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_Phyto == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_Phyto == "Diminution de la douleur" | Data_AMC_test$Douleur_Phyto == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Phyto == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Phyto)))
+
+# Douleur Acupuncture
+Data_AMC_test$D_Acup <- ifelse(Data_AMC_test$Douleur_Acup == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_Acup == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_Acup == "Diminution de la douleur" | Data_AMC_test$Douleur_Acup == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Acup == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Acup)))
+
+# Douleur Hypnose
+Data_AMC_test$D_Hyp <- ifelse(Data_AMC_test$Douleur_Hypnose == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_Hypnose == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_Hypnose == "Diminution de la douleur" | Data_AMC_test$Douleur_Hypnose == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Hypnose == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Hypnose)))
+
+# Douleur Bouillotte
+Data_AMC_test$D_Bou <- ifelse(Data_AMC_test$Douleur_Bouillotte == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_Bouillotte == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_Bouillotte == "Diminution de la douleur" | Data_AMC_test$Douleur_Bouillotte == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Bouillotte == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Bouillotte)))
+
+# Douleur CBD
+Data_AMC_test$D_CBD <- ifelse(Data_AMC_test$Douleur_CBD == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_CBD == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_CBD == "Diminution de la douleur" | Data_AMC_test$Douleur_CBD == "Réduction légère de la douleur" | Data_AMC_test$Douleur_CBD == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_CBD)))
+
+# Douleur Tens
+Data_AMC_test$D_Tens <- ifelse(Data_AMC_test$Douleur_Tens == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_Tens == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_Tens == "Diminution de la douleur" | Data_AMC_test$Douleur_Tens == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Tens == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Tens)))
+
+# Douleur TM
+Data_AMC_test$D_TM <- ifelse(Data_AMC_test$Douleur_TM == "Augmentation de la douleur","-",
+                              ifelse(Data_AMC_test$Douleur_TM == "Pas d'impact sur la douleur","0",
+                                     ifelse(Data_AMC_test$Douleur_TM == "Réduction légère de la douleur" | Data_AMC_test$Douleur_TM == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_TM)))
 ```
 
 
+```{r}
+Data_AMC_TH = subset(Data_AMC_test, TM == "TH")
+Data_AMC_CM = subset(Data_AMC_test, TM == "CM")
+Data_AMC_NM = subset(Data_AMC_test, TM == "NM")
+
+# Variables utilisees pour l'AMC avec quali.sup = combos
+colonnes_combos_TH <- which(seq_along(Data_AMC_TH) %in% c(32, 36, 40, 44, 48, 52, 56, 60, 64, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97))
+
+#AMC avec quali.sup = combos
+mca.combos.TH = MCA(Data_AMC_TH[colonnes_combos_TH], graph=FALSE)
+fviz_mca_biplot(mca.combos.TH)
+```
+```{r}
+for (i in 1:9){
+  print(fviz_mca_biplot(mca.combos.TH, invisible=c("var","quali.sup"), habillage = i, repel = FALSE)) # , axes = c(3, 4) pour changer les dimensions
+}
+```
+
+### ACM de tous les combos et habillages selon l'échelle de douleur ###
+
+```{r}
+# Variables utilisees pour l'AMC avec les quali sup douleur
+colonnes_combos_D <- which(seq_along(Data_AMC_test) %in% c(70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108))
+
+# Variables utilisees pour l'AMC avec les quali sup douleur/TH
+colonnes_combos_TH_D <- which(seq_along(Data_AMC_TH) %in% c(70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108)) # 
+
+# Variables utilisees pour l'AMC avec les quali sup douleur/CM
+colonnes_combos_CM_D <- which(seq_along(Data_AMC_CM) %in% c(71, 74, 77, 80, 86, 89, 92, 95, 98, 99, 100, 101, 102, 103, 105, 106, 107, 108))
+
+# Variables utilisees pour l'AMC avec les quali sup douleur/NM
+colonnes_combos_NM_D <- which(seq_along(Data_AMC_NM) %in% c(72, 75, 78, 81, 84, 87, 90, 93, 96, 99, 100, 101, 102, 103, 104, 105, 106, 107))
+
+#AMC avec quali sup douleur
+mca.combos.D = MCA(Data_AMC_test[colonnes_combos_D], quali.sup=29:38, graph=FALSE)
+fviz_mca_biplot(mca.combos.D)
+
+#AMC avec quali sup douleur
+mca.combos.TH.D = MCA(Data_AMC_TH[colonnes_combos_TH_D], graph=FALSE, quali.sup=11:20) #
+fviz_mca_biplot(mca.combos.TH.D)
+
+#AMC avec quali sup douleur
+mca.combos.CM.D = MCA(Data_AMC_CM[colonnes_combos_CM_D], quali.sup=10:18, graph=FALSE)
+fviz_mca_biplot(mca.combos.CM.D)
+
+#AMC avec quali sup douleur
+mca.combos.NM.D = MCA(Data_AMC_NM[colonnes_combos_NM_D], quali.sup=10:18, graph=FALSE)
+fviz_mca_biplot(mca.combos.NM.D)
+```
+```{r}
+# General
+for (i in 29:38){
+  print(fviz_mca_biplot(mca.combos.D, invisible=c("var","quali.sup"), habillage = i, repel = FALSE)) # , axes = c(3, 4) pour changer les dimensions
+}
+```
+
+```{r}
+# Pour TH
+for (i in 11:20){
+  print(fviz_mca_biplot(mca.combos.TH.D, invisible=c("var","quali.sup"), habillage = i, repel = FALSE)) # , axes = c(3, 4) pour changer les dimensions
+}
+```
+
+```{r}
+# Pour CM
+for (i in 10:18){
+  print(fviz_mca_biplot(mca.combos.CM.D, invisible=c("var","quali.sup"), habillage = i, repel = FALSE)) # , axes = c(3, 4) pour changer les dimensions
+}
+```
+
+```{r}
+# Pour NM
+for (i in 10:18){
+  print(fviz_mca_biplot(mca.combos.NM.D, invisible=c("var","quali.sup"), habillage = i, repel = FALSE)) # , axes = c(3, 4) pour changer les dimensions
+}
+```
+
+
+### ACM de TH/CM et habillages selon apparition d'ES ###
+
+```{r}
+# Variables utilisees pour l'AMC avec les quali sup ES
+colonnes_TM_ES <- which(seq_along(Data_AMC_TM) %in% c(10, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97, 98))
+
+#AMC avec quali sup douleur
+mca.TM.ES = MCA(Data_AMC_TM[colonnes_TM_ES], quali.sup=1, graph=FALSE)
+fviz_mca_biplot(mca.TM.ES)
+```
+```{r}
+print(fviz_mca_biplot(mca.TM.ES, invisible=c("var"), habillage = 1, repel = FALSE))
+```
 
 
