@@ -1413,10 +1413,12 @@ for (i in 1:9){
 
 
 ### ACM de tous les combos et habillages selon l'échelle de douleur ###
-
 ```{r}
 # Variables utilisees pour l'AMC avec les quali sup douleur
 colonnes_combos_D <- which(seq_along(Data_AMC_test) %in% c(7,70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108))
+
+# Variables utilisees pour l'AMC avec les quali sup douleur/TH
+colonnes_combos_TH_D <- which(seq_along(Data_AMC_TH) %in% c(70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108))
 
 # Variables utilisees pour l'AMC avec les quali sup douleur/CM
 colonnes_combos_CM_D <- which(seq_along(Data_AMC_CM) %in% c(71, 74, 77, 80, 86, 89, 92, 95, 98, 99, 100, 101, 102, 103, 105, 106, 107, 108))
@@ -1441,22 +1443,18 @@ mca.combos.NM.D = MCA(Data_AMC_NM[colonnes_combos_NM_D], quali.sup=10:18, graph=
 fviz_mca_biplot(mca.combos.NM.D) + ggtitle("ACM des NM seuls avec l'echelle de douleur en quali sup")
 ```
 
-#Graphe des individus avec habillage = traitement (TH/CM/NM)
-```{r}
-# Variables utilisees pour l'AMC avec les quali sup douleur/TH
-colonnes_combos_TH_D <- which(seq_along(Data_AMC_TH) %in% c(70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108))
-
-#AMC avec quali sup TH/CM/NM
-mca.combos.T = MCA(Data_AMC_test[colonnes_combos_T], quali.sup=c(1), graph=FALSE)
-fviz_mca_ind(mca.combos.T, habillage=1) + ggtitle("ACM de tous les combos de traitements avec l'echelle de douleur en quali sup")
-
-```
-
-# Graphe des variable avec habillage = qualité de représentation
+# Graphe des individus avec habillage = traitement (TH/CM/NM)
 ```{r}
 # Variables utilisees pour l'AMC avec quali sup TH/CM/NM
 colonnes_combos_T <- which(seq_along(Data_AMC_test) %in% c(7,70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98))
 
+#AMC avec quali sup TH/CM/NM
+mca.combos.T = MCA(Data_AMC_test[colonnes_combos_T], quali.sup=c(1), graph=FALSE)
+fviz_mca_ind(mca.combos.T, habillage=1) + ggtitle("ACM de tous les combos de traitements avec l'echelle de douleur en quali sup")
+```
+
+# Graphe des variable avec habillage = qualité de représentation
+```{r}
 #Affichage des var : habillage = qualité de représentation
 fviz_mca_var(mca.combos.D, invisible=c("quali.sup"), repel=TRUE, col.var="cos2") + ggtitle("Graphe des var de tous les combos de traitements avec l'echelle de douleur en quali sup")
 ```
@@ -1492,9 +1490,7 @@ ggplot(df, aes(x = `Dim 1`, y = `Dim 2`, color = Traitement)) +
 
 ```
 
-
-
-#Test
+# Graphe des individus pour tous les traitements : habillage = echelle douleur en fonction du NM Version 2
 ```{r}
 # Extraire les coordonnées des variables
 ind <- rownames(mca.combos.D$ind$coord)
@@ -1521,7 +1517,7 @@ df$D_CBD <- Data_AMC_test$D_CBD
 df$D_Tens <- Data_AMC_test$D_Tens
 
 # Afficher le dataframe
-head(df)
+#head(df)
 
 # Définir une palette de couleurs personnalisée pour chaque variable
 custom_palette <- list(
@@ -1538,23 +1534,23 @@ custom_palette <- list(
 
 # Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
 for (var in c("D_Mob","D_Nut","D_Str","D_Phyto","D_Acup","D_Hyp","D_Bou","D_CBD","D_Tens")){
+  titre <- paste("Graphe des individus de tous les combos avec habillage \nen fonction de la douleur du combo TM avec ", var)
   print(
-    ggplot(df, aes(x = `Dim 1`, y = `Dim 2`, color = df[[var]])) +
+    ggplot(df, aes(x = `Dim 1`, y = `Dim 2`, color = df[[var]], label = rownames(df))) +
       geom_point(size=3) +
+      geom_text(aes(color = df[[var]]), hjust = 0, vjust = 0, size = 3) +  # Ajouter les noms des individus avec la couleur du point correspondant
       scale_color_manual(values = custom_palette[[var]], na.value = "transparent") +  # Utiliser la palette de couleurs personnalisée
       theme_minimal() +
-      labs(title = paste("Variables habillées en fonction de", var),
+      labs(title = titre,  # Utiliser le titre créé
            x = "Dim 1",
-           y = "Dim 2")
+           y = "Dim 2",
+           color = "Efficacité sur la douleur")  # Modifier le nom de la légende
   )
 }
 
 ```
 
-
-
-
-# Graphe des individus pour tous les traitements : habillage = echelle douleur en fonction du NM
+# Graphe des individus pour tous les traitements : habillage = echelle douleur en fonction du NM Version 1
 ```{r}
 # General
 for (i in 30:38){
