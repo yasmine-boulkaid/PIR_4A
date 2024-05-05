@@ -1254,6 +1254,116 @@ Data_AMC_test$D_TM <- ifelse(Data_AMC_test$Douleur_TM == "Augmentation de la dou
                                      ifelse(Data_AMC_test$Douleur_TM == "Réduction légère de la douleur" | Data_AMC_test$Douleur_TM == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_TM)))
 ```
 
+```{r}
+class(Data_AMC_test$Evolution_Mobilite)
+typeof(Data_AMC_test$Evolution_Mobilite)
+summary(Data_AMC_test$Evolution_Mobilite)
+
+```
+
+
+```{r}
+levels(Data_AMC_test$Evolution_Mobilite)
+print("sep")
+levels(Data_AMC_test$Evolution_Nutrition)
+print("sep")
+levels(Data_AMC_test$Evolution_Stress)
+print("sep")
+levels(Data_AMC_test$Evolution_Phyto)
+print("sep")
+levels(Data_AMC_test$Evolution_Hypnose)
+print("sep")
+levels(Data_AMC_test$Evolution_Bouillotte)
+print("sep")
+levels(Data_AMC_test$Evolution_CBD)
+print("sep")
+levels(Data_AMC_test$Evolution_Tens)
+print("sep")
+levels(Data_AMC_test$Evolution_Acup)
+print("sep")
+levels(Data_AMC_test$Evolution_TM)
+```
+
+### Creation des echelles d'evolution par traitements ###
+
+```{r}
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(
+    E_Mob = case_when(
+      Evolution_Mobilite %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Augmentation des lésions") ~ "-",
+      Evolution_Mobilite %in% c("Pas d'évolution", "Pas d'impact sur les lésions") ~ "0",
+      Evolution_Mobilite %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Réduction des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_Mobilite)
+    ),
+    
+    E_Nut = case_when(
+      Evolution_Nutrition %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_Nutrition == "Pas d'évolution" ~ "0",
+      Evolution_Nutrition %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_Nutrition)
+    ),
+    
+    E_Str = case_when(
+      Evolution_Stress %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_Stress == "Pas d'évolution" ~ "0",
+      Evolution_Stress %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_Stress)
+    ),
+    
+    E_Phyto = case_when(
+      Evolution_Phyto %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_Phyto == "Pas d'évolution" ~ "0",
+      Evolution_Phyto %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_Phyto)
+    ),
+    
+     E_Acup = case_when(
+      Evolution_Acup %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_Acup == "Pas d'évolution" ~ "0",
+      Evolution_Acup %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_Acup)
+    ),
+    
+    E_Hyp = case_when(
+      Evolution_Hypnose %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_Hypnose == "Pas d'évolution" ~ "0",
+      Evolution_Hypnose %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_Hypnose)
+    ),
+    
+    E_Bou = case_when(
+      Evolution_Bouillotte %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_Bouillotte == "Pas d'évolution" ~ "0",
+      Evolution_Bouillotte %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_Bouillotte)
+    ),
+    
+    E_CBD = case_when(
+      Evolution_CBD %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_CBD == "Pas d'évolution" ~ "0",
+      Evolution_CBD %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_CBD)
+    ),
+    
+    E_Tens = case_when(
+      Evolution_Tens %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_Tens == "Pas d'évolution" ~ "0",
+      Evolution_Tens %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_Tens)
+    ),
+    
+     E_TM = case_when(
+      Evolution_TM %in% c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes") ~ "-",
+      Evolution_TM == "Pas d'évolution" ~ "0",
+      Evolution_TM %in% c("Réduction modérée des lésions", "Réduction importante voire disparition des lésions") ~ "+",
+      TRUE ~ as.character(Evolution_TM)
+    ),
+  )
+
+
+```
+
+
 
 
 
@@ -1304,7 +1414,7 @@ fviz_mca_var(mca.combos,
              repel = TRUE) + ggtitle("Graphe des variables combos TM en fonction qualité de représentation")
 ```
 
-Le graphe des variables qui sépare le fait de prendre un combo d'un traitement médicamenteux en parallèle d'un non médicamenteux, semble permettre de distinguer la prise de combo ou non : avoir pris une cure de ménopause artificielle (CM) en parallèle d'un traitement NM semble corrélé positivement à la fois à la première et à le seconde dimension. Avoir pris un traitement hormonal (TH) en parallèle de traitements NM semble corrélé positivement à la seconde dimension et négativement à la première. Enfin l'absence de pris d'un combo quel qu'il soit n'est corrélé à aucune des deux diemnsions.
+Le graphe des variables qui sépare le fait de prendre un combo d'un traitement médicamenteux en parallèle d'un non médicamenteux, semble permettre de distinguer la prise de combo ou non : avoir pris une cure de ménopause artificielle (CM) en parallèle d'un traitement NM semble corrélé positivement à la fois à la première et à le seconde dimension. Avoir pris un traitement hormonal (TH) en parallèle de traitements NM semble corrélé positivement à la seconde dimension et négativement à la première. Enfin l'absence de pris d'un combo quel qu'il soit n'est corrélé à aucune des deux dimensions.
 
 Par ailleurs en habillant les variables par rapport à leur contribution on constate que certains combos tels que la Mobilite (aussi bien avec TH que CM) ou la Bouillotte (avec TH et CM) ont la plus forte contribution et respectent le observations précédentes.
 De plus l'absence de prise d'un combo (modalité "no") quel qu'il soit contribue très peu aux résultats de l'ACM.
@@ -1346,7 +1456,6 @@ print(fviz_mca_ind(mca.TM.ES, habillage = 1, repel = FALSE))
 ```
 
 
-
 ## Graphe des individus en fonction du type d'effet secondaire
 ```{r}
 for (i in 1:9){
@@ -1354,60 +1463,163 @@ for (i in 1:9){
 }
 ```
 
-
-
-
-## ACM sur les TH uniquement
-
-# Biplot pour les TH en fonction de combos pris / pas pris
+## Graphe des indis pour TM : habillage = frequence des ES
 ```{r}
-# Variables utilisees pour l'AMC avec quali.sup = combos
-colonnes_combos_TH <- which(seq_along(Data_AMC_TH) %in% c(70, 73, 76, 79, 82, 85, 88, 91, 94, 97))
+colonnes_combos_TM_freq <- which(seq_along(Data_AMC_TM) %in% c(14, 17, 20, 23, 26, 29, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95))
 
-#AMC avec quali.sup = combos
-mca.combos.TH = MCA(Data_AMC_TH[colonnes_combos_TH], graph=FALSE)
-fviz_mca_biplot(mca.combos.TH) + ggtitle("ACM en fonction des combos")
+mca.combos.TM.freq= MCA(Data_AMC_TM[colonnes_combos_TM_freq], quali.sup=1:6, graph=FALSE)
+
 ```
 
-# Graphe des variables pour les TH avec habillage = qualité de représentation (5 les plus représentés)
 ```{r}
-fviz_mca_var(mca.combos.TH, select.var = list(cos2 = 5), col.var = "cos2") + ggtitle("ACM en fonction des combos")
-```
+# Extraire les coordonnées des variables
+ind_TM_freq <- rownames(mca.combos.TM.freq$ind$coord)
 
+# Créer un dataframe vide
+df_TM_freq <- data.frame(matrix(nrow = length(ind_TM_freq), ncol = 0))
 
-# Graphe des individus pour les TH avec habillage = combo pris/pas pris
-```{r}
-for (i in 1:10){
-  print(fviz_mca_ind(mca.combos.TH, habillage = i, repel = FALSE) + ggtitle(paste("Graphe des individus avec habillage en fonction du combo TH et "),names(Data_AMC_TH[colonnes_combos_TH[i]]))) # , axes = c(3, 4) pour changer les dimensions
+# Ajouter les coord
+coord_TM_freq <- mca.combos.TM.freq$ind$coord
+df_TM_freq <- cbind(df_TM_freq, coord_TM_freq)
+
+# Définir les variables
+df_TM_freq$Freq_Tete <- Data_AMC_TM$Freq_Tete
+df_TM_freq$Freq_Fatigue <- Data_AMC_TM$Freq_Fatigue
+df_TM_freq$Freq_Nausee <- Data_AMC_TM$Freq_Nausee
+df_TM_freq$Freq_Humeur <- Data_AMC_TM$Freq_Humeur
+df_TM_freq$Freq_Libido <- Data_AMC_TM$Freq_Libido
+df_TM_freq$Freq_Sang <- Data_AMC_TM$Freq_Sang
+
+print(df_TM_freq)
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_TM_freq <- list(
+  Freq_Tete = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Fatigue = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Nausee = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Humeur = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Libido = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Sang = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Freq_Tete","Freq_Fatigue","Freq_Nausee","Freq_Humeur","Freq_Libido","Freq_Sang")){
+  titre <- paste("Graphe des individus des TM avec habillage en fonction de ", var)
+  print(
+    ggplot(df_TM_freq, aes(x = `Dim 1`, y = `Dim 2`, color = df_TM_freq[[var]], label = rownames(df_TM_freq))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_TM_freq[[var]]), hjust = 0, vjust = 0, size = 3) +  # Ajouter les noms des individus avec la couleur du point correspondant
+      scale_color_manual(values = custom_palette_TM_freq[[var]], na.value = "transparent") +  # Utiliser la palette de couleurs personnalisée
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Frequence des ES")
+  )
 }
 ```
 
 
-
-
-## ACM sur les CM uniquement
-
-# Biplot pour les CM en fonction de combos pris / pas pris
+## Graphe des indis pour TM : habillage = apparition des ES
 ```{r}
-# Variables utilisees pour l'AMC
-colonnes_combos_CM <- which(seq_along(Data_AMC_CM) %in% c(71, 74, 77, 80, 86, 89, 92, 95, 98))
+colonnes_combos_TM_app <- which(seq_along(Data_AMC_TM) %in% c(13, 16, 19, 22, 25, 28, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95))
 
-#AMC avec quali.sup = combos
-mca.combos.CM = MCA(Data_AMC_CM[colonnes_combos_CM], graph=FALSE)
-fviz_mca_biplot(mca.combos.CM) + ggtitle("ACM en fonction des combos avec CM")
+mca.combos.TM.app= MCA(Data_AMC_TM[colonnes_combos_TM_app], quali.sup=1:6, graph=FALSE)
+
 ```
 
-# Graphe des variables pour les CM avec habillage = qualité de représentation (5 les plus représentés)
 ```{r}
-fviz_mca_var(mca.combos.CM, select.var = list(cos2 = 5), col.var = "cos2") + ggtitle("ACM en fonction des combos")
-```
+# Extraire les coordonnées des variables
+ind_TM_app <- rownames(mca.combos.TM.app$ind$coord)
 
-# Graphe des individus pour les CM avec habillage = combo pris/pas pris
-```{r}
-for (i in 1:9){
-  print(fviz_mca_ind(mca.combos.CM, habillage = i, repel = FALSE) + ggtitle(paste("Graphe des individus avec habillage en fonction du combo CM et "),names(Data_AMC_CM[colonnes_combos_CM[i]]))) # , axes = c(3, 4) pour changer les dimensions
+# Créer un dataframe vide
+df_TM_app <- data.frame(matrix(nrow = length(ind_TM_app), ncol = 0))
+
+# Ajouter les coord
+coord_TM_app <- mca.combos.TM.app$ind$coord
+df_TM_app <- cbind(df_TM_app, coord_TM_app)
+
+# Définir les variables
+df_TM_app$Apparition_Tete <- Data_AMC_TM$Apparition_Tete
+df_TM_app$Apparition_Fatigue <- Data_AMC_TM$Apparition_Fatigue
+df_TM_app$Apparition_Nausee <- Data_AMC_TM$Apparition_Nausee
+df_TM_app$Apparition_Humeur <- Data_AMC_TM$Apparition_Humeur
+df_TM_app$Apparition_Libido <- Data_AMC_TM$Apparition_Libido
+df_TM_app$Apparition_Sang <- Data_AMC_TM$Apparition_Sang
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_TM_app <- list(
+  Apparition_Tete = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684"),
+  Apparition_Fatigue = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684"),
+  Apparition_Nausee = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684"),
+  Apparition_Humeur = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684"),
+  Apparition_Libido = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684"),
+  Apparition_Sang = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Apparition_Tete","Apparition_Fatigue","Apparition_Nausee","Apparition_Humeur","Apparition_Libido","Apparition_Sang")){
+  titre <- paste("Graphe des individus des TM avec habillage en fonction de ", var)
+  print(
+    ggplot(df_TM_app, aes(x = `Dim 1`, y = `Dim 2`, color = df_TM_app[[var]], label = rownames(df_TM_app))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_TM_app[[var]]), hjust = 0, vjust = 0, size = 3) +  # Ajouter les noms des individus avec la couleur du point correspondant
+      scale_color_manual(values = custom_palette_TM_app[[var]], na.value = "transparent") +  # Utiliser la palette de couleurs personnalisée
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Apparition des ES")
+  )
 }
 ```
+
+
+## Graphe des indis pour TM : habillage = durée TM
+```{r}
+colonnes_combos_TM_duree <- which(seq_along(Data_AMC_TM) %in% c(8, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95))
+
+mca.combos.TM.duree= MCA(Data_AMC_TM[colonnes_combos_TM_duree], quali.sup=1:10, graph=FALSE)
+```
+
+```{r}
+# Extraire les coordonnées des variables
+ind_TM_duree <- rownames(mca.combos.TM.duree$ind$coord)
+
+# Créer un dataframe vide
+df_TM_duree <- data.frame(matrix(nrow = length(ind_TM_duree), ncol = 0))
+
+# Ajouter les coord
+coord_TM_duree <- mca.combos.TM.duree$ind$coord
+df_TM_duree <- cbind(df_TM_duree, coord_TM_duree)
+
+# Définir les variables
+df_TM_duree$Duree_TM <- Data_AMC_TM$Duree_TM
+
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_TM_duree <- list(
+  Duree_TM = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Duree_TM")){
+  titre <- paste("Graphe des individus des TM avec habillage en fonction de la duree du TM ")
+  print(
+    ggplot(df_TM_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_TM_duree[[var]], label = rownames(df_TM_duree))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_TM_duree[[var]]), hjust = 0, vjust = 0, size = 3) +  # Ajouter les noms des individus avec la couleur du point correspondant
+      scale_color_manual(values = custom_palette_TM_duree[[var]], na.value = "transparent") +  # Utiliser la palette de couleurs personnalisée
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Duree traitement")
+  )
+}
+```
+
+
 
 
 
@@ -1426,24 +1638,24 @@ colonnes_combos_CM_D <- which(seq_along(Data_AMC_CM) %in% c(71, 74, 77, 80, 86, 
 # Variables utilisees pour l'AMC avec les quali sup douleur/NM
 colonnes_combos_NM_D <- which(seq_along(Data_AMC_NM) %in% c(72, 75, 78, 81, 84, 87, 90, 93, 96, 99, 100, 101, 102, 103, 104, 105, 106, 107))
 
-#AMC avec quali sup douleur
+#AMC avec quali sup douleur ts les traitements
 mca.combos.D = MCA(Data_AMC_test[colonnes_combos_D], quali.sup=c(1,30:39), graph=FALSE)
 fviz_mca_biplot(mca.combos.D) + ggtitle("ACM de tous les combos de traitements avec l'echelle de douleur en quali sup")
 
-#AMC avec quali sup douleur
+#AMC avec quali sup douleur TH
 mca.combos.TH.D = MCA(Data_AMC_TH[colonnes_combos_TH_D], graph=FALSE, quali.sup=11:20)
 fviz_mca_biplot(mca.combos.TH.D) + ggtitle("ACM des combos avec TH avec l'echelle de douleur en quali sup")
 
-#AMC avec quali sup douleur
+#AMC avec quali sup douleur CM
 mca.combos.CM.D = MCA(Data_AMC_CM[colonnes_combos_CM_D], quali.sup=10:18, graph=FALSE)
 fviz_mca_biplot(mca.combos.CM.D) + ggtitle("ACM des combos avec CM avec l'echelle de douleur en quali sup")
 
-#AMC avec quali sup douleur
+#AMC avec quali sup douleur NM
 mca.combos.NM.D = MCA(Data_AMC_NM[colonnes_combos_NM_D], quali.sup=10:18, graph=FALSE)
 fviz_mca_biplot(mca.combos.NM.D) + ggtitle("ACM des NM seuls avec l'echelle de douleur en quali sup")
 ```
 
-# Graphe des individus avec habillage = traitement (TH/CM/NM)
+## Graphe des individus avec habillage = traitement (TH/CM/NM)
 ```{r}
 # Variables utilisees pour l'AMC avec quali sup TH/CM/NM
 colonnes_combos_T <- which(seq_along(Data_AMC_test) %in% c(7,70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98))
@@ -1453,13 +1665,13 @@ mca.combos.T = MCA(Data_AMC_test[colonnes_combos_T], quali.sup=c(1), graph=FALSE
 fviz_mca_ind(mca.combos.T, habillage=1) + ggtitle("ACM de tous les combos de traitements avec l'echelle de douleur en quali sup")
 ```
 
-# Graphe des variable avec habillage = qualité de représentation
+## Graphe des variable avec habillage = qualité de représentation
 ```{r}
 #Affichage des var : habillage = qualité de représentation
 fviz_mca_var(mca.combos.D, invisible=c("quali.sup"), repel=TRUE, col.var="cos2") + ggtitle("Graphe des var de tous les combos de traitements avec l'echelle de douleur en quali sup")
 ```
 
-# Graphe des variable avec habillage = traitement (TH/CM/NM)
+## Graphe des variable avec habillage = traitement (TH/CM/NM)
 ```{r}
 # Extraire les coordonnées des variables
 var <- rownames(mca.combos.T$var$coord)
@@ -1490,7 +1702,7 @@ ggplot(df, aes(x = `Dim 1`, y = `Dim 2`, color = Traitement)) +
 
 ```
 
-# Graphe des individus pour tous les traitements : habillage = echelle douleur en fonction du NM Version 2
+## Graphe des individus pour tous les traitements : habillage = echelle douleur en fonction du NM Version 2
 ```{r}
 # Extraire les coordonnées des variables
 ind <- rownames(mca.combos.D$ind$coord)
@@ -1549,8 +1761,18 @@ for (var in c("D_Mob","D_Nut","D_Str","D_Phyto","D_Acup","D_Hyp","D_Bou","D_CBD"
 }
 
 ```
+Mobilite = Pas de lien entre type de traitement et efficacite douleur
+Nutrition = Pas de lien
+Gestion Stress = Globalement pas d'impact sur CM / n'empire qu'avec TH (mais très peu de point)
+Phyto = N'améliore pas TH (26 personnes ont testé le combo)
+Acup -> difficile tirer conclusions (trop peu de cas)
+Hypnose = Pas de lien
+Bouillotte = Pas de lien avec type traitement mais globalement très efficace
+CBD = Pas de lien
+Bouillotte = Pas de lien mais gloablement très efficace
 
-# Graphe des individus pour tous les traitements : habillage = echelle douleur en fonction du NM Version 1
+
+## Graphe des individus pour tous les traitements : habillage = echelle douleur en fonction du NM Version 1
 ```{r}
 # General
 for (i in 30:38){
@@ -1560,15 +1782,147 @@ for (i in 30:38){
 }
 ```
 
-# Graphe des individus pour TH : habillage = echelle douleur en fonction du NM en combo
+
+## Graphe des indis pour tous les traitements : habillage = duree du TM
+```{r}
+colonnes_combos_duree <- which(seq_along(Data_AMC_TM) %in% c(8, 34, 38, 42, 46, 50, 54, 58, 62, 66, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95))
+
+mca.combos.duree= MCA(Data_AMC_TM[colonnes_combos_duree], quali.sup=c(1,10), graph=FALSE)
+```
+
+
+## Graphe des indis pour tous les traitements : habillage = evolution NM
+```{r}
+colonnes_combos_Evol <- which(seq_along(Data_AMC_test) %in% c(70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118))
+
+mca.combos.TT.Evol = MCA(Data_AMC_test[colonnes_combos_Evol], graph=FALSE, quali.sup=29:38)
+
+```
+
+```{r}
+# Extraire les coordonnées des variables
+ind_TT_evol <- rownames(mca.combos.TT.Evol$ind$coord)
+
+# Créer un dataframe vide
+df_TT_evol <- data.frame(matrix(nrow = length(ind_TT_evol), ncol = 0))
+
+# Ajouter les coord
+coord_TT_evol <- mca.combos.TT.Evol$ind$coord
+df_TT_evol <- cbind(df_TT_evol, coord_TT_evol)
+
+# Définir les variables
+df_TT_evol$E_TM <- Data_AMC_test$E_TM
+df_TT_evol$E_Mob <- Data_AMC_test$E_Mob
+df_TT_evol$E_Nut <- Data_AMC_test$E_Nut
+df_TT_evol$E_Str <- Data_AMC_test$E_Str
+df_TT_evol$E_Phyto <- Data_AMC_test$E_Phyto
+df_TT_evol$E_Acup <- Data_AMC_test$E_Acup
+df_TT_evol$E_Hyp <- Data_AMC_test$E_Hyp
+df_TT_evol$E_Bou <- Data_AMC_test$E_Bou
+df_TT_evol$E_CBD <- Data_AMC_test$E_CBD
+df_TT_evol$E_Tens <- Data_AMC_test$E_Tens
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_TM_app <- list(
+  E_TM = c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_Mob = c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_Nut = c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_Str =c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_Phyto =c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_Hyp = c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_Acup = c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_Bou = c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_CBD = c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018"),
+  E_Tens = c("+" = "#3AF24B", "0" = "#FFD700", "-" = "#960018")
+)
+
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("E_TM", "E_Mob","E_Nut","E_Str","E_Phyto","E_Acup","E_Hyp","E_Bou","E_CBD","E_Tens")){
+  titre <- paste("Graphe des individus des TM avec habillage en fonction de ", var)
+  print(
+    ggplot(df_TT_evol, aes(x = `Dim 1`, y = `Dim 2`, color = df_TT_evol[[var]], label = rownames(df_TT_evol))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_TT_evol[[var]]), hjust = 0, vjust = 0, size = 3) +  # Ajouter les noms des individus avec la couleur du point correspondant
+      scale_color_manual(values = custom_palette_TM_app[[var]], na.value = "transparent") +  # Utiliser la palette de couleurs personnalisée
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Evolution maladie")
+  )
+}
+```
+
+
+
+
+
+
+
+### ACM sur les TH uniquement
+
+## Biplot pour les TH en fonction de combos pris / pas pris
+```{r}
+# Variables utilisees pour l'AMC avec quali.sup = combos
+colonnes_combos_TH <- which(seq_along(Data_AMC_TH) %in% c(70, 73, 76, 79, 82, 85, 88, 91, 94, 97))
+
+#AMC avec quali.sup = combos
+mca.combos.TH = MCA(Data_AMC_TH[colonnes_combos_TH], graph=FALSE)
+fviz_mca_biplot(mca.combos.TH) + ggtitle("ACM en fonction des combos")
+```
+
+## Graphe des variables pour les TH avec habillage = qualité de représentation (5 les plus représentés)
+```{r}
+fviz_mca_var(mca.combos.TH, select.var = list(cos2 = 5), col.var = "cos2") + ggtitle("ACM en fonction des combos")
+```
+
+
+## Graphe des individus pour les TH avec habillage = combo pris/pas pris
+```{r}
+for (i in 1:10){
+  print(fviz_mca_ind(mca.combos.TH, habillage = i, repel = FALSE) + ggtitle(paste("Graphe des individus avec habillage en fonction du combo TH et "),names(Data_AMC_TH[colonnes_combos_TH[i]]))) # , axes = c(3, 4) pour changer les dimensions
+}
+```
+
+## Graphe des individus pour TH : habillage = echelle douleur en fonction du NM en combo
 ```{r}
 # Pour TH
 for (i in 11:20){
   print(fviz_mca_ind(mca.combos.TH.D,  habillage = i, repel = FALSE) + ggtitle(paste("Graphe des individus des combos avec TH avec habillage \nen fonction de la douleur du combo TH avec "),names(Data_AMC_TH[colonnes_combos_TH_D[i]])) )
 }
+
 ```
 
-# Graphe des individus pour CM : habillage = echelle douleur en fonction du NM en combo
+
+
+
+
+### ACM sur les CM uniquement
+
+## Biplot pour les CM en fonction de combos pris / pas pris
+```{r}
+# Variables utilisees pour l'AMC
+colonnes_combos_CM <- which(seq_along(Data_AMC_CM) %in% c(71, 74, 77, 80, 86, 89, 92, 95, 98))
+
+#AMC avec quali.sup = combos
+mca.combos.CM = MCA(Data_AMC_CM[colonnes_combos_CM], graph=FALSE)
+fviz_mca_biplot(mca.combos.CM) + ggtitle("ACM en fonction des combos avec CM")
+```
+
+## Graphe des variables pour les CM avec habillage = qualité de représentation (5 les plus représentés)
+```{r}
+fviz_mca_var(mca.combos.CM, select.var = list(cos2 = 5), col.var = "cos2") + ggtitle("ACM en fonction des combos")
+```
+
+## Graphe des individus pour les CM avec habillage = combo pris/pas pris
+```{r}
+for (i in 1:9){
+  print(fviz_mca_ind(mca.combos.CM, habillage = i, repel = FALSE) + ggtitle(paste("Graphe des individus avec habillage en fonction du combo CM et "),names(Data_AMC_CM[colonnes_combos_CM[i]]))) # , axes = c(3, 4) pour changer les dimensions
+}
+```
+
+## Graphe des individus pour CM : habillage = echelle douleur en fonction du NM en combo
 ```{r}
 # Pour CM
 for (i in 10:18){
@@ -1576,13 +1930,23 @@ for (i in 10:18){
 }
 ```
 
-# Graphe des individus pour NM : habillage = echelle douleur
+
+
+
+
+### ACM sur les NM uniquement 
+
+## Graphe des individus pour NM : habillage = echelle douleur
 ```{r}
 # Pour NM
 for (i in 10:18){
   print(fviz_mca_ind(mca.combos.NM.D, habillage = i, repel = FALSE)) # , axes = c(3, 4) pour changer les dimensions
 }
 ```
+
+
+
+
 
 
 ### ACM des effets secondaires et habillages selon le TM ###
