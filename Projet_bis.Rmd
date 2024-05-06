@@ -849,34 +849,34 @@ Data3 <- data[data$Aucun_NM == 'no', ]
 
 ### Creation des vecteurs de Duree de prise du traitement ####
 ```{r}
-Duree_M <- factor(ifelse(is.na(Data3$Depuis_Mobilite_NM), as.character(data$Combien_Mobilite_NM), as.character(data$Depuis_Mobilite_NM)))
+Data3$Duree_M <- factor(ifelse(is.na(Data3$Depuis_Mobilite_NM), as.character(Data3$Combien_Mobilite_NM), as.character(Data3$Depuis_Mobilite_NM)))
 
 
-Duree_N <- factor(ifelse(is.na(Data3$Depuis_Nutrition_NM), as.character(data$Combien_Nutrition_NM), as.character(data$Depuis_Nutrition_NM)))
+Data3$Duree_N <- factor(ifelse(is.na(Data3$Depuis_Nutrition_NM), as.character(Data3$Combien_Nutrition_NM), as.character(Data3$Depuis_Nutrition_NM)))
 
 
-Duree_S <- factor(ifelse(is.na(Data3$Depuis_Stress_NM), as.character(data$Combien_Stress_NM), as.character(data$Depuis_Stress_NM)))
+Data3$Duree_S <- factor(ifelse(is.na(Data3$Depuis_Stress_NM), as.character(Data3$Combien_Stress_NM), as.character(Data3$Depuis_Stress_NM)))
 
 
-Duree_P <- factor(ifelse(is.na(Data3$Depuis_Phyto_NM), as.character(data$Combien_Phyto_NM), as.character(data$Depuis_Phyto_NM)))
+Data3$Duree_P <- factor(ifelse(is.na(Data3$Depuis_Phyto_NM), as.character(Data3$Combien_Phyto_NM), as.character(Data3$Depuis_Phyto_NM)))
 
 
-Duree_A <- factor(ifelse(is.na(Data3$Depuis_Acup_NM), as.character(data$Combien_Acup_NM), as.character(data$Depuis_Acup_NM)))
+Data3$Duree_A <- factor(ifelse(is.na(Data3$Depuis_Acup_NM), as.character(Data3$Combien_Acup_NM), as.character(Data3$Depuis_Acup_NM)))
 
 
-Duree_H <- factor(ifelse(is.na(Data3$Depuis_Hypnose_NM), as.character(data$Combien_Hypnose_NM), as.character(data$Depuis_Hypnose_NM)))
+Data3$Duree_H <- factor(ifelse(is.na(Data3$Depuis_Hypnose_NM), as.character(Data3$Combien_Hypnose_NM), as.character(Data3$Depuis_Hypnose_NM)))
 
 
-Duree_B <- factor(ifelse(is.na(Data3$Depuis_Bouillotte_NM), as.character(data$Combien_Bouillotte_NM), as.character(data$Depuis_Bouillotte_NM)))
+Data3$Duree_B <- factor(ifelse(is.na(Data3$Depuis_Bouillotte_NM), as.character(Data3$Combien_Bouillotte_NM), as.character(Data3$Depuis_Bouillotte_NM)))
 
-Duree_C <- factor(ifelse(is.na(Data3$Depuis_CBD_NM), as.character(data$Combien_CBD_NM), as.character(data$Depuis_CBD_NM)))
+Data3$Duree_C <- factor(ifelse(is.na(Data3$Depuis_CBD_NM), as.character(Data3$Combien_CBD_NM), as.character(Data3$Depuis_CBD_NM)))
 
-Duree_T <- factor(ifelse(is.na(Data3$Depuis_Tens_NM), as.character(data$Combien_Tens_NM), as.character(data$Depuis_Tens_NM)))
+Data3$Duree_T <- factor(ifelse(is.na(Data3$Depuis_Tens_NM), as.character(Data3$Combien_Tens_NM), as.character(Data3$Depuis_Tens_NM)))
 
 ```
 
 
-### Creation de 3 dataframe ayant tous les memes noms de variables : reaffectation des variables dans les bonnes colonnes pour l'AMC ###
+### Creation de 3 dataframes ayant tous les memes noms de variables : reaffectation des variables dans les bonnes colonnes pour l'ACM ###
 ```{r}
 data1 <- data.frame(
   ID = Data1$ID,
@@ -936,7 +936,7 @@ data1 <- data.frame(
   Douleur_Hypnose = Data1$Douleur_Hypnose_TH,
   Evolution_Hypnose = Data1$Evolution_Hypnose_TH,
   Bouillotte = Data1$Bouillotte_TH,
-  Duree_Bouillotte = Data1$Combien_Hypnose_TH,
+  Duree_Bouillotte = Data1$Combien_Bouillotte_TH,
   Douleur_Bouillotte = Data1$Douleur_Bouillotte_TH,
   Evolution_Bouillotte= Data1$Evolution_Bouillotte_TH,
   CBD = Data1$CBD_TH,
@@ -1061,39 +1061,39 @@ data3 <- data.frame(
   Allergie = rep(NA, nrow(Data3)),
   Thrombose = rep(NA, nrow(Data3)),
   Mobilite = Data3$Mobilite_NM,
-  Duree_Mobilite = Duree_M,
+  Duree_Mobilite = Data3$Duree_M,
   Douleur_Mobilite = Data3$Douleur_Mobilite_NM,
   Evolution_Mobilite = Data3$Evolution_Mobilite_NM,
   Nutrition = Data3$Nutrition_NM,
-  Duree_Nutrition = Duree_N,
+  Duree_Nutrition = Data3$Duree_N,
   Douleur_Nutrition = Data3$Douleur_Nutrition_NM,
   Evolution_Nutrition = Data3$Evolution_Nutrition_NM,
   Stress = Data3$Stress_NM,
-  Duree_Stress = Duree_S,
+  Duree_Stress = Data3$Duree_S,
   Douleur_Stress = Data3$Douleur_Stress_NM,
   Evolution_Stress = Data3$Evolution_Stress_NM,
   Phyto = Data3$Phyto_NM,
-  Duree_Phyto = Duree_P,
+  Duree_Phyto = Data3$Duree_P,
   Douleur_Phyto = Data3$Douleur_Phyto_NM,
   Evolution_Phyto = Data3$Evolution_Phyto_NM,
   Acup = Data3$Acup_NM,
-  Duree_Acup = Duree_A,
+  Duree_Acup = Data3$Duree_A,
   Douleur_Acup = Data3$Douleur_Acup_NM,
   Evolution_Acup = Data3$Evolution_Acup_NM,
   Hypnose = Data3$Hypnose_NM,
-  Duree_Hypnose = Duree_H,
+  Duree_Hypnose = Data3$Duree_H,
   Douleur_Hypnose = Data3$Douleur_Hypnose_NM,
   Evolution_Hypnose = Data3$Evolution_Hypnose_NM,
   Bouillotte = Data3$Bouillotte_NM,
-  Duree_Bouillotte = Duree_B,
+  Duree_Bouillotte = Data3$Duree_B,
   Douleur_Bouillotte = Data3$Douleur_Bouillotte_NM,
   Evolution_Bouillotte = Data3$Evolution_Bouillotte_NM,
   CBD = Data3$CBD_NM,
-  Duree_CBD = Duree_C,
+  Duree_CBD = Data3$Duree_C,
   Douleur_CBD = Data3$Douleur_CBD_NM,
   Evolution_CBD = Data3$Evolution_CBD_NM,
   Tens = Data3$Tens_NM,
-  Duree_Tens = Duree_T,
+  Duree_Tens = Data3$Duree_T,
   Douleur_Tens = Data3$Douleur_Tens_NM,
   Evolution_Tens = Data3$Evolution_Tens_NM,
   Aucun = rep(NA, nrow(Data3))
@@ -1103,7 +1103,7 @@ data3 <- data.frame(
 ```
 
 
-### Creation du data pour l'AMC ###
+### Creation du data pour l'ACM ###
 ```{r}
 Data_AMC_test <- bind_rows(data1,data2,data3)
 
@@ -1367,7 +1367,7 @@ Data_AMC_test <- Data_AMC_test %>%
 
 
 
-### ACM de tous les combos avec TM et habillages selon les effets secondaires (ES) ###
+### ACM de tous les combos avec TM ###
 ```{r}
 Data_AMC_TM = subset(Data_AMC_test, TM != "NM")
 Data_AMC_TH = subset(Data_AMC_test, TM == "TH")
@@ -1412,7 +1412,6 @@ for (i in 1:17){
 ```
 
 
-
 ## Graphe de variables de tous les combos TM : habillage = qualité de représentation
 ```{r}
 fviz_mca_var(mca.combos, 
@@ -1424,11 +1423,11 @@ fviz_mca_var(mca.combos,
 
 Par ailleurs en habillant les variables par rapport à leur contribution on constate que certains combos tels que la Mobilite (aussi bien avec TH que CM), la Bouillotte (avec TH et CM) et la Nutrition ont la plus forte contribution et respectent les observations précédentes.
 
-# Contribution des combos
+## Classement contribution combos
 ```{r}
-fviz_cos2(mca.combos, choice = "var", axes = 1:2) + ggtitle("Contribution des combos à l'ACM")
+fviz_cos2(mca.combos, choice = "var", axes = 1:2) + ggtitle("Classement qualité de représentation des combos à l'ACM")
 ```
-On constate que les variables qui contribuent le plus sont celles qui sont le mieux représentées globalement 5 (Combos avec Mobilite, Bouillotte et Nutrition alors qu'au contraire combos avec Phyto et Acup contribuent le moins)
+
 
 
 ## Graphe des individus en fonction de leur qualité de représentation
@@ -1912,7 +1911,6 @@ for (i in 1:9){
 ```
 
 ## Graphe des individus pour TH : habillage = echelle douleur en fonction du NM en combo
-
 ```{r}
 # Extraire les coordonnées des variables
 ind_TH_D <- rownames(mca.combos.TH$ind$coord)
@@ -1999,7 +1997,6 @@ for (i in 1:8){
 ```
 
 ## Graphe des individus pour CM : habillage = echelle douleur en fonction du NM en combo
-
 ```{r}
 # Extraire les coordonnées des variables
 ind_CM_D <- rownames(mca.combos.CM$ind$coord)
@@ -2057,7 +2054,6 @@ for (var in c("D_Mob","D_Nut","D_Str","D_Phyto","D_Acup","D_Hyp","D_Bou","D_CBD"
 
 
 ### ACM sur les NM uniquement 
-
 
 ## Graphe des variables pour TNM pris/ pas pris
 ```{r}
@@ -2168,7 +2164,7 @@ custom_palette_NM_duree <- list(
 
 # Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
 for (var in c("Duree_Mobilite","Duree_Nutrition","Duree_Stress","Duree_Phyto","Duree_Acup","Duree_Hypnose", "Duree_Bouillotte", "Duree_CBD", "Duree_Tens" )){
-  titre <- paste("Graphe des individus des TNM avec habillage en fonction de la duree du TNM ")
+  titre <- paste("Graphe des individus des TNM avec habillage en fonction de ", var)
   print(
     ggplot(df_NM_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_NM_duree[[var]], label = rownames(df_NM_duree))) +
       geom_point(size=3) +
@@ -2197,7 +2193,6 @@ colonnes_ES <- which(seq_along(Data_AMC_TM) %in% c(7, 12, 15, 18, 21, 24, 27, 30
 mca.ES = MCA(Data_AMC_TM[colonnes_ES], quali.sup=1, graph=FALSE)
 fviz_mca_var(mca.ES, col.var = rep(c("no","yes"),9), invisible = "quali.sup")
 ```
-
 
 ## Graphe des individus avec habillage selon type de TM
 ```{r}
@@ -2305,5 +2300,1321 @@ for (var in c("Apparition_Tete","Apparition_Fatigue","Apparition_Nausee","Appari
   )
 }
 ```
+
+
+
+
+
+### ACM pour la Mobilite ###
+
+## Création de l'ACM
+```{r}
+Data_AMC_Mobilite = subset(Data_AMC_test, Mobilite=="yes")
+
+colonnes_Mobilite <- which(seq_along(Data_AMC_Mobilite) %in% c(7,34,99))
+
+mca.Mobilite = MCA(Data_AMC_Mobilite[colonnes_Mobilite], graph=FALSE)
+
+fviz_mca_var(mca.Mobilite) + ggtitle("Graphe des variables")
+
+```
+`
+## Graphe des variables en fonction de la qualité de représentation
+```{r}
+fviz_mca_var(mca.Mobilite, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
+
+fviz_cos2(mca.Mobilite, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+```
+
+## Graphe des individus en fonction de la qualité de représentation
+```{r}
+fviz_mca_ind(mca.Mobilite, col.ind = "cos2") + ggtitle("Graphe des individus en fonction de la qualité de représentation")
+
+```
+
+## Graphe des individus : habillage = TM
+```{r}
+# Extraire les coordonnées des variables
+ind_Mob_TM <- rownames(mca.Mobilite$ind$coord)
+
+# Créer un dataframe vide
+df_Mob_TM <- data.frame(matrix(nrow = length(ind_Mob_TM), ncol = 0))
+
+# Ajouter les coord
+coord_Mob_TM <- mca.Mobilite$ind$coord
+df_Mob_TM <- cbind(df_Mob_TM, coord_Mob_TM)
+
+# Définir les variables
+df_Mob_TM$TM <- Data_AMC_Mobilite$TM
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Mobilite_TM <- list(
+  TM = c("TH" = "#34C924", "CM" = "#1FFED8", "NM" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("TM")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction du TM associé")
+  print(
+    ggplot(df_Mob_TM, aes(x = `Dim 1`, y = `Dim 2`, color = df_Mob_TM[[var]], label = rownames(df_Mob_TM))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Mob_TM[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Mobilite_TM[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Traitement associé") 
+  )
+}
+```
+
+## Graphe des individus : habillage = douleur
+```{r}
+# Extraire les coordonnées des variables
+ind_Mob_D <- rownames(mca.Mobilite$ind$coord)
+
+# Créer un dataframe vide
+df_Mob_D <- data.frame(matrix(nrow = length(ind_Mob_D), ncol = 0))
+
+# Ajouter les coord
+coord_Mob_D <- mca.Mobilite$ind$coord
+df_Mob_D <- cbind(df_Mob_D, coord_Mob_D)
+
+# Définir les variables
+df_Mob_D$D_Mob <- Data_AMC_Mobilite$D_Mob
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Mobilite_D <- list(
+  D_Mob = c("+" = "#b3e93e", "0" = "#ffec1b", "-" = "#f15854")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("D_Mob")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la douleur")
+  print(
+    ggplot(df_Mob_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_Mob_D[[var]], label = rownames(df_Mob_D))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Mob_D[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Mobilite_D[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Efficacité sur la douleur") 
+  )
+}
+```
+
+## Graphe des individus : habillage = durée du traitement
+```{r}
+# Extraire les coordonnées des variables
+ind_Mobilite_duree <- rownames(mca.Mobilite$ind$coord)
+
+# Créer un dataframe vide
+df_Mobilite_duree <- data.frame(matrix(nrow = length(ind_Mobilite_duree), ncol = 0))
+
+# Ajouter les coord
+coord_Mobilite_duree <- mca.Mobilite$ind$coord
+df_Mobilite_duree <- cbind(df_Mobilite_duree, coord_Mobilite_duree)
+
+# Définir les variables
+df_Mobilite_duree$Duree_Mobilite <- Data_AMC_Mobilite$Duree_Mobilite
+
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Mobilite_duree <- list(
+  Duree_Mobilite = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Duree_Mobilite")){
+  titre <- paste("Graphe des individus avec habillage en fonction de la duree du traitement")
+  print(
+    ggplot(df_Mobilite_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_Mobilite_duree[[var]], label = rownames(df_Mobilite_duree))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Mobilite_duree[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_Mobilite_duree[[var]], na.value = "transparent") + 
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Duree traitement")
+  )
+}
+```
+
+## Graphe des indivdus : habillage = conso tabac
+```{r}
+# Extraire les coordonnées des variables
+ind_Mob_tabac <- rownames(mca.Mobilite$ind$coord)
+
+# Créer un dataframe vide
+df_Mob_tabac <- data.frame(matrix(nrow = length(ind_Mob_tabac), ncol = 0))
+
+# Ajouter les coord
+coord_Mob_tabac <- mca.Mobilite$ind$coord
+df_Mob_tabac <- cbind(df_Mob_tabac, coord_Mob_tabac)
+
+# Définir les variables
+df_Mob_tabac$Tabac <- Data_AMC_Mobilite$Tabac
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Mobilite_tabac <- list(
+  Tabac = c("Jamais" = "#34C924", "Parfois (en certaines occasions)" = "#F4661B", "Régulièrement (consommation hebdomadaire)" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Tabac")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la consommation de tabac")
+  print(
+    ggplot(df_Mob_tabac, aes(x = `Dim 1`, y = `Dim 2`, color = df_Mob_tabac[[var]], label = rownames(df_Mob_tabac))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Mob_tabac[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Mobilite_tabac[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Consommation tabac") 
+  )
+}
+```
+
+## Graphe des individus : habillage = conso alcool
+```{r}
+# Extraire les coordonnées des variables
+ind_Mob_alcool <- rownames(mca.Mobilite$ind$coord)
+
+# Créer un dataframe vide
+df_Mob_alcool <- data.frame(matrix(nrow = length(ind_Mob_alcool), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Mob_alcool <- mca.Mobilite$ind$coord
+df_Mob_alcool <- cbind(df_Mob_alcool, coord_Mob_alcool)
+
+# Définir les variables
+df_Mob_alcool$Alcool <- Data_AMC_Mobilite$Alcool
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Mobilite_alcool <- list(
+  Alcool = c("Jamais" = "#34C924", "Parfois (en certaines occasions)" = "#F4661B", "Régulièrement (consommation hebdomadaire)" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Alcool")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la consommation d'alcool")
+  print(
+    ggplot(df_Mob_alcool, aes(x = `Dim 1`, y = `Dim 2`, color = df_Mob_alcool[[var]], label = rownames(df_Mob_alcool))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Mob_alcool[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Mobilite_alcool[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Consommation alcool") 
+  )
+}
+
+```
+
+## Graphe des individus : habillage = âge
+```{r}
+
+### Création des tranches d'age ###
+bornes <- c(0, 25, 30, 35, 40, Inf)
+labels <- c(" - de 25 ans", "26-30 ans", "31-35 ans", "36-40 ans", "+ de 40 ans")
+Data_AMC_Mobilite$Tranches_age <- cut(Data_AMC_Mobilite$Age, breaks = bornes, labels = labels, right = FALSE)
+
+# Extraire les coordonnées des variables
+ind_Mob_age <- rownames(mca.Mobilite$ind$coord)
+
+# Créer un dataframe vide
+df_Mob_age <- data.frame(matrix(nrow = length(ind_Mob_age), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Mob_age <- mca.Mobilite$ind$coord
+df_Mob_age <- cbind(df_Mob_age, coord_Mob_age)
+
+# Définir les variables
+df_Mob_age$Age <- Data_AMC_Mobilite$Tranches_age
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Mobilite_Age <- list(
+  Age = c(" - de 25 ans" = "#1FFED8","26-30 ans" = "#34C924", "31-35 ans" = "#ffec1b", "36-40 ans" = "#F4661B", "+ de 40 ans" ="#960018" )
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Age")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de l'age")
+  print(
+    ggplot(df_Mob_age, aes(x = `Dim 1`, y = `Dim 2`, color = df_Mob_age[[var]], label = rownames(df_Mob_age))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Mob_age[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Mobilite_Age[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Age des patient(e)s") 
+  )
+}
+
+```
+
+
+
+
+
+### ACM pour la Nutrition ###
+
+## Création de l'ACM
+```{r}
+Data_AMC_Nutrition = subset(Data_AMC_test, Nutrition=="yes")
+
+colonnes_Nutrition <- which(seq_along(Data_AMC_Nutrition) %in% c(7,38,100))
+
+mca.Nutrition = MCA(Data_AMC_Nutrition[colonnes_Nutrition], graph=FALSE)
+
+fviz_mca_var(mca.Nutrition) + ggtitle("Graphe des variables")
+
+```
+
+## Graphe des variables en fonction de la qualité de représentation
+```{r}
+fviz_mca_var(mca.Nutrition, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
+
+fviz_cos2(mca.Nutrition, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+
+```
+
+## Graphe des individus en fonction de la qualité de représentation
+```{r}
+fviz_mca_ind(mca.Nutrition, col.ind = "cos2") + ggtitle("Graphe des individus en fonction de la qualité de représentation")
+
+```
+
+## Graphe des individus : habillage = TM
+```{r}
+# Extraire les coordonnées des variables
+ind_Nut_TM <- rownames(mca.Nutrition$ind$coord)
+
+# Créer un dataframe vide
+df_Nut_TM <- data.frame(matrix(nrow = length(ind_Nut_TM), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Nut_TM <- mca.Nutrition$ind$coord
+df_Nut_TM <- cbind(df_Nut_TM, coord_Nut_TM)
+
+# Définir les variables
+df_Nut_TM$TM <- Data_AMC_Nutrition$TM
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Nut_TM <- list(
+  TM = c("TH" = "#34C924", "CM" = "#1FFED8", "NM" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("TM")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction du TM associé")
+  print(
+    ggplot(df_Nut_TM, aes(x = `Dim 1`, y = `Dim 2`, color = df_Nut_TM[[var]], label = rownames(df_Nut_TM))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Nut_TM[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Nut_TM[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Traitement associé") 
+  )
+}
+```
+
+# Graphe des individus : habillage = douleur
+```{r}
+# Extraire les coordonnées des variables
+ind_Nut_D <- rownames(mca.Nutrition$ind$coord)
+
+# Créer un dataframe vide
+df_Nut_D <- data.frame(matrix(nrow = length(ind_Nut_D), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Nut_D <- mca.Nutrition$ind$coord
+df_Nut_D <- cbind(df_Nut_D, coord_Nut_D)
+
+# Définir les variables
+df_Nut_D$D_Nut <- Data_AMC_Nutrition$D_Nut
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Nut_D <- list(
+  D_Nut = c("+" = "#b3e93e", "0" = "#ffec1b", "-" = "#f15854")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("D_Nut")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la douleur")
+  print(
+    ggplot(df_Nut_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_Nut_D[[var]], label = rownames(df_Nut_D))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Nut_D[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Nut_D[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Efficacité sur la douleur") 
+  )
+}
+
+```
+
+## Graphe des individus : habillage = durée du traitement
+```{r}
+# Extraire les coordonnées des variables
+ind_Nutrition_duree <- rownames(mca.Nutrition$ind$coord)
+
+# Créer un dataframe vide
+df_Nutrition_duree <- data.frame(matrix(nrow = length(ind_Nutrition_duree), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Nutrition_duree <- mca.Nutrition$ind$coord
+df_Nutrition_duree <- cbind(df_Nutrition_duree, coord_Nutrition_duree)
+
+# Définir les variables
+df_Nutrition_duree$Duree_Nutrition <- Data_AMC_Nutrition$Duree_Nutrition
+
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Nutrition_duree <- list(
+  Duree_Nutrition = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Duree_Nutrition")){
+  titre <- paste("Graphe des individus avec habillage en fonction de la duree du traitement")
+  print(
+    ggplot(df_Nutrition_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_Nutrition_duree[[var]], label = rownames(df_Nutrition_duree))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Nutrition_duree[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_Nutrition_duree[[var]], na.value = "transparent") + 
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Duree traitement")
+  )
+}
+
+```
+
+## Graphe des indivdus : habillage = conso tabac
+```{r}
+# Extraire les coordonnées des variables
+ind_Nut_tabac <- rownames(mca.Nutrition$ind$coord)
+
+# Créer un dataframe vide
+df_Nut_tabac <- data.frame(matrix(nrow = length(ind_Nut_tabac), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Nut_tabac <- mca.Nutrition$ind$coord
+df_Nut_tabac <- cbind(df_Nut_tabac, coord_Nut_tabac)
+
+# Définir les variables
+df_Nut_tabac$Tabac <- Data_AMC_Nutrition$Tabac
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Nut_tabac <- list(
+  Tabac = c("Jamais" = "#34C924", "Parfois (en certaines occasions)" = "#F4661B", "Régulièrement (consommation hebdomadaire)" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Tabac")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la consommation de tabac")
+  print(
+    ggplot(df_Nut_tabac, aes(x = `Dim 1`, y = `Dim 2`, color = df_Nut_tabac[[var]], label = rownames(df_Nut_tabac))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Nut_tabac[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Nut_tabac[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Consommation tabac") 
+  )
+}
+
+```
+
+## Graphe des individus : habillage = conso alcool
+```{r}
+# Extraire les coordonnées des variables
+ind_Nut_alcool <- rownames(mca.Nutrition$ind$coord)
+
+# Créer un dataframe vide
+df_Nut_alcool <- data.frame(matrix(nrow = length(ind_Nut_alcool), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Nut_alcool <- mca.Nutrition$ind$coord
+df_Nut_alcool <- cbind(df_Nut_alcool, coord_Nut_alcool)
+
+# Définir les variables
+df_Nut_alcool$Alcool <- Data_AMC_Nutrition$Alcool
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Nut_alcool <- list(
+  Alcool = c("Jamais" = "#34C924", "Parfois (en certaines occasions)" = "#F4661B", "Régulièrement (consommation hebdomadaire)" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Alcool")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la consommation d'alcool")
+  print(
+    ggplot(df_Nut_alcool, aes(x = `Dim 1`, y = `Dim 2`, color = df_Nut_alcool[[var]], label = rownames(df_Nut_alcool))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Nut_alcool[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Nut_alcool[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Consommation alcool") 
+  )
+}
+
+
+```
+
+## Graphe des individus : habillage = âge
+```{r}
+### Création des tranches d'âge ###
+bornes <- c(0, 25, 30, 35, 40, Inf)
+labels <- c(" - de 25 ans", "26-30 ans", "31-35 ans", "36-40 ans", "+ de 40 ans")
+Data_AMC_Nutrition$Tranches_age <- cut(Data_AMC_Nutrition$Age, breaks = bornes, labels = labels, right = FALSE)
+
+# Extraire les coordonnées des variables
+ind_Nut_age <- rownames(mca.Nutrition$ind$coord)
+
+# Créer un dataframe vide
+df_Nut_age <- data.frame(matrix(nrow = length(ind_Nut_age), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Nut_age <- mca.Nutrition$ind$coord
+df_Nut_age <- cbind(df_Nut_age, coord_Nut_age)
+
+# Définir les variables
+df_Nut_age$Age <- Data_AMC_Nutrition$Tranches_age
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Nut_Age <- list(
+  Age = c(" - de 25 ans" = "#1FFED8","26-30 ans" = "#34C924", "31-35 ans" = "#ffec1b", "36-40 ans" = "#F4661B", "+ de 40 ans" ="#960018" )
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Age")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de l'âge")
+  print(
+    ggplot(df_Nut_age, aes(x = `Dim 1`, y = `Dim 2`, color = df_Nut_age[[var]], label = rownames(df_Nut_age))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Nut_age[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Nut_Age[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Âge des patient(e)s") 
+  )
+}
+
+```
+
+
+
+
+
+
+
+
+### ACM pour Phyto ###
+
+```{r}
+## Création de l'ACM
+Data_AMC_Phyto = subset(Data_AMC_test, Phyto=="yes")
+
+colonnes_Phyto <- which(seq_along(Data_AMC_Phyto) %in% c(7,46,102))
+
+mca.Phyto = MCA(Data_AMC_Phyto[colonnes_Phyto], graph=FALSE)
+
+fviz_mca_var(mca.Phyto) + ggtitle("Graphe des variables")
+```
+
+## Graphe des variables en fonction de la qualité de représentation
+```{r}
+fviz_mca_var(mca.Phyto, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
+
+fviz_cos2(mca.Phyto, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+```
+
+## Graphe des individus en fonction de la qualité de représentation
+```{r}
+fviz_mca_ind(mca.Phyto, col.ind = "cos2") + ggtitle("Graphe des individus en fonction de la qualité de représentation")
+```
+
+## Graphe des individus : habillage = TM
+```{r}
+# Extraire les coordonnées des variables
+ind_Phyto_TM <- rownames(mca.Phyto$ind$coord)
+
+# Créer un dataframe vide
+df_Phyto_TM <- data.frame(matrix(nrow = length(ind_Phyto_TM), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Phyto_TM <- mca.Phyto$ind$coord
+df_Phyto_TM <- cbind(df_Phyto_TM, coord_Phyto_TM)
+
+# Définir les variables
+df_Phyto_TM$TM <- Data_AMC_Phyto$TM
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Phyto_TM <- list(
+  TM = c("TH" = "#34C924", "CM" = "#1FFED8", "NM" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("TM")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction du TM associé")
+  print(
+    ggplot(df_Phyto_TM, aes(x = `Dim 1`, y = `Dim 2`, color = df_Phyto_TM[[var]], label = rownames(df_Phyto_TM))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Phyto_TM[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Phyto_TM[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Traitement associé") 
+  )
+}
+```
+
+
+
+
+
+
+
+
+
+
+### ACM pour l'Acup ###
+
+```{r}
+## Création de l'ACM
+Data_AMC_Acup = subset(Data_AMC_test, Acup=="yes")
+
+colonnes_Acup <- which(seq_along(Data_AMC_Acup) %in% c(7,50,103))
+
+mca.Acup = MCA(Data_AMC_Acup[colonnes_Acup], graph=FALSE)
+
+fviz_mca_var(mca.Acup) + ggtitle("Graphe des variables")
+```
+
+## Graphe des variables en fonction de la qualité de représentation
+```{r}
+fviz_mca_var(mca.Acup, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
+
+fviz_cos2(mca.Acup, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+```
+
+## Graphe des individus en fonction de la qualité de représentation
+```{r}
+fviz_mca_ind(mca.Acup, col.ind = "cos2") + ggtitle("Graphe des individus en fonction de la qualité de représentation")
+```
+
+## Graphe des individus : habillage = TM
+```{r}
+# Extraire les coordonnées des variables
+ind_Acup_TM <- rownames(mca.Acup$ind$coord)
+
+# Créer un dataframe vide
+df_Acup_TM <- data.frame(matrix(nrow = length(ind_Acup_TM), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Acup_TM <- mca.Acup$ind$coord
+df_Acup_TM <- cbind(df_Acup_TM, coord_Acup_TM)
+
+# Définir les variables
+df_Acup_TM$TM <- Data_AMC_Acup$TM
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Acup_TM <- list(
+  TM = c("TH" = "#34C924", "CM" = "#1FFED8", "NM" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("TM")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction du TM associé")
+  print(
+    ggplot(df_Acup_TM, aes(x = `Dim 1`, y = `Dim 2`, color = df_Acup_TM[[var]], label = rownames(df_Acup_TM))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Acup_TM[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Acup_TM[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Traitement associé") 
+  )
+}
+```
+
+# Graphe des individus : habillage = douleur
+```{r}
+# Extraire les coordonnées des variables
+ind_Acup_D <- rownames(mca.Acup$ind$coord)
+
+# Créer un dataframe vide
+df_Acup_D <- data.frame(matrix(nrow = length(ind_Acup_D), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Acup_D <- mca.Acup$ind$coord
+df_Acup_D <- cbind(df_Acup_D, coord_Acup_D)
+
+# Définir les variables
+df_Acup_D$D_Acup <- Data_AMC_Acup$D_Acup
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Acup_D <- list(
+  D_Acup = c("+" = "#b3e93e", "0" = "#ffec1b", "-" = "#f15854")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("D_Acup")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la douleur")
+  print(
+    ggplot(df_Acup_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_Acup_D[[var]], label = rownames(df_Acup_D))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Acup_D[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Acup_D[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Efficacité sur la douleur") 
+  )
+}
+```
+
+## Graphe des individus : habillage = durée du traitement
+```{r}
+# Extraire les coordonnées des variables
+ind_Acup_duree <- rownames(mca.Acup$ind$coord)
+
+# Créer un dataframe vide
+df_Acup_duree <- data.frame(matrix(nrow = length(ind_Acup_duree), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Acup_duree <- mca.Acup$ind$coord
+df_Acup_duree <- cbind(df_Acup_duree, coord_Acup_duree)
+
+# Définir les variables
+df_Acup_duree$Duree_Acup <- Data_AMC_Acup$Duree_Acup
+
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Acup_duree <- list(
+  Duree_Acup = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Duree_Acup")){
+  titre <- paste("Graphe des individus avec habillage en fonction de la duree du traitement")
+  print(
+    ggplot(df_Acup_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_Acup_duree[[var]], label = rownames(df_Acup_duree))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Acup_duree[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_Acup_duree[[var]], na.value = "transparent") + 
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Duree traitement")
+  )
+}
+```
+
+
+
+
+
+
+
+### ACM pour l'Hypnose ###
+
+```{r}
+## Création de l'ACM
+Data_AMC_Hypnose = subset(Data_AMC_test, Hypnose=="yes")
+
+colonnes_Hypnose <- which(seq_along(Data_AMC_Hypnose) %in% c(7,54,104))
+
+mca.Hypnose = MCA(Data_AMC_Hypnose[colonnes_Hypnose], graph=FALSE)
+
+fviz_mca_var(mca.Hypnose) + ggtitle("Graphe des variables")
+```
+
+## Graphe des variables en fonction de la qualité de représentation
+```{r}
+fviz_mca_var(mca.Hypnose, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
+
+fviz_cos2(mca.Hypnose, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+```
+
+## Graphe des individus en fonction de la qualité de représentation
+```{r}
+fviz_mca_ind(mca.Hypnose, col.ind = "cos2") + ggtitle("Graphe des individus en fonction de la qualité de représentation")
+```
+
+## Graphe des individus : habillage = TM
+```{r}
+# Extraire les coordonnées des variables
+ind_Hyp_TM <- rownames(mca.Hypnose$ind$coord)
+
+# Créer un dataframe vide
+df_Hyp_TM <- data.frame(matrix(nrow = length(ind_Hyp_TM), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Hyp_TM <- mca.Hypnose$ind$coord
+df_Hyp_TM <- cbind(df_Hyp_TM, coord_Hyp_TM)
+
+# Définir les variables
+df_Hyp_TM$TM <- Data_AMC_Hypnose$TM
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Hyp_TM <- list(
+  TM = c("TH" = "#34C924", "CM" = "#1FFED8", "NM" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("TM")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction du TM associé")
+  print(
+    ggplot(df_Hyp_TM, aes(x = `Dim 1`, y = `Dim 2`, color = df_Hyp_TM[[var]], label = rownames(df_Hyp_TM))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Hyp_TM[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Hyp_TM[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Traitement associé") 
+  )
+}
+```
+
+# Graphe des individus : habillage = douleur
+```{r}
+# Extraire les coordonnées des variables
+ind_Hyp_D <- rownames(mca.Hypnose$ind$coord)
+
+# Créer un dataframe vide
+df_Hyp_D <- data.frame(matrix(nrow = length(ind_Hyp_D), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Hyp_D <- mca.Hypnose$ind$coord
+df_Hyp_D <- cbind(df_Hyp_D, coord_Hyp_D)
+
+# Définir les variables
+df_Hyp_D$D_Hyp <- Data_AMC_Hypnose$D_Hyp
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Hyp_D <- list(
+  D_Hyp = c("+" = "#b3e93e", "0" = "#ffec1b", "-" = "#f15854")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("D_Hyp")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la douleur")
+  print(
+    ggplot(df_Hyp_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_Hyp_D[[var]], label = rownames(df_Hyp_D))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Hyp_D[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Hyp_D[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Efficacité sur la douleur") 
+  )
+}
+```
+
+## Graphe des individus : habillage = durée du traitement
+```{r}
+# Extraire les coordonnées des variables
+ind_Hyp_duree <- rownames(mca.Hypnose$ind$coord)
+
+# Créer un dataframe vide
+df_Hyp_duree <- data.frame(matrix(nrow = length(ind_Hyp_duree), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Hyp_duree <- mca.Hypnose$ind$coord
+df_Hyp_duree <- cbind(df_Hyp_duree, coord_Hyp_duree)
+
+# Définir les variables
+df_Hyp_duree$Duree_Hyp <- Data_AMC_Hypnose$Duree_Hyp
+
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Hyp_duree <- list(
+  Duree_Hyp = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Duree_Hyp")){
+  titre <- paste("Graphe des individus avec habillage en fonction de la duree du traitement")
+  print(
+    ggplot(df_Hyp_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_Hyp_duree[[var]], label = rownames(df_Hyp_duree))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Hyp_duree[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_Hyp_duree[[var]], na.value = "transparent") + 
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Duree traitement")
+  )
+}
+```
+
+
+
+
+
+### ACM pour la Bouillotte ###
+
+```{r}
+## Création de l'ACM
+Data_AMC_Bouillotte = subset(Data_AMC_test, Bouillotte=="yes")
+
+colonnes_Bouillotte <- which(seq_along(Data_AMC_Bouillotte) %in% c(7,58,105))
+
+mca.Bouillotte = MCA(Data_AMC_Bouillotte[colonnes_Bouillotte], graph=FALSE)
+
+fviz_mca_var(mca.Bouillotte) + ggtitle("Graphe des variables")
+```
+
+## Graphe des variables en fonction de la qualité de représentation
+```{r}
+fviz_mca_var(mca.Bouillotte, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
+
+fviz_cos2(mca.Bouillotte, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+
+## Graphe des individus en fonction de la qualité de représentation
+fviz_mca_ind(mca.Bouillotte, col.ind = "cos2") + ggtitle("Graphe des individus en fonction de la qualité de représentation")
+```
+
+## Graphe des individus : habillage = TM
+```{r}
+# Extraire les coordonnées des variables
+ind_Bou_TM <- rownames(mca.Bouillotte$ind$coord)
+
+# Créer un dataframe vide
+df_Bou_TM <- data.frame(matrix(nrow = length(ind_Bou_TM), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Bou_TM <- mca.Bouillotte$ind$coord
+df_Bou_TM <- cbind(df_Bou_TM, coord_Bou_TM)
+
+# Définir les variables
+df_Bou_TM$TM <- Data_AMC_Bouillotte$TM
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Bou_TM <- list(
+  TM = c("TH" = "#34C924", "CM" = "#1FFED8", "NM" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("TM")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction du TM associé")
+  print(
+    ggplot(df_Bou_TM, aes(x = `Dim 1`, y = `Dim 2`, color = df_Bou_TM[[var]], label = rownames(df_Bou_TM))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Bou_TM[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Bou_TM[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Traitement associé") 
+  )
+}
+
+```
+
+# Graphe des individus : habillage = douleur
+```{r}
+# Extraire les coordonnées des variables
+ind_Bou_D <- rownames(mca.Bouillotte$ind$coord)
+
+# Créer un dataframe vide
+df_Bou_D <- data.frame(matrix(nrow = length(ind_Bou_D), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Bou_D <- mca.Bouillotte$ind$coord
+df_Bou_D <- cbind(df_Bou_D, coord_Bou_D)
+
+# Définir les variables
+df_Bou_D$D_Bou <- Data_AMC_Bouillotte$D_Bou
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Bou_D <- list(
+  D_Bou = c("+" = "#b3e93e", "0" = "#ffec1b", "-" = "#f15854")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("D_Bou")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la douleur")
+  print(
+    ggplot(df_Bou_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_Bou_D[[var]], label = rownames(df_Bou_D))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Bou_D[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Bou_D[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Efficacité sur la douleur") 
+  )
+}
+```
+
+## Graphe des individus : habillage = durée du traitement
+ 
+```{r}
+# Extraire les coordonnées des variables
+ind_Bouillotte_duree <- rownames(mca.Bouillotte$ind$coord)
+
+# Créer un dataframe vide
+df_Bouillotte_duree <- data.frame(matrix(nrow = length(ind_Bouillotte_duree), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Bouillotte_duree <- mca.Bouillotte$ind$coord
+df_Bouillotte_duree <- cbind(df_Bouillotte_duree, coord_Bouillotte_duree)
+
+# Définir les variables
+df_Bouillotte_duree$Duree_Bouillotte <- Data_AMC_Bouillotte$Duree_Bouillotte
+
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Bouillotte_duree <- list(
+  Duree_Bouillotte = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Duree_Bouillotte")){
+  titre <- paste("Graphe des individus avec habillage en fonction de la duree du traitement")
+  print(
+    ggplot(df_Bouillotte_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_Bouillotte_duree[[var]], label = rownames(df_Bouillotte_duree))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Bouillotte_duree[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_Bouillotte_duree[[var]], na.value = "transparent") + 
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Duree traitement")
+  )
+}
+```
+
+
+
+
+
+### ACM pour le CBD ###
+
+## Création de l'ACM
+```{r}
+Data_AMC_CBD = subset(Data_AMC_test, CBD=="yes")
+
+colonnes_CBD <- which(seq_along(Data_AMC_CBD) %in% c(7,62,106))
+
+mca.CBD = MCA(Data_AMC_CBD[colonnes_CBD], graph=FALSE)
+
+fviz_mca_var(mca.CBD) + ggtitle("Graphe des variables")
+```
+
+## Graphe des variables en fonction de la qualité de représentation
+```{r}
+fviz_mca_var(mca.CBD, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
+
+fviz_cos2(mca.CBD, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+```
+
+## Graphe des individus en fonction de la qualité de représentation
+```{r}
+fviz_mca_ind(mca.CBD, col.ind = "cos2") + ggtitle("Graphe des individus en fonction de la qualité de représentation")
+```
+
+## Graphe des individus : habillage = TM
+```{r}
+# Extraire les coordonnées des variables
+ind_CBD_TM <- rownames(mca.CBD$ind$coord)
+
+# Créer un dataframe vide
+df_CBD_TM <- data.frame(matrix(nrow = length(ind_CBD_TM), ncol = 0))
+
+# Ajouter les coordonnées
+coord_CBD_TM <- mca.CBD$ind$coord
+df_CBD_TM <- cbind(df_CBD_TM, coord_CBD_TM)
+
+# Définir les variables
+df_CBD_TM$TM <- Data_AMC_CBD$TM
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_CBD_TM <- list(
+  TM = c("TH" = "#34C924", "CM" = "#1FFED8", "NM" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("TM")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction du TM associé")
+  print(
+    ggplot(df_CBD_TM, aes(x = `Dim 1`, y = `Dim 2`, color = df_CBD_TM[[var]], label = rownames(df_CBD_TM))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_CBD_TM[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_CBD_TM[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Traitement associé") 
+  )
+}
+```
+
+# Graphe des individus : habillage = douleur
+```{r}
+# Extraire les coordonnées des variables
+ind_CBD_D <- rownames(mca.CBD$ind$coord)
+
+# Créer un dataframe vide
+df_CBD_D <- data.frame(matrix(nrow = length(ind_CBD_D), ncol = 0))
+
+# Ajouter les coordonnées
+coord_CBD_D <- mca.CBD$ind$coord
+df_CBD_D <- cbind(df_CBD_D, coord_CBD_D)
+
+# Définir les variables
+df_CBD_D$D_CBD <- Data_AMC_CBD$D_CBD
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_CBD_D <- list(
+  D_CBD = c("+" = "#b3e93e", "0" = "#ffec1b", "-" = "#f15854")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("D_CBD")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la douleur")
+  print(
+    ggplot(df_CBD_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_CBD_D[[var]], label = rownames(df_CBD_D))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_CBD_D[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_CBD_D[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Efficacité sur la douleur") 
+  )
+}
+```
+
+# Graphe des individus : habillage = durée du traitement
+```{r}
+# Extraire les coordonnées des variables
+ind_CBD_duree <- rownames(mca.CBD$ind$coord)
+
+# Créer un dataframe vide
+df_CBD_duree <- data.frame(matrix(nrow = length(ind_CBD_duree), ncol = 0))
+
+# Ajouter les coordonnées
+coord_CBD_duree <- mca.CBD$ind$coord
+df_CBD_duree <- cbind(df_CBD_duree, coord_CBD_duree)
+
+# Définir les variables
+df_CBD_duree$Duree_CBD <- Data_AMC_CBD$Duree_CBD
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_CBD_duree <- list(
+  Duree_CBD = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Duree_CBD")){
+  titre <- paste("Graphe des individus avec habillage en fonction de la duree du traitement")
+  print(
+    ggplot(df_CBD_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_CBD_duree[[var]], label = rownames(df_CBD_duree))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_CBD_duree[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_CBD_duree[[var]], na.value = "transparent") + 
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Duree traitement")
+  )
+}
+```
+
+
+
+
+
+### ACM pour le Tens ###
+
+```{r}
+## Création de l'ACM
+Data_AMC_Tens = subset(Data_AMC_test, Tens=="yes")
+
+colonnes_Tens <- which(seq_along(Data_AMC_Tens) %in% c(7,66,107))
+
+mca.Tens = MCA(Data_AMC_Tens[colonnes_Tens], graph=FALSE)
+
+fviz_mca_var(mca.Tens) + ggtitle("Graphe des variables")
+```
+
+## Graphe des variables en fonction de la qualité de représentation
+```{r}
+fviz_mca_var(mca.Tens, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
+
+fviz_cos2(mca.Tens, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+```
+
+## Graphe des individus en fonction de la qualité de représentation
+```{r}
+fviz_mca_ind(mca.Tens, col.ind = "cos2") + ggtitle("Graphe des individus en fonction de la qualité de représentation")
+```
+
+## Graphe des individus : habillage = TM
+```{r}
+# Extraire les coordonnées des variables
+ind_Tens_TM <- rownames(mca.Tens$ind$coord)
+
+# Créer un dataframe vide
+df_Tens_TM <- data.frame(matrix(nrow = length(ind_Tens_TM), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Tens_TM <- mca.Tens$ind$coord
+df_Tens_TM <- cbind(df_Tens_TM, coord_Tens_TM)
+
+# Définir les variables
+df_Tens_TM$TM <- Data_AMC_Tens$TM
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Tens_TM <- list(
+  TM = c("TH" = "#34C924", "CM" = "#1FFED8", "NM" = "#960018")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("TM")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction du TM associé")
+  print(
+    ggplot(df_Tens_TM, aes(x = `Dim 1`, y = `Dim 2`, color = df_Tens_TM[[var]], label = rownames(df_Tens_TM))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Tens_TM[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Tens_TM[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Traitement associé") 
+  )
+}
+```
+
+# Graphe des individus : habillage = douleur
+```{r}
+# Extraire les coordonnées des variables
+ind_Tens_D <- rownames(mca.Tens$ind$coord)
+
+# Créer un dataframe vide
+df_Tens_D <- data.frame(matrix(nrow = length(ind_Tens_D), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Tens_D <- mca.Tens$ind$coord
+df_Tens_D <- cbind(df_Tens_D, coord_Tens_D)
+
+# Définir les variables
+df_Tens_D$D_Tens <- Data_AMC_Tens$D_Tens
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Tens_D <- list(
+  D_Tens = c("+" = "#b3e93e", "0" = "#ffec1b", "-" = "#f15854")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("D_Tens")){
+  titre <- paste("Graphe des individus avec habillage \nen fonction de la douleur")
+  print(
+    ggplot(df_Tens_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_Tens_D[[var]], label = rownames(df_Tens_D))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Tens_D[[var]]), hjust = 0, vjust = 0, size = 3) +  
+      scale_color_manual(values = custom_palette_Tens_D[[var]], na.value = "transparent") +  
+      theme_minimal() +
+      labs(title = titre, 
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Efficacité sur la douleur") 
+  )
+}
+```
+
+# Graphe des individus : habillage = durée du traitement
+```{r}
+# Extraire les coordonnées des variables
+ind_Tens_duree <- rownames(mca.Tens$ind$coord)
+
+# Créer un dataframe vide
+df_Tens_duree <- data.frame(matrix(nrow = length(ind_Tens_duree), ncol = 0))
+
+# Ajouter les coordonnées
+coord_Tens_duree <- mca.Tens$ind$coord
+df_Tens_duree <- cbind(df_Tens_duree, coord_Tens_duree)
+
+# Définir les variables
+df_Tens_duree$Duree_Tens <- Data_AMC_Tens$Duree_Tens
+
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_Tens_duree <- list(
+  Duree_Tens = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Duree_Tens")){
+  titre <- paste("Graphe des individus avec habillage en fonction de la duree du traitement")
+  print(
+    ggplot(df_Tens_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_Tens_duree[[var]], label = rownames(df_Tens_duree))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_Tens_duree[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_Tens_duree[[var]], na.value = "transparent") + 
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Duree traitement")
+  )
+}
+
+
+```
+
+
+
+
+
+
 
 
