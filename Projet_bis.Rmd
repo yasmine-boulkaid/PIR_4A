@@ -2311,9 +2311,9 @@ for (var in c("Apparition_Tete","Apparition_Fatigue","Apparition_Nausee","Appari
 ```{r}
 Data_AMC_Mobilite = subset(Data_AMC_test, Mobilite=="yes")
 
-colonnes_Mobilite <- which(seq_along(Data_AMC_Mobilite) %in% c(7,34,99))
+colonnes_Mobilite <- which(seq_along(Data_AMC_Mobilite) %in% c(7,34, 99))#,99
 
-mca.Mobilite = MCA(Data_AMC_Mobilite[colonnes_Mobilite], graph=FALSE)
+mca.Mobilite = MCA(Data_AMC_Mobilite[colonnes_Mobilite], graph=FALSE, quali.sup = 3)
 
 fviz_mca_var(mca.Mobilite) + ggtitle("Graphe des variables")
 
@@ -2324,6 +2324,7 @@ fviz_mca_var(mca.Mobilite) + ggtitle("Graphe des variables")
 fviz_mca_var(mca.Mobilite, col.var = "cos2") + ggtitle("Graphe des variables en fonction de la qualité de représentation")
 
 fviz_cos2(mca.Mobilite, choice = "var", axes = 1:2) + ggtitle("Classement des variables en fonction de la qualité de représentation")
+
 ```
 
 ## Graphe des individus en fonction de la qualité de représentation
@@ -2393,7 +2394,7 @@ custom_palette_Mobilite_D <- list(
 for (var in c("D_Mob")){
   titre <- paste("Graphe des individus avec habillage \nen fonction de la douleur")
   print(
-    ggplot(df_Mob_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_Mob_D[[var]], label = rownames(df_Mob_D))) +
+    ggplot(df_Mob_D, aes(x = `Dim 1`, y = `Dim 2`, color = df_Mob_D[[var]], label = rownames(df_Mob_D)), repel =TRUE) +
       geom_point(size=3) +
       geom_text(aes(color = df_Mob_D[[var]]), hjust = 0, vjust = 0, size = 3) +  
       scale_color_manual(values = custom_palette_Mobilite_D[[var]], na.value = "transparent") +  
@@ -2575,7 +2576,7 @@ Data_AMC_Nutrition = subset(Data_AMC_test, Nutrition=="yes")
 
 colonnes_Nutrition <- which(seq_along(Data_AMC_Nutrition) %in% c(7,38,100))
 
-mca.Nutrition = MCA(Data_AMC_Nutrition[colonnes_Nutrition], graph=FALSE)
+mca.Nutrition = MCA(Data_AMC_Nutrition[colonnes_Nutrition], quali.sup=3, graph=FALSE)
 
 fviz_mca_var(mca.Nutrition) + ggtitle("Graphe des variables")
 
@@ -2844,7 +2845,7 @@ Data_AMC_Phyto = subset(Data_AMC_test, Phyto=="yes")
 
 colonnes_Phyto <- which(seq_along(Data_AMC_Phyto) %in% c(7,46,102))
 
-mca.Phyto = MCA(Data_AMC_Phyto[colonnes_Phyto], graph=FALSE)
+mca.Phyto = MCA(Data_AMC_Phyto[colonnes_Phyto], quali.sup = 3, graph=FALSE)
 
 fviz_mca_var(mca.Phyto) + ggtitle("Graphe des variables")
 ```
@@ -3199,7 +3200,7 @@ Data_AMC_Bouillotte = subset(Data_AMC_test, Bouillotte=="yes")
 
 colonnes_Bouillotte <- which(seq_along(Data_AMC_Bouillotte) %in% c(7,58,105))
 
-mca.Bouillotte = MCA(Data_AMC_Bouillotte[colonnes_Bouillotte], graph=FALSE)
+mca.Bouillotte = MCA(Data_AMC_Bouillotte[colonnes_Bouillotte], quali.sup = 3, graph=FALSE)
 
 fviz_mca_var(mca.Bouillotte) + ggtitle("Graphe des variables")
 ```
