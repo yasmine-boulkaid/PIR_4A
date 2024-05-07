@@ -3614,8 +3614,80 @@ for (var in c("Duree_Tens")){
 
 
 
+# Score global
+```{r}
+a = 10 # efficacité TM
+b = 1 # modulation TM
+c = 2 # efficacité NM
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_plus_NM = 0)
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_moins_NM = 0)
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_plus_moins_TM = 0)
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(Score_global = 0)
 
 
+for (i in 1:nrow(Data_AMC_test)){
+  for (nm in list("D_Mob", "D_Nut", "D_Str", "D_Phyto", "D_Acup", "D_Hyp", "D_Bou", "D_CBD", "D_Tens")){
+    if(!is.na(Data_AMC_test[i,nm])) {
+      if(Data_AMC_test[i,nm] == '+'){
+        Data_AMC_test[i,"N_plus_NM"] <- Data_AMC_test[i,"N_plus_NM"] + 1
+      }
+      if(Data_AMC_test[i,nm] == '-'){
+        Data_AMC_test[i,"N_moins_NM"] <- Data_AMC_test[i,"N_moins_NM"] + 1
+      }
+    }
+  }
+  
+  if(!is.na(Data_AMC_test[i,"D_TM"])){
+    if(Data_AMC_test[i,"D_TM"] == '+'){
+      Data_AMC_test[i,"N_plus_moins_TM"] <- Data_AMC_test[i,"N_plus_moins_TM"] + 1
+      }
+    if(Data_AMC_test[i,"D_TM"] == '-'){
+      Data_AMC_test[i,"N_plus_moins_TM"] <- Data_AMC_test[i,"N_plus_moins_TM"] - 1
+      }
+  }
+  
+  if(Data_AMC_test[i,"TM"] == "NM"){
+    Data_AMC_test[i,"Score_global"] <- c * Data_AMC_test[i,"N_plus_NM"] - c * Data_AMC_test[i,"N_moins_NM"]
+  } else {
+    Data_AMC_test[i,"Score_global"] <- a * Data_AMC_test[i,"N_plus_moins_TM"] + b * Data_AMC_test[i,"N_plus_NM"] - b * Data_AMC_test[i,"N_moins_NM"]
+  }
+}
+
+```
+
+# Min et max du score global
+```{r}
+min(Data_AMC_test$Score_global)
+max(Data_AMC_test$Score_global)
+```
 
 
+# ACM avec le score global
+```{r}
+# Variables utilisees pour l'AMC avec les quanti sup Score_global
+colonnes_Score <- which(seq_along(Data_AMC_test) %in% c(7, 33, 37, 41, 45, 49, 53, 57, 61, 65, 122))
+
+#AMC avec quanti sup Score_global
+mca.Score = MCA(Data_AMC_test[colonnes_Score], quanti.sup = 11, graph=FALSE)
+fviz_mca_biplot(mca.Score)
+```
+
+
+```{r}
+#mca.Score$quanti.sup <- as.numeric(as.character(mca.Score$quanti.sup))
+
+fviz_mca_ind(mca.Score,
+             habillage = 11,
+             geom = "point",
+             gradient.cols = c("green","red")
+             )
+```
 
