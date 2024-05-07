@@ -3616,9 +3616,9 @@ for (var in c("Duree_Tens")){
 
 # Score global
 ```{r}
-a = 10 # efficacité TM
-b = 1 # modulation TM
-c = 2 # efficacité NM
+a = 10.0 # efficacité TM 10
+b = 1.0 # modulation TM 1
+c = 2.0 # efficacité NM 2
 
 Data_AMC_test <- Data_AMC_test %>%
   mutate(N_plus_NM = 0)
@@ -3677,7 +3677,29 @@ colonnes_Score <- which(seq_along(Data_AMC_test) %in% c(7, 33, 37, 41, 45, 49, 5
 
 #AMC avec quanti sup Score_global
 mca.Score = MCA(Data_AMC_test[colonnes_Score], quanti.sup = 11, graph=FALSE)
-fviz_mca_biplot(mca.Score)
+fviz_mca_var(mca.Score)
+```
+
+Séparation : Les "yes" sont corrélées + avec dim 1 et les "no" -
+Les TM (TH + CM) sont corrélés + avec dim 2 et les TNM -
+
+```{r}
+# Créer une palette de couleurs allant du bleu au rouge
+palette_bleu_rouge <- colorRampPalette(c("blue", "red"))
+
+# Générer un vecteur de couleurs avec la palette créée
+vecteur_couleurs <- palette_bleu_rouge(25) # 10 étant le nombre de couleurs dans la palette
+
+# Afficher les couleurs générées
+print(vecteur_couleurs)
+
+```
+
+
+```{r}
+# Créer le graphique avec fviz_mca_ind en utilisant une palette discrète
+fviz_mca_ind(mca.Score, habillage = "Score_global", palette = palette_bleu_rouge(23), discrete = TRUE)
+
 ```
 
 
@@ -3686,8 +3708,8 @@ fviz_mca_biplot(mca.Score)
 
 fviz_mca_ind(mca.Score,
              habillage = 11,
-             geom = "point",
-             gradient.cols = c("green","red")
+             #geom = "point",
+             #gradient.cols = c("green","red")
              )
 ```
 
