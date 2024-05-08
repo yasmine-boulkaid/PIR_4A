@@ -1503,7 +1503,10 @@ print(nrow(data3))
 
 
 # Analyse Exploratoire
+
+
 ## Âge
+
 ### Pyramide des âges de la bdd
 ```{r}
 ### Age ###
@@ -1546,8 +1549,6 @@ data_pop$Ensemble <- as.numeric(data_pop$Ensemble)
 df_age_counts_bis <- data.frame(age = data_pop$Age_revolu,
                              count = data_pop$Nb_femmes)
 
-head(df_age_counts_bis_filtre)
-
 ggplot(df_age_counts_bis, aes(x = age, y = count)) +
   geom_bar(stat = "identity", fill = "skyblue") +
   labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges des femmes de la population française en 2024") +
@@ -1574,67 +1575,78 @@ plot2 <- ggplot(df_age_counts_bis_filtre, aes(x = age, y = count)) +
 grid.arrange(plot1, plot2, nrow = 1)
 ```
 
-### Tentative d'afficher les pyramides une sur l'autre
+### Regroupement tranches d'age
 ```{r}
-# afficher nos âges par dessus la pyramide des âges (pas réussi)
+### Création des tranches d'age ###
+bornes <- c(0, 25, 30, 35, 40, Inf)
+labels <- c(" - de 25 ans", "26-30 ans", "31-35 ans", "36-40 ans", "+ de 40 ans")
+df_age_counts$Tranches_age <- cut(df_age_counts$age, breaks = bornes, labels = labels, right = FALSE)
+df_age_counts_bis_filtre$Tranches_age <- cut(df_age_counts_bis_filtre$age, breaks = bornes, labels = labels, right = FALSE)
 
-# ggplot(df_age_counts, aes(x = age, y = count)) +
-# ggplot(df_age_counts_bis, aes(x = age, y = count))
+# Histogramme pour df_age_counts
+ggplot(df_age_counts, aes(x = Tranches_age, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Distribution des âges (Sondage)", x = "Tranches d'âge", y = "Nombre d'occurrences")
 
-# ggplot(df_age_counts, aes(x = age, y = count)) +
-#   geom_bar(stat = "identity", fill = "skyblue") +
-#  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de # données") +
-#  theme_minimal() +
-#  geom_bar() +
-#  geom_line(data = df_age_counts_bis, color = "red")
+# Histogramme pour df_age_counts_bis_filtre
+ggplot(df_age_counts_bis_filtre, aes(x = Tranches_age, y = count)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  labs(title = "Distribution des âges (Population française)", x = "Tranches d'âge", y = "Nombre d'occurrences")
+
+
 ```
 
-### Regroupement en tranches d'âges
+### Regroupement en tranches d'âges bis
 ```{r}
-tranches_age <- cut(data$Age, breaks = 5)
-tranches_age_pyramide = cut(df_age_counts_bis_filtre$count, breaks = 5)
+#tranches_age <- cut(data$Age, breaks = 5)
+#tranches_age_pyramide = cut(df_age_counts_bis_filtre$count, breaks = 5)
 
-plot(tranches_age)
-plot(tranches_age_pyramide)
+#plot(tranches_age)
+#plot(tranches_age_pyramide)
 
-plot1 <- ggplot(tranches_age, aes(x = age, y = count)) +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
-  theme_minimal()
+#plot1 <- ggplot(tranches_age, aes(x = age, y = count)) +
+#  geom_bar(stat = "identity", fill = "skyblue") +
+#  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
+#  theme_minimal()
 
-plot2 <- ggplot(tranches_age_pyramide, aes(x = age, y = count)) +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges des femmes de la population française en 2024 (âges 18-53)") +
-  theme_minimal()
+#plot2 <- ggplot(tranches_age_pyramide, aes(x = age, y = count)) +
+#  geom_bar(stat = "identity", fill = "skyblue") +
+#  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges des femmes de la population française en 2024 #(âges 18-53)") +
+#  theme_minimal()
 
-grid.arrange(plot1, plot2, nrow = 1)
+#grid.arrange(plot1, plot2, nrow = 1)
 
-length(df_age_counts_bis_filtre$age)
+#length(df_age_counts_bis_filtre$age)
 ```
 
-### Test khi2 d'adéquation des âges
+### Test khi2 d'adéquation des âges et des tranches d'âge
 ```{r}
 # Effectuer un test du khi-deux pour comparer les distributions d'âge
 
-chisq.test(df_age_counts$age, df_age_counts_bis$age[19:54])
+print("Avec les ages bruts :")
+
+chisq.test(df_age_counts$age, df_age_counts_bis$age[17:53])
+
+print("----------------")
+print("Avec les tranches d'age :")
+
+chisq.test(df_age_counts$Tranches_age, df_age_counts_bis_filtre$Tranches_age)
+
 
 ####### "Chi-squared approximation may be incorrect" ????
 ```
+Premier test :
 p-value = 0.2376 > 0.05 (alpha=5%)
 
 Il ne semble donc pas y avoir de différence significative entre les distributions d'âge des deux groupes (ie les femmes ayant répondu au sondage et l'ensemble des Françaises recensées en 2024).
 
-RESTE À FAIRE : REFAIRE LE TEST EN FAISANT DES REGROUPEMENTS DES ÂGES
+Deuxième test :
+p-value = 2,2.10e-16 < 0.05
 
-### Test khi2 d'adéquation des tranches d'âges 
-```{r}
-# Effectuer un test du khi-deux pour comparer les distributions d'âge
+=> Ages sont representatifs
 
-chisq.test(tranches_age, tranches_age_pyramide)
-length(df_age_counts$age)
-length(df_age_counts_bis$age[19:54])
-?chisq.test
-```
+
+
 
 
 ## Evolution de la douleur en fonction de la durée de prise du traitement (Mosaic plots)
@@ -1838,9 +1850,12 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_douleur_T, main = "Mosaïque Douleur x Duree TENS", cex.axis = 0.8, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=4, xlab="")
 
 ```
+
 Pour TH, CM, Mobilite?, Phyto, Tens : prendre le traitement + de 6 mois semble augmenter l'efficacité du traitement sur la douleur.
 Pour CBD : il semble que plus le traitement est pris, + il y a réduction de la douleur
 Pour les autres : pas de déduction par rapport à la durée de prise du traitement
+
+
 
 ## Evolution de la maladie en fonction de la durée de prise du traitement (Mosaic plots)
 
@@ -2009,7 +2024,10 @@ par(mar = margins)
 mosaicplot(table_contingence_duree_evol_Tens[,1:5], main = "Mosaïque Evolution x Duree Tens", cex.axis = 0.8, col = terrain.colors(length(unique(data3$Evolution_Tens_NM))), las = 4, xlab="", ylab="")
 
 ```
+
 Pour TH : semble avoir une inluence positive sur la résorption des lésions au-delà de 6 mois
+
+
 
 ## Evolution de la douleur en fonction de la consommation de tabac (Mosaic plots)
 ```{r}
@@ -2169,6 +2187,8 @@ par(mar = margins)
 mosaicplot(table_contingence_tabac_douleur_Tens, main = "Mosaïque Douleur x Tabac Tens", cex.axis = 0.7, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=1, xlab="")
 
 ```
+
+
 
 ## Evolution de la douleur en fonction de la consommation d'alcool (Mosaic plots)
 ```{r}
@@ -2333,10 +2353,13 @@ par(mar = margins)
 mosaicplot(table_contingence_alcool_douleur_Tens, main = "Mosaïque Douleur x Alcool Tens", cex.axis = 0.7, col = terrain.colors(length(unique(dataT$Douleur_Tens_NM))), las=1, xlab="", ylab="")
 
 ```
-Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
 
-# Evolution de la douleur en fonction de la prise du traitement
-## Mosaic plots 
+=> Ni alcool, ni tabac ne semblent avoir d'influence significative sur l'efficacité du TH.
+(Seulement pour CM la conso d'alcool ou de tabac semble bénéfique ???)
+
+
+
+## Evolution de la douleur en fonction de la prise du traitement (Mosaic-plots)
 ```{r}
 ##### Evolution de la douleur sous TH en fonction de la prise #####
 
@@ -2497,9 +2520,11 @@ mosaicplot(table_contingence_prise_douleur_Tens, main = "Mosaïque Douleur x Pri
 ```
 Pour TH : pas ultra pertinent car trop de prises continues en proportion pour être significatif.
 Pour CM : type de prise ne semble pas trop impacter efficacité sur la douleur
+Pour les TNM : same as CM
 
-# Apparition des effets secondaires en fonction de la durée du traitement
-## Mosaic plots 
+
+
+## Apparition des effets secondaires en fonction de la durée du traitement (Mosaic-plots)
 ```{r}
 #Ont subi des effets secondaires en fonction duree traitement (TH)
 
@@ -2521,10 +2546,10 @@ mosaicplot(table_contingence_duree_ES_CM, main = "Graphique de Mosaïque", cex.a
 ```
 La durée de prise du traitement, que ce soit TH ou CM, ne semble pas influencer l'apparition des effets secondaires.
 
-# Douleur TH / Douleur CM
-## Pie charts
+
+
+## Douleur TH / Douleur CM (Pie charts)
 ```{r}
-#install.packages("RColorBrewer")
 library(RColorBrewer)
 
 options(repr.plot.width = 16, repr.plot.height = 10)
@@ -2562,8 +2587,9 @@ pie_table_CM <- table(data2$Douleur_CM)
 text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
 ```
 
-# Évolution TH / Évolution CM
-## Pie charts
+
+
+## Évolution TH / Évolution CM (Pie charts)
 ```{r}
 options(repr.plot.width = 16, repr.plot.height = 10)
 par(mfrow = c(1, 2))
@@ -2601,10 +2627,13 @@ text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
 ```
 
 
+
+## Rôle des TNM pris en combo avec TH sur la douleur
+
+### Pie charts : indique l'évolution de la douleur grâce au TNM pris en combo avec TH
 ```{r}
 ##### Combo traitements non médicamenteux avec TH #####
 
-#install.packages("RColorBrewer")
 library(RColorBrewer)
 
 options(repr.plot.width = 20, repr.plot.height = 12)
@@ -2769,6 +2798,9 @@ text(0, 0, paste("Total:", sum(data1_TTH_table)), cex = 0.8, pos = 2)
 ```
 
 
+### Classement des combos par efficacité en pourcentage (barplots)
+Trie les TNM de celui ayant le plus permis de réduire davantage la douleur en prise conjointe avec TH à celui y contribuant le moins
+
 ```{r}
 options(repr.plot.width = 15, repr.plot.height = 8)
 
@@ -2793,9 +2825,6 @@ resultats1 <- data.frame(Variable = noms_variables, Pourcentage = pourcentages, 
 # Trier le dataframe par ordre décroissant des pourcentages
 resultats1 <- resultats1[order(resultats1$Pourcentage, decreasing = TRUE), ]
 
-# Afficher les résultats
-#print(resultats)
-
 # Afficher les pourcentages avec les noms des variables
 bp <- barplot(resultats1$Pourcentage, names.arg = resultats1$Variable,
         xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
@@ -2808,9 +2837,22 @@ bp <- barplot(resultats1$Pourcentage, names.arg = resultats1$Variable,
 
 # Ajouter les totaux sur chaque bâton
 text(x = bp, y = 1, labels = resultats1$Total, pos = 3)
+
+# Ajouter une barre horizontale en pointillés rouge à hauteur de 50
+abline(h = 50, col = "red", lty = 2)
+
+# Ajouter une barre horizontale en pointillés violet à hauteur de 75
+abline(h = 75, col = "purple", lty = 2)
+
+# Ajouter une barre horizontale en pointillés verte à hauteur de 25
+abline(h = 25, col = "green", lty = 2)
 ```
 
 
+
+## Rôle des TNM pris en combo avec CM sur la douleur
+
+### Pie charts : indique l'évolution de la douleur grâce au TNM pris en combo avec CM
 ```{r}
 # Combo traitements non médicamenteux avec CM
 
@@ -2864,7 +2906,6 @@ text(0, 0, paste("Total:", sum(data2_SCM_table)), cex = 0.8, pos = 2)
 
 ```
 
-
 ```{r}
 options(repr.plot.width = 20, repr.plot.height = 15)
 par(mfrow = c(1, 2))
@@ -2900,7 +2941,6 @@ legend("bottom", legend = names(data2_ACM_table), fill = colors_pastels_data_ACM
 text(0, 0, paste("Total:", sum(data2_ACM_table)), cex = 0.8, pos = 2)
 
 ```
-
 
 ```{r}
 options(repr.plot.width = 20, repr.plot.height = 15)
@@ -2954,6 +2994,8 @@ text(0, 0, paste("Total:", sum(data2_TCM_table)), cex = 0.8, pos = 2)
 ```
 
 
+### Classement des combos par efficacité en pourcentage (barplots)
+Trie les TNM de celui ayant le plus permis de réduire davantage la douleur en prise conjointe avec CM à celui y contribuant le moins
 ```{r}
 options(repr.plot.width = 15, repr.plot.height = 8)
 
@@ -2994,15 +3036,24 @@ bp <- barplot(resultats2$Pourcentage, names.arg = resultats2$Variable,
 # Ajouter les totaux sur chaque bâton
 text(x = bp, y = 1, labels = resultats2$Total, pos = 3)
 
+# Ajouter une barre horizontale en pointillés rouge à hauteur de 50
+abline(h = 50, col = "red", lty = 2)
+
+# Ajouter une barre horizontale en pointillés violet à hauteur de 75
+abline(h = 75, col = "purple", lty = 2)
+
+# Ajouter une barre horizontale en pointillés verte à hauteur de 25
+abline(h = 25, col = "green", lty = 2)
+
 ```
 
 Attention niveau interpretation : acupunture à 100% car peu de cas relevés
 
-```{r}
-
-```
 
 
+## Efficacité des TNM pris seuls sur la douleur
+
+### Pie charts : indique l'évolution de la douleur en prenant le TNM 
 ```{r}
 # Traitements non médicamenteux seuls : Pie chart
 
@@ -3061,6 +3112,7 @@ legend("bottom", legend = names(data3_SNM_table), fill = colors_pastels_data_SNM
 
 text(0, 0, paste("Total:", sum(data3_SNM_table)), cex = 0.8, pos = 2)
 ```
+
 ```{r}
 options(repr.plot.width = 20, repr.plot.height = 15)
 par(mfrow = c(1, 3))
@@ -3111,6 +3163,7 @@ legend("bottom", legend = names(data3_HNM_table), fill = colors_pastels_data_HNM
 text(0, 0, paste("Total:", sum(data3_HNM_table)), cex = 0.8, pos = 2)
 
 ```
+
 ```{r}
 options(repr.plot.width = 20, repr.plot.height = 15)
 par(mfrow = c(1, 3))
@@ -3161,6 +3214,8 @@ legend("bottom", legend = names(data3_TNM_table), fill = colors_pastels_data_TNM
 text(0, 0, paste("Total:", sum(data3_TNM_table)), cex = 0.8, pos = 2)
 ```
 
+
+### Classement des combos par efficacité en pourcentage (barplots)
 ```{r}
 options(repr.plot.width = 15, repr.plot.height = 8)
 
@@ -3201,15 +3256,23 @@ bp <- barplot(resultats3$Pourcentage, names.arg = resultats3$Variable,
 # Ajouter les totaux sur chaque bâton
 text(x = bp, y = 1, labels = resultats3$Total, pos = 3)
 
+# Ajouter une barre horizontale en pointillés rouge à hauteur de 50
+abline(h = 50, col = "red", lty = 2)
+
+# Ajouter une barre horizontale en pointillés violet à hauteur de 75
+abline(h = 75, col = "purple", lty = 2)
+
+# Ajouter une barre horizontale en pointillés verte à hauteur de 25
+abline(h = 25, col = "green", lty = 2)
+
 ```
 
 
 
-#### Tests de Chi_deux ####
 
+## Tests de Chi_deux
 
-
-## Test de Chi_deux Duree x Douleur
+### Test de Chi_deux Duree x Douleur
 
 ```{r}
 ######### Duree x Douleur TH ##########
@@ -3442,17 +3505,9 @@ Globalement permet de confirmer que TH, CM, Mobilite, Phyto et Tens + efficaces 
 En revanche, aucune confirmation pour le CBD.
 
 
-## Test de Chi_deux Tabac x Douleur
+### Test de Chi_deux Tabac x Douleur
 
 ```{r}
-test = chisq.test(table_contingence_tabac_douleur_TH)
-test$expected
-```
-
-
-```{r}
-
-
 # TH
 
 print(table_contingence_tabac_douleur_TH)
@@ -3530,7 +3585,7 @@ print(chisq.test(table_contingence_tabac_douleur_Tens))
 Pour tous : test de Khi-2 confirment que la consommation de tabac et la douleur ressentie au cours du traitement sont indépendantes.
 
 
-## Test de Chi_deux Alcool x Douleur
+### Test de Chi_deux Alcool x Douleur
 
 ```{r}
 # TH
@@ -3612,7 +3667,7 @@ print(chisq.test(table_contingence_alcool_douleur_Tens))
 Pour tous : test de Khi-2 confirment que la consommation d'alcool et la douleur ressentie au cours du traitement sont indépendantes.
 
 
-## Test Chi_deux Apparition effets secondaires en fonction duree du traitement
+### Test Chi_deux Apparition effets secondaires en fonction duree du traitement
 
 ```{r}
 print(table_contingence_duree_ES_TH)
@@ -3626,7 +3681,7 @@ print(chisq.test(table_contingence_duree_ES_CM))
 => Comme prevu durée du traitement n'influence pas l'apparition des effets secondaires
 
 
-## Test de Chi_deux Prise x Douleur
+### Test de Chi_deux Prise x Douleur
 
 ```{r}
 print(table_contingence_prise_douleur_TH)
@@ -3668,7 +3723,7 @@ print(chisq.test(table_contingence_prise_douleur_Tens))
 Trop peu diversité des prises
 
 
-##Test de Chi_deux Age x Douleur
+### Test de Chi_deux Age x Douleur
 
 ```{r}
 
@@ -3790,10 +3845,7 @@ print(chisq.test(table_contingence_age_douleur_Tens))
 
 ```
 
-=> Âge indépendant de la perception de la douleur
-
-
-##Test de Chi_deux Age x ES
+### Test de Chi_deux Age x ES
 
 ```{r}
 ########## Age x Effets secondaires TH ##########
@@ -3841,7 +3893,6 @@ data_facteurs <- lapply(data, function(x) {
 data_facteurs <- as.data.frame(data_facteurs, stringsAsFactors = TRUE)
 data_facteurs_subset <- data_facteurs[, -c(10, (ncol(data_facteurs)-2):ncol(data_facteurs))] #Colonnes à exclure
 
-#str(data_facteurs_subset)
 
 res.mca <- MCA(data_facteurs_subset, graph = FALSE)
 print(res.mca)
@@ -3855,11 +3906,6 @@ fviz_mca_biplot(res.mca,select.var = list(cos2=0.5, contrib =10), repel = TRUE, 
 fviz_mca_var(res.mca, choice="mca.cor")
 
 help(fviz_mca_biplot)
-```
-
-
-```{r}
-str(data)
 ```
 
 
