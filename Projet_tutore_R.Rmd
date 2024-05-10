@@ -1596,29 +1596,6 @@ ggplot(df_age_counts_bis_filtre, aes(x = Tranches_age, y = count)) +
 
 ```
 
-### Regroupement en tranches d'âges bis
-```{r}
-#tranches_age <- cut(data$Age, breaks = 5)
-#tranches_age_pyramide = cut(df_age_counts_bis_filtre$count, breaks = 5)
-
-#plot(tranches_age)
-#plot(tranches_age_pyramide)
-
-#plot1 <- ggplot(tranches_age, aes(x = age, y = count)) +
-#  geom_bar(stat = "identity", fill = "skyblue") +
-#  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges dans la base de données") +
-#  theme_minimal()
-
-#plot2 <- ggplot(tranches_age_pyramide, aes(x = age, y = count)) +
-#  geom_bar(stat = "identity", fill = "skyblue") +
-#  labs(x = "Âge", y = "Nombre d'occurrences", title = "Pyramide des âges des femmes de la population française en 2024 #(âges 18-53)") +
-#  theme_minimal()
-
-#grid.arrange(plot1, plot2, nrow = 1)
-
-#length(df_age_counts_bis_filtre$age)
-```
-
 ### Test khi2 d'adéquation des âges et des tranches d'âge
 ```{r}
 # Effectuer un test du khi-deux pour comparer les distributions d'âge

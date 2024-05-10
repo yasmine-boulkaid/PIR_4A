@@ -3694,6 +3694,7 @@ vecteur_couleurs <- palette_bleu_rouge(25) # 10 étant le nombre de couleurs dan
 print(vecteur_couleurs)
 
 ```
+
 ```{r}
 # Créer une palette de couleurs allant du bleu au rouge
 palette_vert_rouge <- colorRampPalette(c("red", "green"))
@@ -3705,21 +3706,16 @@ vecteur_couleurs2 <- palette_vert_rouge(25) # 10 étant le nombre de couleurs da
 print(vecteur_couleurs2)
 ```
 
-
-
 ```{r}
 # Créer le graphique avec fviz_mca_ind en utilisant une palette discrète
 fviz_mca_ind(mca.Score, habillage = "Score_global", palette = palette_bleu_rouge(23), discrete = TRUE)
 
 ```
 
-
-
 ```{r}
 # Créer le graphique avec fviz_mca_ind en utilisant une palette discrète
 fviz_mca_ind(mca.Score, habillage = "Score_global", palette = palette_vert_rouge(23), discrete = TRUE)
 ```
-
 
 ```{r}
 #mca.Score$quanti.sup <- as.numeric(as.character(mca.Score$quanti.sup))
@@ -3730,6 +3726,7 @@ fviz_mca_ind(mca.Score,
              #gradient.cols = c("green","red")
              )
 ```
+
 
 # Nouvelle variable durée
 ```{r}
@@ -3763,20 +3760,25 @@ Data_AMC_test <- Data_AMC_test %>%
 Data_AMC_test <- Data_AMC_test %>%
   mutate(Duree_Tens_bis = "Pas pris")
 
+```
 
+```{r}
+str(Data_AMC_test[Duree_TM])
+```
+
+```{r}
 for (i in 1:nrow(Data_AMC_test)){
   for (duree in list("Duree_TM"," Duree_Mobilite", "Duree_Nutrition", "Duree_Stress", "Duree_Phyto", "Duree_Acup", "Duree_Hypnose", "Duree_Bouillotte", "Duree_CBD", "Duree_Tens")){
     if(!is.na(Data_AMC_test[i,duree])) {
-      if(Data_AMC_test[i,duree] = "Plus de 5 ans" | Data_AMC_test[i,duree] = "Entre 2 et 5 ans" | Data_AMC_test[i,duree] = "Entre 6 mois et 2 ans"){
+      if(Data_AMC_test[i,duree] == "Plus de 5 ans" | Data_AMC_test[i,duree] == "Entre 2 et 5 ans" | Data_AMC_test[i,duree] == "Entre 6 mois et 2 ans"){
         Data_AMC_test[i,paste(duree, "_bis", sep="")] = "Plus de 6 mois"
       }
-      if(Data_AMC_test[i,duree] = "Moins de 3 mois" | Data_AMC_test[i,duree] = "Entre 3 et 6 mois"){
+      if(Data_AMC_test[i,duree] == "Moins de 3 mois" | Data_AMC_test[i,duree] == "Entre 3 et 6 mois"){
         Data_AMC_test[i,paste(duree, "_bis", sep="")] = "Moins de 6 mois"
       }
     }
   }
 }
-
 ```
 
 
