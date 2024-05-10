@@ -40,7 +40,6 @@ head(data)
 
 ### On renomme les variables ###
 ```{r}
-
 ### Questions préliminaires ###
 names(data)[names(data) == "Étude.sur.les.traitements.de.l.endométriose"] <- "ID"
 names(data)[names(data) == "X"] <- "Age"
@@ -197,12 +196,22 @@ data$Diagnostic = as.integer(data$Diagnostic)
 data$Tabac <- factor(data$Tabac, levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), ordered = TRUE)
 data$Alcool <- factor(data$Alcool, levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), ordered = TRUE)
 
-TH <- ifelse(data$TH == "X", "y", "n")
-data$TH <- factor(TH, levels = c("y", "n"), labels = c("yes", "no"))
+# TH <- ifelse(data$TH == "X", "y", "n")
+# data$TH <- factor(TH, levels = c("y", "n"), labels = c("yes", "no"))
+# 
+# CM <- ifelse(data$CM == "X", "y", "n")
+# data$CM <- factor(CM, levels = c("y", "n"), labels = c("yes", "no"))
 
-CM <- ifelse(data$CM == "X", "y", "n")
-data$CM <- factor(CM, levels = c("y", "n"), labels = c("yes", "no"))
 
+YesNo <- function(data,liste){
+    for (col in liste){
+      Col <- ifelse(data$col == "X", "y", "n")
+      data$col <- factor(Col, levels = c("y", "n"), labels = c("yes", "no"))
+    }
+  return(data)
+}
+
+data <- YesNo(data, c("TH", "CM"))
 
 
 ### Questions générales TH ###
@@ -322,6 +331,11 @@ data$Tens_TH <- factor(Tens_TH, levels = c("y", "n"), labels = c("yes", "no"))
 Aucun_TH <- ifelse(data$Aucun_TH == "X", "y", "n")
 data$Aucun_TH <- factor(Aucun_TH, levels = c("y", "n"), labels = c("yes", "no"))
 
+```
+
+
+
+```{r}
 # Mobilité TH #
 Combien_Mobilite_TH <- ifelse(data$Combien_Mobilite_TH == "", "0", data$Combien_Mobilite_TH)
 data$Combien_Mobilite_TH <- factor(Combien_Mobilite_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = FALSE)
@@ -421,6 +435,11 @@ data$Douleur_Tens_TH <- factor(Douleur_Tens_TH, levels = c("Augmentation de la d
 Evolution_Tens_TH <- ifelse(data$Evolution_Tens_TH == "", "0", data$Evolution_Tens_TH)
 data$Evolution_Tens_TH <- factor(Evolution_Tens_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = FALSE)
 
+```
+
+
+
+```{r}
 Depuis_CM <- ifelse(data$Depuis_CM == "", "0", data$Depuis_CM)
 data$Depuis_CM <- factor(Depuis_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = FALSE)
 
@@ -2184,7 +2203,6 @@ for (var in c("Duree_Mobilite","Duree_Nutrition","Duree_Stress","Duree_Phyto","D
 
 
 ### ACM des effets secondaires ###
-
 ```{r}
 # Variables utilisees pour l'AMC avec les quali sup ES
 colonnes_ES <- which(seq_along(Data_AMC_TM) %in% c(7, 12, 15, 18, 21, 24, 27, 30, 31, 32))
@@ -3291,7 +3309,6 @@ for (var in c("D_Bou")){
 ```
 
 ## Graphe des individus : habillage = durée du traitement
- 
 ```{r}
 # Extraire les coordonnées des variables
 ind_Bouillotte_duree <- rownames(mca.Bouillotte$ind$coord)
@@ -3474,7 +3491,6 @@ for (var in c("Duree_CBD")){
 
 
 ### ACM pour le Tens ###
-
 ```{r}
 ## Création de l'ACM
 Data_AMC_Tens = subset(Data_AMC_test, Tens=="yes")
@@ -3676,8 +3692,8 @@ max(Data_AMC_test$Score_global)
 colonnes_Score <- which(seq_along(Data_AMC_test) %in% c(7, 33, 37, 41, 45, 49, 53, 57, 61, 65, 122))
 
 #AMC avec quanti sup Score_global
-mca.Score = MCA(Data_AMC_test[colonnes_Score], quali.sup = 1, quanti.sup = 11, graph=FALSE)
-fviz_mca_var(mca.Score, col.var = rep(c("yes","no"),9))
+mca.Score = MCA(Data_AMC_test[colonnes_Score], quanti.sup = 11, graph=FALSE)
+fviz_mca_var(mca.Score) # , col.var = rep(c("yes","no"),9)
 ```
 
 Séparation : Les "yes" sont corrélées + avec dim 1 et les "no" -
@@ -3718,14 +3734,10 @@ fviz_mca_ind(mca.Score, habillage = "Score_global", palette = palette_vert_rouge
 ```
 
 ```{r}
-#mca.Score$quanti.sup <- as.numeric(as.character(mca.Score$quanti.sup))
-
-fviz_mca_ind(mca.Score,
-             habillage = 11,
-             #geom = "point",
-             #gradient.cols = c("green","red")
-             )
+# Créer le graphique avec fviz_mca_ind en utilisant une palette discrète
+fviz_mca_ind(mca.Score, col.ind = "cos2")
 ```
+
 
 
 # Nouvelle variable durée
@@ -3763,22 +3775,33 @@ Data_AMC_test <- Data_AMC_test %>%
 ```
 
 ```{r}
-str(Data_AMC_test[Duree_TM])
-```
-
-```{r}
 for (i in 1:nrow(Data_AMC_test)){
-  for (duree in list("Duree_TM"," Duree_Mobilite", "Duree_Nutrition", "Duree_Stress", "Duree_Phyto", "Duree_Acup", "Duree_Hypnose", "Duree_Bouillotte", "Duree_CBD", "Duree_Tens")){
-    if(!is.na(Data_AMC_test[i,duree])) {
-      if(Data_AMC_test[i,duree] == "Plus de 5 ans" | Data_AMC_test[i,duree] == "Entre 2 et 5 ans" | Data_AMC_test[i,duree] == "Entre 6 mois et 2 ans"){
-        Data_AMC_test[i,paste(duree, "_bis", sep="")] = "Plus de 6 mois"
-      }
-      if(Data_AMC_test[i,duree] == "Moins de 3 mois" | Data_AMC_test[i,duree] == "Entre 3 et 6 mois"){
-        Data_AMC_test[i,paste(duree, "_bis", sep="")] = "Moins de 6 mois"
-      }
+  for (duree in list("Duree_TM", "Duree_Mobilite", "Duree_Nutrition", "Duree_Stress", "Duree_Phyto", "Duree_Acup", "Duree_Hypnose", "Duree_Bouillotte", "Duree_CBD", "Duree_Tens")){
+    if(is.na(Data_AMC_test[i,duree])){
+      Data_AMC_test[i,paste(duree, "_bis", sep="")] = "Pas pris"
+    }
+    else if(Data_AMC_test[i,duree] == "Plus de 5 ans" | Data_AMC_test[i,duree] == "Entre 2 et 5 ans" | Data_AMC_test[i,duree] == "Entre 6 mois et 2 ans"){
+      Data_AMC_test[i,paste(duree, "_bis", sep="")] = "Plus de 6 mois"
+    }
+    else if(Data_AMC_test[i,duree] == "Moins de 3 mois" | Data_AMC_test[i,duree] == "Entre 3 et 6 mois"){
+      Data_AMC_test[i,paste(duree, "_bis", sep="")] = "Moins de 6 mois"
     }
   }
 }
+```
+
+```{r}
+# Variables utilisees pour l'AMC avec les quanti sup Score_global
+colonnes_newD <- which(seq_along(Data_AMC_test) %in% c(7, 122, 124, 125, 126, 127, 128, 129, 130, 131, 132))
+
+#AMC avec quanti sup Score_global
+mca.newD = MCA(Data_AMC_test[colonnes_newD], quanti.sup = 2, graph=FALSE)
+fviz_mca_biplot(mca.newD)
+fviz_mca_var(mca.newD, col.var="cos2")
+```
+
+```{r}
+fviz_mca_ind(mca.newD, habillage = "Score_global", palette = palette_vert_rouge(23), discrete = TRUE) # , select.ind = list(contrib=100)
 ```
 
 
