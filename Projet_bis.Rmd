@@ -8,7 +8,7 @@ output:
     df_print: paged
 ---
 
-#Librairies
+# Librairies
 ```{r, echo=FALSE}
 # Définir un miroir CRAN
 options(repos = "https://cloud.r-project.org")
@@ -30,7 +30,7 @@ library(ggrepel)
 ```
 
 
-### Mise en forme des donnees ###
+# Mise en forme des donnees
 ```{r}
 data <- read.csv("etude_sur_les_traitements_de_lendometriose_bis.csv")
 n <- length(data)
@@ -38,7 +38,7 @@ n <- length(data)
 head(data)
 ```
 
-### On renomme les variables ###
+## On renomme les variables
 ```{r}
 ### Questions préliminaires ###
 names(data)[names(data) == "Étude.sur.les.traitements.de.l.endométriose"] <- "ID"
@@ -183,7 +183,7 @@ head(data)
 ```
 
 
-### Changement de la nature des variables ###
+## Changement de la nature des variables
 ```{r}
 ### Supression des deux premières lignes ###
 data <- data[-c(1:2), ]
@@ -821,7 +821,7 @@ data$Evolution_Tens_NM <- factor(Evolution_Tens_NM, levels = c("Apparition de no
 ```
 
 
-### Ajout des ID ####
+## Ajout des ID ####
 ```{r}
 library(dplyr)
 
@@ -836,7 +836,7 @@ head(data)
 ```
 
 
-### Ajour d'un compteur ###
+## Ajour d'un compteur ###
 ```{r}
 data <- data %>%
   mutate(Compt = 0) %>%
@@ -858,7 +858,7 @@ head(data)
 ```
 
 
-### Creation de 3 dataframes pour les trois types d'individus : TH, CM, NM ####
+## Creation de 3 dataframes pour les trois types d'individus : TH, CM, NM ####
 ```{r}
 Data1 <- data[data$TH == 'yes', ]
 Data2 <- data[data$CM == 'yes', ]
@@ -866,7 +866,7 @@ Data3 <- data[data$Aucun_NM == 'no', ]
 ```
 
 
-### Creation des vecteurs de Duree de prise du traitement ####
+## Creation des vecteurs de Duree de prise du traitement ####
 ```{r}
 Data3$Duree_M <- factor(ifelse(is.na(Data3$Depuis_Mobilite_NM), as.character(Data3$Combien_Mobilite_NM), as.character(Data3$Depuis_Mobilite_NM)))
 
@@ -895,7 +895,7 @@ Data3$Duree_T <- factor(ifelse(is.na(Data3$Depuis_Tens_NM), as.character(Data3$C
 ```
 
 
-### Creation de 3 dataframes ayant tous les memes noms de variables : reaffectation des variables dans les bonnes colonnes pour l'ACM ###
+## Creation de 3 dataframes ayant tous les memes noms de variables : reaffectation des variables dans les bonnes colonnes pour l'ACM ###
 ```{r}
 data1 <- data.frame(
   ID = Data1$ID,
@@ -1122,14 +1122,14 @@ data3 <- data.frame(
 ```
 
 
-### Creation du data pour l'ACM ###
+## Creation du data pour l'ACM ###
 ```{r}
 Data_AMC_test <- bind_rows(data1,data2,data3)
 
 ```
 
 
-### Creation des variables combinatoires entre traitements medicamenteux et non medicamenteux ###
+## Creation des variables combinatoires entre traitements medicamenteux et non medicamenteux ###
 ```{r}
 # Mobilite
 
@@ -1220,7 +1220,7 @@ Data_AMC_test$CM_seul <- ifelse(
 ```
 
 
-### Creation des echelles de douleur par traitements ###
+## Creation des echelles de douleur par traitements ###
 ```{r}
 # Douleur Mobilité
 Data_AMC_test$D_Mob <- ifelse(Data_AMC_test$Douleur_Mobilite == "Augmentation de la douleur","-",
@@ -1303,7 +1303,7 @@ print("sep")
 levels(Data_AMC_test$Evolution_TM)
 ```
 
-### Creation des echelles d'evolution par traitements ###
+## Creation des echelles d'evolution par traitements ###
 
 ```{r}
 Data_AMC_test <- Data_AMC_test %>%
@@ -1386,7 +1386,7 @@ Data_AMC_test <- Data_AMC_test %>%
 
 
 
-### ACM de tous les combos avec TM ###
+# ACM de tous les combos avec TM
 ```{r}
 Data_AMC_TM = subset(Data_AMC_test, TM != "NM")
 Data_AMC_TH = subset(Data_AMC_test, TM == "TH")
@@ -1653,7 +1653,7 @@ for (var in c("Duree_TM")){
 
 
 
-### ACM de tous les combos et habillages ###
+# ACM de tous les combos et habillages
 ```{r}
 # Variables utilisees pour l'AMC avec les quali sup douleur
 colonnes_combos_D <- which(seq_along(Data_AMC_test) %in% c(7,70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108)) #97, 98,
@@ -1901,7 +1901,7 @@ On ne peut pas exploiter le graphe car la plupart des individus ne connaissent p
 
 
 
-### ACM sur les TH uniquement
+# ACM sur les TH uniquement
 
 ## Graphe des variables pour les TH en fonction de combos pris / pas pris
 ```{r}
@@ -1986,7 +1986,7 @@ for (var in c("D_Mob","D_Nut","D_Str","D_Phyto","D_Acup","D_Hyp","D_Bou","D_CBD"
 
 
 
-### ACM sur les CM uniquement
+# ACM sur les CM uniquement
 
 ## Graphe des variables pour les CM en fonction de combos pris / pas pris
 ```{r}
@@ -2072,7 +2072,7 @@ for (var in c("D_Mob","D_Nut","D_Str","D_Phyto","D_Acup","D_Hyp","D_Bou","D_CBD"
 
 
 
-### ACM sur les NM uniquement 
+# ACM sur les NM uniquement 
 
 ## Graphe des variables pour TNM pris/ pas pris
 ```{r}
@@ -2202,7 +2202,7 @@ for (var in c("Duree_Mobilite","Duree_Nutrition","Duree_Stress","Duree_Phyto","D
 
 
 
-### ACM des effets secondaires ###
+# ACM des effets secondaires ###
 ```{r}
 # Variables utilisees pour l'AMC avec les quali sup ES
 colonnes_ES <- which(seq_along(Data_AMC_TM) %in% c(7, 12, 15, 18, 21, 24, 27, 30, 31, 32))
@@ -2323,7 +2323,7 @@ for (var in c("Apparition_Tete","Apparition_Fatigue","Apparition_Nausee","Appari
 
 
 
-### ACM pour la Mobilite ###
+# ACM pour la Mobilite ###
 
 ## Création de l'ACM
 ```{r}
@@ -2586,7 +2586,7 @@ for (var in c("Age")){
 
 
 
-### ACM pour la Nutrition ###
+# ACM pour la Nutrition ###
 
 ## Création de l'ACM
 ```{r}
@@ -2854,8 +2854,7 @@ for (var in c("Age")){
 
 
 
-
-### ACM pour Phyto ###
+# ACM pour Phyto ###
 
 ```{r}
 ## Création de l'ACM
@@ -2926,7 +2925,7 @@ for (var in c("TM")){
 
 
 
-### ACM pour l'Acup ###
+# ACM pour l'Acup ###
 
 ```{r}
 ## Création de l'ACM
@@ -3069,7 +3068,7 @@ for (var in c("Duree_Acup")){
 
 
 
-### ACM pour l'Hypnose ###
+# ACM pour l'Hypnose ###
 
 ```{r}
 ## Création de l'ACM
@@ -3210,7 +3209,7 @@ for (var in c("Duree_Hyp")){
 
 
 
-### ACM pour la Bouillotte ###
+# ACM pour la Bouillotte ###
 
 ```{r}
 ## Création de l'ACM
@@ -3350,7 +3349,7 @@ for (var in c("Duree_Bouillotte")){
 
 
 
-### ACM pour le CBD ###
+# ACM pour le CBD ###
 
 ## Création de l'ACM
 ```{r}
@@ -3490,7 +3489,7 @@ for (var in c("Duree_CBD")){
 
 
 
-### ACM pour le Tens ###
+# ACM pour le Tens ###
 ```{r}
 ## Création de l'ACM
 Data_AMC_Tens = subset(Data_AMC_test, Tens=="yes")
@@ -3627,6 +3626,9 @@ for (var in c("Duree_Tens")){
 
 
 ```
+
+
+
 
 
 
