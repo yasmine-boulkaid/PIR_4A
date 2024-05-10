@@ -2336,7 +2336,7 @@ mosaicplot(table_contingence_alcool_douleur_Tens, main = "Mosaïque Douleur x Al
 
 
 
-## Evolution de la douleur en fonction de la prise du traitement (Mosaic-plots)
+## Evolution de la douleur en fonction de la fréquence de prise du traitement (Mosaic-plots)
 ```{r}
 ##### Evolution de la douleur sous TH en fonction de la prise #####
 
