@@ -1480,7 +1480,7 @@ margins[3] <- 2  # Augmente la marge supérieure (la troisième valeur dans marg
 
 par(mar = margins)
 
-mosaicplot(table_contingence_duree_douleur_P, main = "Mosaïque Douleur x Duree Phyto", cex.axis = 0.8, color = couleurs, las=4, xlab="")
+mosaicplot(table_contingence_duree_douleur_P, main = "Mosaïc Pain x Duration for Herbal medicine", cex.axis = 0.8, color = couleurs, las=4, xlab="")
 
 
 ##### Evolution de la douleur en fonction de la duree de prise du traitement Acupuncture #####
@@ -2572,7 +2572,7 @@ options(repr.plot.width = 15, repr.plot.height = 8)
 # Créer un vecteur contenant les noms des variables Douleur_qqch_TH
 noms_variables <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Hypnose", "Bouillotte", "CBD", "Tens")
 
-noms_variables_en <- c("Mobility", "Nutrition", "Stress", "Phyto", "Acup", "Hypnosis", "Hot Water\nbottle", "CBD", "TENS")
+noms_variables_en <- c("Mobility", "Nutrition", "Stress", "Herbal\nmedicine", "Acup", "Hypnosis", "Hot Water\nbottle", "CBD", "TENS")
 
 # Initialiser une liste pour stocker les pourcentages
 pourcentages <- numeric(length(noms_variables))
@@ -2769,7 +2769,7 @@ options(repr.plot.width = 15, repr.plot.height = 8)
 # Créer un vecteur contenant les noms des variables Douleur_qqch_TH
 noms_variables2 <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Bouillotte", "CBD", "Tens")
 
-noms_variables_en2 <- c("Mobility", "Nutrition", "Stress", "Phyto", "Acup", "Hot Water\nbottle", "CBD", "TENS")
+noms_variables_en2 <- c("Mobility", "Nutrition", "Stress", "Herbal\nmedicine", "Acup", "Hot Water\nbottle", "CBD", "TENS")
 
 # Initialiser une liste pour stocker les pourcentages
 pourcentages2 <- numeric(length(noms_variables2))
