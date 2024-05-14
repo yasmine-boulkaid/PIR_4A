@@ -259,9 +259,16 @@ QuestionsEvolution <- function(data, liste){
   return(data)
 }
 
-data <- QuestionsEvolution(data,c("Evolution_TH", "Evolution_Mobilite_TH", "Evolution_Nutrition_TH", "Evolution_Stress_TH", "Evolution_Acup_TH", "Evolution_Hypnose_TH", "Evolution_Bouillotte_TH", "Evolution_CBD_TH", "Evolution_Tens_TH", "Evolution_CM", "Evolution_Mobilite_CM", "Evolution_Nutrition_CM", "Evolution_Stress_CM", "Evolution_Phyto_CM", "Evolution_Acup_CM", "Evolution_Hypnose_CM", "Evolution_Bouillotte_CM", "Evolution_CBD_CM", "Evolution_Tens_CM", "Evolution_Mobilite_NM", "Evolution_Nutrition_NM", "Evolution_Stress_NM", "Evolution_Phyto_NM", "Evolution_Acup_NM", "Evolution_Hypnose_NM", "Evolution_Bouillotte_NM", "Evolution_CBD_NM", "Evolution_Tens_NM"))
+data <- QuestionsEvolution(data,c("Evolution_TH", "Evolution_CM", "Evolution_Mobilite_NM", "Evolution_Nutrition_NM", "Evolution_Stress_NM", "Evolution_Phyto_NM", "Evolution_Acup_NM", "Evolution_Hypnose_NM", "Evolution_Bouillotte_NM", "Evolution_CBD_NM", "Evolution_Tens_NM"))
 
-data[["Evolution_Phyto_TH"]] <- factor(data[["Evolution_Phyto_TH"]], levels = c("Augmentation des lésions", "Pas d'impact sur les lésions", "Réduction des lésion", "Ne sais pas"), labels = c("Apparition de nouvelles lésions", "Pas d'évolution", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = FALSE)
+QuestionsEvolution2 <- function(data, liste){
+  for (col in liste) {
+    data[[col]] <- factor(data[[col]], levels = c("Augmentations des lésions", "Pas d'impact sur les lésions", "Réduction des lésions", "Ne sais pas"), ordered = FALSE)
+  }
+  return(data)
+}
+
+data <- QuestionsEvolution2(data,c("Evolution_Mobilite_TH", "Evolution_Nutrition_TH", "Evolution_Stress_TH", "Evolution_Phyto_TH", "Evolution_Acup_TH", "Evolution_Hypnose_TH", "Evolution_Bouillotte_TH", "Evolution_CBD_TH", "Evolution_Tens_TH", "Evolution_Mobilite_CM", "Evolution_Nutrition_CM", "Evolution_Stress_CM", "Evolution_Phyto_CM", "Evolution_Acup_CM", "Evolution_Hypnose_CM", "Evolution_Bouillotte_CM", "Evolution_CBD_CM", "Evolution_Tens_CM"))
 
 ```
 
@@ -952,6 +959,12 @@ print(fviz_mca_ind(mca.TM.ES, habillage = 1, repel = FALSE))
 
 On peut seulement conclure que quelques soit le traitement hormonal expérimenté, la majorité des individus ont subi des effets secondaires.
 Aucune différence significative entre le fait d'avoir pris TH ou CM ne semble appraître.
+
+```{r}
+mosaicplot(table(Data_AMC_test$TM, Data_AMC_test$Sang))
+
+```
+
 
 
 ## Graphe des individus en fonction du type d'effet secondaire
@@ -3198,13 +3211,13 @@ print(vecteur_couleurs2)
 
 ```{r}
 # Créer le graphique avec fviz_mca_ind en utilisant une palette discrète
-fviz_mca_ind(mca.Score, habillage = "Score_global", palette = palette_bleu_rouge(23), discrete = TRUE)
+fviz_mca_ind(mca.Score, habillage = "Score_global", palette = palette_bleu_rouge(26), discrete = TRUE)
 
 ```
 
 ```{r}
 # Créer le graphique avec fviz_mca_ind en utilisant une palette discrète
-fviz_mca_ind(mca.Score, habillage = "Score_global", palette = palette_vert_rouge(23), discrete = TRUE)
+fviz_mca_ind(mca.Score, habillage = "Score_global", palette = palette_vert_rouge(26), discrete = TRUE)
 ```
 
 ```{r}
@@ -3269,14 +3282,45 @@ for (i in 1:nrow(Data_AMC_test)){
 colonnes_newD <- which(seq_along(Data_AMC_test) %in% c(7, 122, 124, 125, 126, 127, 128, 129, 130, 131, 132))
 
 #AMC avec quanti sup Score_global
-mca.newD = MCA(Data_AMC_test[colonnes_newD], quanti.sup = 2, graph=FALSE)
+mca.newD = MCA(Data_AMC_test[colonnes_newD], quali.sup=1, quanti.sup = 2, graph=FALSE)
 fviz_mca_biplot(mca.newD)
 fviz_mca_var(mca.newD, col.var="cos2")
 ```
 
 ```{r}
-fviz_mca_ind(mca.newD, habillage = "Score_global", palette = palette_vert_rouge(23), discrete = TRUE) # , select.ind = list(contrib=100)
+fviz_mca_ind(mca.newD, habillage = 1, discrete = TRUE) # , select.ind = list(contrib=100) # , palette = palette_vert_rouge(26)
+```
+
+```{r}
+fviz_mca_ind(mca.newD, habillage = 1, discrete = TRUE) # , select.ind = list(contrib=100) # , palette = palette_vert_rouge(26)
 ```
 
 
+```{r}
+# Variables utilisees pour l'AMC avec les quanti sup Score_global
+colonnes_newmob <- which(seq_along(Data_AMC_test) %in% c(7, 122, 124))
+
+#AMC avec quanti sup Score_global
+mca.newmob = MCA(Data_AMC_test[colonnes_newmob], quali.sup=1, quanti.sup = 2, graph=FALSE)
+fviz_mca_var(mca.newmob, col.var="cos2")
+```
+
+```{r}
+fviz_mca_ind(mca.newmob, habillage = "Score_global", palette = palette_vert_rouge(26), discrete = TRUE) # , select.ind = list(contrib=100) # 
+```
+
+```{r}
+hist(Data_AMC_test$Score_global)
+boxplot(Score_global ~ TM, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_Mobilite_bis, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_Nutrition_bis, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_Stress_bis, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_Phyto_bis, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_Acup_bis, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_Hypnose_bis, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_Bouillotte_bis, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_CBD_bis, data= Data_AMC_test)
+boxplot(Score_global ~ Duree_Tens_bis, data= Data_AMC_test)
+
+```
 

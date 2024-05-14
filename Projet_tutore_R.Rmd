@@ -177,6 +177,10 @@ names(data)[names(data) == "X.317"] <- "Email"
 ### Supression des deux premières lignes ###
 data <- data[-c(1:2), ]
 
+```
+
+```{r}
+
 ### Questions préliminaires ###
 data$Age = as.integer(data$Age)
 data$Stade <- factor(data$Stade, levels = c("Stade I (superficielle)", "Stade II (modérée)", "Stade III (moyenne)", "Stade IV (profonde)"), ordered = TRUE)
@@ -184,17 +188,17 @@ data$Diagnostic = as.integer(data$Diagnostic)
 data$Tabac <- factor(data$Tabac, levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), ordered = TRUE)
 data$Alcool <- factor(data$Alcool, levels = c("Régulièrement (consommation hebdomadaire)", "Parfois (en certaines occasions)", "Jamais"), ordered = TRUE)
 
-TH <- ifelse(data$TH == "X", "1", "0")
-data$TH <- factor(TH, levels = c("1", "0"), labels = c("1", "0"))
 
-CM <- ifelse(data$CM == "X", "1", "0")
-data$CM <- factor(CM, levels = c("1", "0"), labels = c("1", "0"))
+### Questions en "yes" / "no" ###
+YesNo <- function(data,liste){
+    for (col in liste){
+      Col <- ifelse(data[col] == "X", "y", "n")
+      data[col] <- factor(Col, levels = c("y", "n"), labels = c("yes", "no"))
+    }
+  return(data)
+}
 
-Autre <- ifelse(data$Autre == "X", "1", "0")
-data$Autre <- factor(Autre, levels = c("1", "0"), labels = c("1", "0"))
-
-Aucun <- ifelse(data$Aucun == "X", "1", "0")
-data$Aucun <- factor(Aucun, levels = c("1", "0"), labels = c("1", "0"))
+data <- YesNo(data, c("TH", "CM", "Autre", "Aucun", "Tete_TH", "Fatigue_TH", "Nausee_TH", "Humeur_TH", "Libido_TH", "Sang_TH", "Poids_TH", "Allergie_TH", "Thrombose_TH", "Autre_ES_TH", "Mobilite_TH", "Nutrition_TH", "Stress_TH", "Phyto_TH", "Acup_TH", "Hypnose_TH", "Bouillotte_TH", "CBD_TH", "Tens_TH", "Aucun_TH", "Tete_CM", "Fatigue_CM", "Nausee_CM", "Humeur_CM", "Libido_CM", "Sang_CM", "Poids_CM", "Allergie_CM", "Thrombose_CM", "Autre_ES_CM", "Mobilite_CM", "Nutrition_CM", "Stress_CM", "Phyto_CM", "Acup_CM", "Hypnose_CM", "Bouillotte_CM", "CBD_CM", "Tens_CM", "Aucun_CM", "Mobilite_NM", "Nutrition_NM", "Stress_NM", "Phyto_NM", "Acup_NM", "Hypnose_NM", "Bouillotte_NM", "CBD_NM", "Tens_NM", "Aucun_NM"))
 
 data$Lesquels_M <- ifelse(data$Lesquels_M == "", "0", data$Lesquels_M)
 #"Lesquels_M" à traiter dans un second temps
@@ -202,6 +206,18 @@ data$Lesquels_M <- ifelse(data$Lesquels_M == "", "0", data$Lesquels_M)
 head(data)
 print(data$TH)
 #str(Aucun)
+
+
+### Questions sur Depuis ###
+QuestionsDuree <- function(data, liste){
+  for (col in liste){
+    data[[col]] <- factor(data[[col]], levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = FALSE)
+  }
+  return(data)
+}
+
+data <- QuestionsDuree(data, c("Depuis_TH", "Combien_TH", "Apparition_Tete_TH", "Apparition_Fatigue_TH", "Apparition_Nausee_TH", "Apparition_Humeur_TH", "Apparition_Libido_TH", "Apparition_Sang_TH", "Apparition_Thrombose_TH", "Combien_Mobilite_TH", "Combien_Nutrition_TH", "Combien_Stress_TH", "Combien_Phyto_TH", "Combien_Acup_TH", "Combien_Hypnose_TH", "Combien_Bouillotte_TH", "Combien_CBD_TH", "Combien_Tens_TH", "Depuis_CM", "Combien_CM", "Apparition_Tete_CM", "Apparition_Fatigue_CM", "Apparition_Nausee_CM", "Apparition_Humeur_CM", "Apparition_Libido_CM", "Apparition_Sang_CM", "Apparition_Thrombose_CM", "Combien_Mobilite_CM", "Combien_Nutrition_CM", "Combien_Stress_CM", "Combien_Phyto_CM", "Combien_Acup_CM", "Combien_Hypnose_CM", "Combien_Bouillotte_CM", "Combien_CBD_CM", "Combien_Tens_CM", "Depuis_Mobilite_NM", "Combien_Mobilite_NM", "Depuis_Nutrition_NM", "Combien_Nutrition_NM", "Depuis_Stress_NM", "Combien_Stress_NM", "Depuis_Phyto_NM", "Combien_Phyto_NM", "Depuis_Acup_NM", "Combien_Acup_NM", "Depuis_Hypnose_NM", "Combien_Hypnose_NM", "Depuis_Bouillotte_NM", "Combien_Bouillotte_NM", "Depuis_CBD_NM", "Combien_CBD_NM", "Depuis_Tens_NM", "Combien_Tens_NM"))
+
 
 ### Questions générales TH ###
 Encore_TH <- ifelse(data$Encore_TH == "", "0", data$Encore_TH)
@@ -254,36 +270,6 @@ data$Prise_TH <- factor(Prise_TH, levels = c("Continue (toute l'année)", "Cycli
 Subi_ES_TH <- ifelse(data$Subi_ES_TH == "", "0", data$Subi_ES_TH)
 data$Subi_ES_TH <- factor(Subi_ES_TH, levels = c("Oui", "Non"), ordered = TRUE)
 
-Tete_TH <- ifelse(data$Tete_TH == "X", "1", "0")
-data$Tete_TH <- factor(Tete_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Fatigue_TH <- ifelse(data$Fatigue_TH == "X", "1", "0")
-data$Fatigue_TH <- factor(Fatigue_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Nausee_TH <- ifelse(data$Nausee_TH == "X", "1", "0")
-data$Nausee_TH <- factor(Nausee_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Humeur_TH <- ifelse(data$Humeur_TH == "X", "1", "0")
-data$Humeur_TH <- factor(Humeur_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Libido_TH <- ifelse(data$Libido_TH == "X", "1", "0")
-data$Libido_TH <- factor(Libido_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Sang_TH <- ifelse(data$Sang_TH == "X", "1", "0")
-data$Sang_TH <- factor(Sang_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Poids_TH <- ifelse(data$Poids_TH == "X", "1", "0")
-data$Poids_TH <- factor(Poids_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Allergie_TH <- ifelse(data$Allergie_TH == "X", "1", "0")
-data$Allergie_TH <- factor(Allergie_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Thrombose_TH <- ifelse(data$Thrombose_TH == "X", "1", "0")
-data$Thrombose_TH <- factor(Thrombose_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Autre_ES_TH <- ifelse(data$Autre_ES_TH == "X", "1", "0")
-data$Autre_ES_TH <- factor(Autre_ES_TH, levels = c("1", "0"), labels = c("1", "0"))
-
 Apparition_Tete_TH <- ifelse(data$Apparition_Tete_TH == "", "0", data$Apparition_Tete_TH)
 data$Apparition_Tete_TH <- factor(Apparition_Tete_TH, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
 
@@ -332,35 +318,6 @@ data$Apparition_Thrombose_TH <- factor(Apparition_Thrombose_TH, levels = c("Moin
 #print(Frequence_Sang_TH)
 
 ### Traitements non médicamenteux TH ###
-Mobilite_TH <- ifelse(data$Mobilite_TH == "X", "1", "0")
-data$Mobilite_TH <- factor(Mobilite_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Nutrition_TH <- ifelse(data$Nutrition_TH == "X", "1", "0")
-data$Nutrition_TH <- factor(Nutrition_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Stress_TH <- ifelse(data$Stress_TH == "X", "1", "0")
-data$Stress_TH <- factor(Stress_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Phyto_TH <- ifelse(data$Phyto_TH == "X", "1", "0")
-data$Phyto_TH <- factor(Phyto_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Acup_TH <- ifelse(data$Acup_TH == "X", "1", "0")
-data$Acup_TH <- factor(Acup_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Hypnose_TH <- ifelse(data$Hypnose_TH == "X", "1", "0")
-data$Hypnose_TH <- factor(Hypnose_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Bouillotte_TH <- ifelse(data$Bouillotte_TH == "X", "1", "0")
-data$Bouillotte_TH <- factor(Bouillotte_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-CBD_TH <- ifelse(data$CBD_TH == "X", "1", "0")
-data$CBD_TH <- factor(CBD_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Tens_TH <- ifelse(data$Tens_TH == "X", "1", "0")
-data$Tens_TH <- factor(Tens_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Aucun_TH <- ifelse(data$Aucun_TH == "X", "1", "0")
-data$Aucun_TH <- factor(Aucun_TH, levels = c("1", "0"), labels = c("1", "0"))
 
 # Mobilité TH #
 Combien_Mobilite_TH <- ifelse(data$Combien_Mobilite_TH == "", "0", data$Combien_Mobilite_TH)
@@ -531,36 +488,6 @@ data$Prise_CM <- factor(Prise_CM, levels = c("Continue (toute l'année)", "Cycli
 Subi_ES_CM <- ifelse(data$Subi_ES_CM == "", "0", data$Subi_ES_CM)
 data$Subi_ES_CM <- factor(Subi_ES_CM, levels = c("Oui", "Non"), ordered = TRUE)
 
-Tete_CM <- ifelse(data$Tete_CM == "X", "1", "0")
-data$Tete_CM <- factor(Tete_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Fatigue_CM <- ifelse(data$Fatigue_CM == "X", "1", "0")
-data$Fatigue_CM <- factor(Fatigue_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Nausee_CM <- ifelse(data$Nausee_CM == "X", "1", "0")
-data$Nausee_CM <- factor(Nausee_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Humeur_CM <- ifelse(data$Humeur_CM == "X", "1", "0")
-data$Humeur_CM <- factor(Humeur_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Libido_CM <- ifelse(data$Libido_CM == "X", "1", "0")
-data$Libido_CM <- factor(Libido_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Sang_CM <- ifelse(data$Sang_CM == "X", "1", "0")
-data$Sang_CM <- factor(Sang_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Poids_CM <- ifelse(data$Poids_CM == "X", "1", "0")
-data$Poids_CM <- factor(Poids_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Allergie_CM <- ifelse(data$Allergie_CM == "X", "1", "0")
-data$Allergie_CM <- factor(Allergie_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Thrombose_CM <- ifelse(data$Thrombose_CM == "X", "1", "0")
-data$Thrombose_CM <- factor(Thrombose_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Autre_ES_CM <- ifelse(data$Autre_ES_CM == "X", "1", "0")
-data$Autre_ES_CM <- factor(Autre_ES_CM, levels = c("1", "0"), labels = c("1", "0"))
-
 Apparition_Tete_CM <- ifelse(data$Apparition_Tete_CM == "", "0", data$Apparition_Tete_CM)
 data$Apparition_Tete_CM <- factor(Apparition_Tete_CM, levels = c("Moins de 3 mois", "Entre 3 et 6 mois", "Entre 6 mois et 2 ans", "Entre 2 et 5 ans", "Plus de 5 ans"), ordered = TRUE)
 
@@ -604,35 +531,6 @@ data$Apparition_Thrombose_CM <- factor(Apparition_Thrombose_CM, levels = c("Moin
 #print(Apparition_Thrombose_CM)
 
 ### Traitements non médicamenteux CM ###
-Mobilite_CM <- ifelse(data$Mobilite_CM == "X", "1", "0")
-data$Mobilite_CM <- factor(Mobilite_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Nutrition_CM <- ifelse(data$Nutrition_CM == "X", "1", "0")
-data$Nutrition_CM <- factor(Nutrition_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Stress_CM <- ifelse(data$Stress_CM == "X", "1", "0")
-data$Stress_CM <- factor(Stress_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Phyto_CM <- ifelse(data$Phyto_CM == "X", "1", "0")
-data$Phyto_CM <- factor(Phyto_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Acup_CM <- ifelse(data$Acup_CM == "X", "1", "0")
-data$Acup_CM <- factor(Acup_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Hypnose_CM <- ifelse(data$Hypnose_CM == "X", "1", "0")
-data$Hypnose_CM <- factor(Hypnose_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Bouillotte_CM <- ifelse(data$Bouillotte_CM == "X", "1", "0")
-data$Bouillotte_CM <- factor(Bouillotte_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-CBD_CM <- ifelse(data$CBD_CM == "X", "1", "0")
-data$CBD_CM <- factor(CBD_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Tens_CM <- ifelse(data$Tens_CM == "X", "1", "0")
-data$Tens_CM <- factor(Tens_CM, levels = c("1", "0"), labels = c("1", "0"))
-
-Aucun_CM <- ifelse(data$Aucun_CM == "X", "1", "0")
-data$Aucun_CM <- factor(Aucun_CM, levels = c("1", "0"), labels = c("1", "0"))
 
 # Mobilité CM #
 Combien_Mobilite_CM <- ifelse(data$Combien_Mobilite_CM == "", "0", data$Combien_Mobilite_CM)
