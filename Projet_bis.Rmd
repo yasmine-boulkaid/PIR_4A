@@ -704,27 +704,32 @@ Data_AMC_test$CM_seul <- ifelse(
 # Douleur Mobilité
 Data_AMC_test$D_Mob <- ifelse(Data_AMC_test$Douleur_Mobilite == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_Mobilite == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_Mobilite == "Diminution de la douleur" | Data_AMC_test$Douleur_Mobilite == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Mobilite == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Mobilite)))
+                                     ifelse(Data_AMC_test$Douleur_Mobilite == "Diminution de la douleur" | Data_AMC_test$Douleur_Mobilite == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_Mobilite == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_Mobilite))))
 
 # Douleur Nutrition
 Data_AMC_test$D_Nut <- ifelse(Data_AMC_test$Douleur_Nutrition == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_Nutrition == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_Nutrition == "Diminution de la douleur" | Data_AMC_test$Douleur_Nutrition == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Nutrition == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Nutrition)))
+                                     ifelse(Data_AMC_test$Douleur_Nutrition == "Diminution de la douleur" | Data_AMC_test$Douleur_Nutrition == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_Nutrition == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_Nutrition))))
 
 # Douleur Stress
 Data_AMC_test$D_Str <- ifelse(Data_AMC_test$Douleur_Stress == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_Stress == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_Stress == "Diminution de la douleur" | Data_AMC_test$Douleur_Stress == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Stress == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Stress)))
+                                     ifelse(Data_AMC_test$Douleur_Stress == "Diminution de la douleur" | Data_AMC_test$Douleur_Stress == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_Stress == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_Stress))))
 
 # Douleur Phytothérapie
 Data_AMC_test$D_Phyto <- ifelse(Data_AMC_test$Douleur_Phyto == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_Phyto == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_Phyto == "Diminution de la douleur" | Data_AMC_test$Douleur_Phyto == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Phyto == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Phyto)))
+                                     ifelse(Data_AMC_test$Douleur_Phyto == "Diminution de la douleur" | Data_AMC_test$Douleur_Phyto == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_Phyto == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_Phyto))))
 
 # Douleur Acupuncture
 Data_AMC_test$D_Acup <- ifelse(Data_AMC_test$Douleur_Acup == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_Acup == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_Acup == "Diminution de la douleur" | Data_AMC_test$Douleur_Acup == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Acup == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Acup)))
+                                     ifelse(Data_AMC_test$Douleur_Acup == "Diminution de la douleur" | Data_AMC_test$Douleur_Acup == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_Acup == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_Acup))))
 
 # Douleur Hypnose
 Data_AMC_test$D_Hyp <- ifelse(Data_AMC_test$Douleur_Hypnose == "Augmentation de la douleur","-",
@@ -734,22 +739,26 @@ Data_AMC_test$D_Hyp <- ifelse(Data_AMC_test$Douleur_Hypnose == "Augmentation de 
 # Douleur Bouillotte
 Data_AMC_test$D_Bou <- ifelse(Data_AMC_test$Douleur_Bouillotte == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_Bouillotte == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_Bouillotte == "Diminution de la douleur" | Data_AMC_test$Douleur_Bouillotte == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Bouillotte == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Bouillotte)))
+                                     ifelse(Data_AMC_test$Douleur_Bouillotte == "Diminution de la douleur" | Data_AMC_test$Douleur_Bouillotte == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_Bouillotte == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_Bouillotte))))
 
 # Douleur CBD
 Data_AMC_test$D_CBD <- ifelse(Data_AMC_test$Douleur_CBD == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_CBD == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_CBD == "Diminution de la douleur" | Data_AMC_test$Douleur_CBD == "Réduction légère de la douleur" | Data_AMC_test$Douleur_CBD == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_CBD)))
+                                     ifelse(Data_AMC_test$Douleur_CBD == "Diminution de la douleur" | Data_AMC_test$Douleur_CBD == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_CBD == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_CBD))))
 
 # Douleur Tens
 Data_AMC_test$D_Tens <- ifelse(Data_AMC_test$Douleur_Tens == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_Tens == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_Tens == "Diminution de la douleur" | Data_AMC_test$Douleur_Tens == "Réduction légère de la douleur" | Data_AMC_test$Douleur_Tens == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_Tens)))
+                                     ifelse(Data_AMC_test$Douleur_Tens == "Diminution de la douleur" | Data_AMC_test$Douleur_Tens == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_Tens == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_Tens))))
 
 # Douleur TM
 Data_AMC_test$D_TM <- ifelse(Data_AMC_test$Douleur_TM == "Augmentation de la douleur","-",
                               ifelse(Data_AMC_test$Douleur_TM == "Pas d'impact sur la douleur","0",
-                                     ifelse(Data_AMC_test$Douleur_TM == "Réduction légère de la douleur" | Data_AMC_test$Douleur_TM == "Réduction importante de la douleur","+",Data_AMC_test$Douleur_TM)))
+                                     ifelse(Data_AMC_test$Douleur_TM == "Réduction légère de la douleur","+",
+                                            ifelse(Data_AMC_test$Douleur_TM == "Réduction importante de la douleur","++",Data_AMC_test$Douleur_TM))))
 ```
 
 ```{r}
@@ -3119,9 +3128,29 @@ for (var in c("Duree_Tens")){
 
 # Score global
 ```{r}
-a = 10.0 # efficacité TM 10
-b = 1.0 # modulation TM 1
-c = 2.0 # efficacité NM 2
+a = 10.0 # efficacité importante TM 10
+b = 5.0 # efficacité modérée TM 5
+c = 1.0 # modulation TM 1
+d = 3.0 # efficacité importante NM 3
+e = 2.0 # efficacité modérée NM 2
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_plus_imp_TM = 0)
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_plus_TM = 0)
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_moins_TM = 0)
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_plus_modu_NM = 0)
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_moins_modu_NM = 0)
+
+Data_AMC_test <- Data_AMC_test %>%
+  mutate(N_plus_imp_NM = 0)
 
 Data_AMC_test <- Data_AMC_test %>%
   mutate(N_plus_NM = 0)
@@ -3130,37 +3159,52 @@ Data_AMC_test <- Data_AMC_test %>%
   mutate(N_moins_NM = 0)
 
 Data_AMC_test <- Data_AMC_test %>%
-  mutate(N_plus_moins_TM = 0)
-
-Data_AMC_test <- Data_AMC_test %>%
   mutate(Score_global = 0)
 
 
 for (i in 1:nrow(Data_AMC_test)){
-  for (nm in list("D_Mob", "D_Nut", "D_Str", "D_Phyto", "D_Acup", "D_Hyp", "D_Bou", "D_CBD", "D_Tens")){
-    if(!is.na(Data_AMC_test[i,nm])) {
-      if(Data_AMC_test[i,nm] == '+'){
-        Data_AMC_test[i,"N_plus_NM"] <- Data_AMC_test[i,"N_plus_NM"] + 1
-      }
-      if(Data_AMC_test[i,nm] == '-'){
-        Data_AMC_test[i,"N_moins_NM"] <- Data_AMC_test[i,"N_moins_NM"] + 1
-      }
+  
+  if(!is.na(Data_AMC_test[i,"D_TM"])) {
+    if(Data_AMC_test[i,"D_TM"] == "++"){
+      Data_AMC_test[i,"N_plus_imp_TM"] <- Data_AMC_test[i,"N_plus_imp_TM"] + 1
+    }
+    if(Data_AMC_test[i,"D_TM"] == "+"){
+      Data_AMC_test[i,"N_plus_TM"] <- Data_AMC_test[i,"N_plus_TM"] + 1
+    }
+    if(Data_AMC_test[i,"D_TM"] == "-"){
+      Data_AMC_test[i,"N_moins_TM"] <- Data_AMC_test[i,"N_moins_TM"] + 1
     }
   }
   
-  if(!is.na(Data_AMC_test[i,"D_TM"])){
-    if(Data_AMC_test[i,"D_TM"] == '+'){
-      Data_AMC_test[i,"N_plus_moins_TM"] <- Data_AMC_test[i,"N_plus_moins_TM"] + 1
+  for (nm in list("D_Mob", "D_Nut", "D_Str", "D_Phyto", "D_Acup", "D_Hyp", "D_Bou", "D_CBD", "D_Tens")){
+    if(!is.na(Data_AMC_test[i,nm])) {
+      if(Data_AMC_test[i,"TM"] == "TH" | Data_AMC_test[i,"TM"] == "CM"){
+        if(Data_AMC_test[i,nm] == "+"){
+          Data_AMC_test[i,"N_plus_modu_NM"] <- Data_AMC_test[i,"N_plus_modu_NM"] + 1
+        }
+        if(Data_AMC_test[i,nm] == "-"){
+          Data_AMC_test[i,"N_moins_modu_NM"] <- Data_AMC_test[i,"N_moins_modu_NM"] + 1
+        }
       }
-    if(Data_AMC_test[i,"D_TM"] == '-'){
-      Data_AMC_test[i,"N_plus_moins_TM"] <- Data_AMC_test[i,"N_plus_moins_TM"] - 1
+      
+      if(Data_AMC_test[i,"TM"] == "NM"){
+        if(Data_AMC_test[i,nm] == "++"){
+          Data_AMC_test[i,"N_plus_imp_NM"] <- Data_AMC_test[i,"N_plus_imp_NM"] + 1
+        }
+        if(Data_AMC_test[i,nm] == "+"){
+          Data_AMC_test[i,"N_plus_NM"] <- Data_AMC_test[i,"N_plus_NM"] + 1
+        }
+        if(Data_AMC_test[i,nm] == "-"){
+          Data_AMC_test[i,"N_moins_NM"] <- Data_AMC_test[i,"N_moins_NM"] + 1
+        }
       }
+    }
   }
   
   if(Data_AMC_test[i,"TM"] == "NM"){
     Data_AMC_test[i,"Score_global"] <- c * Data_AMC_test[i,"N_plus_NM"] - c * Data_AMC_test[i,"N_moins_NM"]
   } else {
-    Data_AMC_test[i,"Score_global"] <- a * Data_AMC_test[i,"N_plus_moins_TM"] + b * Data_AMC_test[i,"N_plus_NM"] - b * Data_AMC_test[i,"N_moins_NM"]
+    Data_AMC_test[i,"Score_global"] <- a * Data_AMC_test[i,"N_plus_imp_TM"] + b * Data_AMC_test[i,"N_plus_TM"] - a * Data_AMC_test[i,"N_moins_TM"] + c * Data_AMC_test[i,"N_plus_modu_NM"] - c * Data_AMC_test[i,"N_moins_modu_NM"] + d * Data_AMC_test[i,"N_plus_imp_NM"] + e * Data_AMC_test[i,"N_plus_NM"] - d * Data_AMC_test[i,"N_moins_NM"]
   }
 }
 
@@ -3176,7 +3220,7 @@ max(Data_AMC_test$Score_global)
 # ACM avec le score global
 ```{r}
 # Variables utilisees pour l'AMC avec les quanti sup Score_global
-colonnes_Score <- which(seq_along(Data_AMC_test) %in% c(7, 33, 37, 41, 45, 49, 53, 57, 61, 65, 122))
+colonnes_Score <- which(seq_along(Data_AMC_test) %in% c(7, 33, 37, 41, 45, 49, 53, 57, 61, 65, 127))
 
 #AMC avec quanti sup Score_global
 mca.Score = MCA(Data_AMC_test[colonnes_Score], quanti.sup = 11, graph=FALSE)
@@ -3279,7 +3323,7 @@ for (i in 1:nrow(Data_AMC_test)){
 
 ```{r}
 # Variables utilisees pour l'AMC avec les quanti sup Score_global
-colonnes_newD <- which(seq_along(Data_AMC_test) %in% c(7, 122, 124, 125, 126, 127, 128, 129, 130, 131, 132))
+colonnes_newD <- which(seq_along(Data_AMC_test) %in% c(7, 127, 129, 130, 131, 132, 133, 134, 135, 136, 137))
 
 #AMC avec quanti sup Score_global
 mca.newD = MCA(Data_AMC_test[colonnes_newD], quali.sup=1, quanti.sup = 2, graph=FALSE)
@@ -3295,19 +3339,6 @@ fviz_mca_ind(mca.newD, habillage = 1, discrete = TRUE) # , select.ind = list(con
 fviz_mca_ind(mca.newD, habillage = 1, discrete = TRUE) # , select.ind = list(contrib=100) # , palette = palette_vert_rouge(26)
 ```
 
-
-```{r}
-# Variables utilisees pour l'AMC avec les quanti sup Score_global
-colonnes_newmob <- which(seq_along(Data_AMC_test) %in% c(7, 122, 124))
-
-#AMC avec quanti sup Score_global
-mca.newmob = MCA(Data_AMC_test[colonnes_newmob], quali.sup=1, quanti.sup = 2, graph=FALSE)
-fviz_mca_var(mca.newmob, col.var="cos2")
-```
-
-```{r}
-fviz_mca_ind(mca.newmob, habillage = "Score_global", palette = palette_vert_rouge(26), discrete = TRUE) # , select.ind = list(contrib=100) # 
-```
 
 ```{r}
 hist(Data_AMC_test$Score_global)
