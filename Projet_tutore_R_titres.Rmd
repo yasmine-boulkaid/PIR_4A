@@ -488,10 +488,10 @@ Autre_Cause_Fin_TH <- ifelse(data$Autre_Cause_Fin_TH == "X", "1", "0")
 data$Autre_Cause_Fin_TH <- factor(Autre_Cause_Fin_TH, levels = c("1", "0"), labels = c("1", "0"))
 
 Douleur_TH <- ifelse(data$Douleur_TH == "", "0", data$Douleur_TH)
-data$Douleur_TH <- factor(Douleur_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+data$Douleur_TH <- factor(Douleur_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Increase in pain", "No impact on pain", "Slight reduction in pain", "Significant reduction in pain"), ordered = TRUE)
 
 Evolution_TH <- ifelse(data$Evolution_TH == "", "0", data$Evolution_TH)
-data$Evolution_TH <- factor(Evolution_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+data$Evolution_TH <- factor(Evolution_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Appearance of new lesions", "Enlargement of existing lesions", "No progression", "Moderate reduction of lesions", "Significant reduction or disappearance of lesions", "Don't know"), ordered = TRUE)
 
 Pre_op_TH <- ifelse(data$Pre_op_TH == "X", "1", "0")
 data$Pre_op_TH <- factor(Pre_op_TH, levels = c("1", "0"), labels = c("1", "0"))
@@ -777,10 +777,10 @@ Autre_Cause_Fin_CM <- ifelse(data$Autre_Cause_Fin_CM == "X", "1", "0")
 data$Autre_Cause_Fin_CM <- factor(Autre_Cause_Fin_CM, levels = c("1", "0"), labels = c("1", "0"))
 
 Douleur_CM <- ifelse(data$Douleur_CM == "", "0", data$Douleur_CM)
-data$Douleur_CM <- factor(Douleur_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
+data$Douleur_CM <- factor(Douleur_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Increase in pain", "No impact on pain", "Slight reduction in pain", "Significant reduction in pain"), ordered = TRUE)
 
 Evolution_CM <- ifelse(data$Evolution_CM == "", "0", data$Evolution_CM)
-data$Evolution_CM <- factor(Evolution_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
+data$Evolution_CM <- factor(Evolution_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), labels = c("Appearance of new lesions", "Enlargement of existing lesions", "No progression", "Moderate reduction of lesions", "Significant reduction or disappearance of lesions", "Don't know"), ordered = TRUE)
 
 Pre_op_CM <- ifelse(data$Pre_op_CM == "X", "1", "0")
 data$Pre_op_CM <- factor(Pre_op_CM, levels = c("1", "0"), labels = c("1", "0"))
@@ -2572,6 +2572,11 @@ library(RColorBrewer)
 options(repr.plot.width = 16, repr.plot.height = 10)
 par(mfrow = c(1, 2))
 
+couleurs4 <- c("Augmentation de la douleur" = "#FBB4AE",
+              "Pas d'impact sur la douleur" = "#FFF2AE", 
+              "Réduction légère de la douleur" = "#CCEBC5",
+              "Réduction importante de la douleur" = "#B3E2CD")
+
 ##### Choix des couleurs #####
 colors_pastels_data1 <- brewer.pal(length(levels(data1$Douleur_TH)), "Pastel1")
 colors_pastels_data2 <- brewer.pal(length(levels(data2$Douleur_CM)), "Pastel1")
@@ -2584,8 +2589,8 @@ data1_table <- data1_table[data1_table != 0]  # Filtrer les zéros
 percentage_labels1 <- paste0(round(100 * prop.table(data1_table), 1), "%")
 percentage_labels1 <- percentage_labels1[percentage_labels1 != "0%"]  # Filtrer les 0%
 
-pie(data1_table, main = "Échelles de douleur sous Traitement Hormonal", labels = percentage_labels1, col = colors_pastels_data1, cex.main = 0.75)
-legend("bottom", legend = names(data1_table), fill = colors_pastels_data1, title = "Douleur_TH", cex = 0.75, xpd = TRUE, inset = c(0, -0.3))
+pie(data1_table, main = "Pain Scale under Hormonal Treatment", labels = percentage_labels1, col = couleurs4, cex.main = 0.75)
+legend("bottom", legend = names(data1_table), fill = couleurs4, title = "Pain scale", cex = 0.75, xpd = TRUE, inset = c(0, -0.3))
 
 pie_table_TH <- table(data1$Douleur_TH)
 text(0, 0, paste("Total:", sum(pie_table_TH)), cex = 0.8, pos = 2)
@@ -2597,8 +2602,8 @@ data2_table <- data2_table[data2_table != 0]  # Filtrer les zéros
 percentage_labels2 <- paste0(round(100 * prop.table(data2_table), 1), "%")
 percentage_labels2 <- percentage_labels2[percentage_labels2 != "0%"]  # Filtrer les 0%
 
-pie(data2_table, main = "Échelles de douleur sous Cure de Ménopause", labels = percentage_labels2, col = colors_pastels_data2, cex.main = 0.75)
-legend("bottom", legend = names(data2_table), fill = colors_pastels_data2, title = "Douleur_CM", cex = 0.75, xpd = TRUE, inset = c(0, -0.3))
+pie(data2_table, main = "Pain Scale under Artificial Menopause", labels = percentage_labels2, col = couleurs4, cex.main = 0.75)
+legend("bottom", legend = names(data2_table), fill = couleurs4, title = "Pain scale", cex = 0.75, xpd = TRUE, inset = c(0, -0.3))
 
 pie_table_CM <- table(data2$Douleur_CM)
 text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
@@ -2611,6 +2616,13 @@ text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
 options(repr.plot.width = 16, repr.plot.height = 10)
 par(mfrow = c(1, 2))
 
+couleurs5 <- c("Apparition de nouvelles lésions" = "#FBB4AE",
+              "Grossissement des lésions déjà présentes" = "#FED9A6",
+              "Pas d'évolution" = "#FFF2AE",
+              "Réduction modérée des lésions" = "#CCEBC5",
+              "Réduction importante voire disparition des lésions" = "#B3E2CD",
+              "Ne sais pas" = "#FDDAEC")
+
 ##### Choix des couleurs #####
 colors_pastels_data1 <- brewer.pal(length(levels(data1$Evolution_TH)), "Pastel1")
 colors_pastels_data2 <- brewer.pal(length(levels(data2$Evolution_CM)), "Pastel1")
@@ -2622,8 +2634,8 @@ data1_table <- data1_table[data1_table != 0]  # Filtrer les zéros
 percentage_labels1 <- paste0(round(100 * prop.table(data1_table), 1), "%")
 percentage_labels1 <- percentage_labels1[percentage_labels1 != "0%"]  # Filtrer les 0%
 
-pie(data1_table, main = "Échelles d'évolution sous Traitement Hormonal", labels = percentage_labels1, col = colors_pastels_data1, cex.main = 0.75)
-legend("bottom", legend = names(data1_table), fill = colors_pastels_data1, title = "Evolution_TH", cex = 0.7, xpd = TRUE, inset = c(0, -0.37))
+pie(data1_table, main = "Progression Scale under Hormonal Treatment", labels = percentage_labels1, col = couleurs5, cex.main = 0.75)
+legend("bottom", legend = names(data1_table), fill = couleurs5, title = "Progression Scale", cex = 0.7, xpd = TRUE, inset = c(0, -0.37))
 
 pie_table_TH <- table(data1$Evolution_TH)
 text(0, 0, paste("Total:", sum(pie_table_TH)), cex = 0.8, pos = 2)
@@ -2635,8 +2647,8 @@ data2_table <- data2_table[data2_table != 0]  # Filtrer les zéros
 percentage_labels2 <- paste0(round(100 * prop.table(data2_table), 1), "%")
 percentage_labels2 <- percentage_labels2[percentage_labels2 != "0%"]  # Filtrer les 0%
 
-pie(data2_table, main = "Échelles d'évolution sous Cure de Ménopause", labels = percentage_labels2, col = colors_pastels_data2, cex.main = 0.75)
-legend("bottom", legend = names(data2_table), fill = colors_pastels_data2, title = "Evolution_CM", cex = 0.7, xpd = TRUE, inset = c(0, -0.37))
+pie(data2_table, main = "Progression Scale under Artificial Menopause", labels = percentage_labels2, col = couleurs5, cex.main = 0.75)
+legend("bottom", legend = names(data2_table), fill = couleurs5, title = "Progression Scale", cex = 0.7, xpd = TRUE, inset = c(0, -0.37))
 
 pie_table_CM <- table(data2$Evolution_CM)
 text(0, 0, paste("Total:", sum(pie_table_CM)), cex = 0.8, pos = 2)
@@ -2824,6 +2836,8 @@ options(repr.plot.width = 15, repr.plot.height = 8)
 # Créer un vecteur contenant les noms des variables Douleur_qqch_TH
 noms_variables <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Hypnose", "Bouillotte", "CBD", "Tens")
 
+names_variables <- c("Mobility", "Nutrition", "Stress", "Herbal \n Medicine", "Acup", "Hypnosis", "Hot Water \n Bottle", "CBD", "Tens")
+
 # Initialiser une liste pour stocker les pourcentages
 pourcentages <- numeric(length(noms_variables))
 
@@ -2831,21 +2845,21 @@ pourcentages <- numeric(length(noms_variables))
 for (i in seq_along(noms_variables)) {
   variable <- paste0("Douleur_", noms_variables[i], "_TH")
   filtered_data <- data1[data1[[paste0(noms_variables[i], "_TH")]] == 1, ]
-  pourcentages[i] <- sum(filtered_data[[variable]] == "Diminution de la douleur") / nrow(filtered_data) * 100
+  pourcentages[i] <- (sum(filtered_data[[variable]] == "Diminution de la douleur") + sum(filtered_data[[variable]] == "Decrease in pain")) / nrow(filtered_data) * 100
 }
 
 total1 = c(sum(data1_MTH_table), sum(data1_NTH_table), sum(data1_STH_table), sum(data1_PTH_table), sum(data1_ATH_table), sum(data1_HTH_table), sum(data1_BTH_table), sum(data1_CTH_table), sum(data1_TTH_table))
 
 # Créer un dataframe pour stocker les résultats
-resultats1 <- data.frame(Variable = noms_variables, Pourcentage = pourcentages, Total = total1)
+resultats1 <- data.frame(Variable = names_variables, Pourcentage = pourcentages, Total = total1)
 
 # Trier le dataframe par ordre décroissant des pourcentages
 resultats1 <- resultats1[order(resultats1$Pourcentage, decreasing = TRUE), ]
 
 # Afficher les pourcentages avec les noms des variables
 bp <- barplot(resultats1$Pourcentage, names.arg = resultats1$Variable,
-        xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
-        main = "Pourcentage de 'Diminution de la douleur' par variable\npour chaque traitement non médicamenteux associé à TH",
+        xlab = "Variable", ylab = "Percentage of 'Pain Reduction'",
+        main = "Percentage of 'Pain Reduction' by variable\nfor each non-drug treatment associated with Hormonal Treatment",
         col = brewer.pal(length(noms_variables), "Pastel1"),
         ylim=c(0,100),
         cex.main = 1,
@@ -3019,6 +3033,8 @@ options(repr.plot.width = 15, repr.plot.height = 8)
 # Créer un vecteur contenant les noms des variables Douleur_qqch_TH
 noms_variables2 <- c("Mobilite", "Nutrition", "Stress", "Phyto", "Acup", "Bouillotte", "CBD", "Tens")
 
+names_variables2 <- c("Mobility", "Nutrition", "Stress", "Herbal \n Medicine", "Acup", "Hot Water \n Bottle", "CBD", "Tens")
+
 # Initialiser une liste pour stocker les pourcentages
 pourcentages2 <- numeric(length(noms_variables2))
 
@@ -3032,7 +3048,7 @@ for (i in seq_along(noms_variables2)) {
 total2 = c(sum(data2_MCM_table), sum(data2_NCM_table), sum(data2_SCM_table), sum(data2_PCM_table), sum(data2_ACM_table), sum(data2_BCM_table), sum(data2_CCM_table), sum(data2_TCM_table))
 
 # Créer un dataframe pour stocker les résultats
-resultats2 <- data.frame(Variable = noms_variables2, Pourcentage = pourcentages2, Total = total2)
+resultats2 <- data.frame(Variable = names_variables2, Pourcentage = pourcentages2, Total = total2)
 
 # Trier le dataframe par ordre décroissant des pourcentages
 resultats2 <- resultats2[order(resultats2$Pourcentage, decreasing = TRUE), ]
@@ -3042,8 +3058,8 @@ resultats2 <- resultats2[order(resultats2$Pourcentage, decreasing = TRUE), ]
 
 # Afficher les pourcentages avec les noms des variables
 bp <- barplot(resultats2$Pourcentage, names.arg = resultats2$Variable,
-              xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
-              main = "Pourcentage de 'Diminution de la douleur' par variable\npour chaque traitement non médicamenteux associé à CM",
+              xlab = "Variable", ylab = "Percentage of 'Pain Reduction'",
+              main = "Percentage of 'pain reduction' by variable for each\nnon-drug treatment associated with Artificial Menopause",
               col = brewer.pal(length(noms_variables2), "Pastel1"),
               ylim=c(0,100),
               cex.main = 1,
@@ -3246,13 +3262,13 @@ pourcentages3 <- numeric(length(noms_variables3))
 for (i in seq_along(noms_variables3)) {
   variable3 <- paste0("Douleur_", noms_variables3[i], "_NM")
   filtered_data3 <- data3[data3[[paste0(noms_variables3[i], "_NM")]] == 1, ]
-  pourcentages3[i] <- (sum(filtered_data3[[variable3]] == "Réduction légère de la douleur") + sum(filtered_data3[[variable3]] == "Réduction importante de la douleur")) / nrow(filtered_data3) * 100
+  pourcentages3[i] <- (sum(filtered_data3[[variable3]] == "Réduction légère de la douleur") + sum(filtered_data3[[variable3]] == "Réduction importante de la douleur") + sum(filtered_data3[[variable3]] == "Slight reduction in pain") + sum(filtered_data3[[variable3]] == "Significant reduction in pain")) / nrow(filtered_data3) * 100
 }
 
 total3 = c(sum(data3_MNM_table), sum(data3_NNM_table), sum(data3_SNM_table), sum(data3_PNM_table), sum(data3_ANM_table), sum(data3_HNM_table),sum(data3_BNM_table), sum(data3_CNM_table), sum(data3_TNM_table))
 
 # Créer un dataframe pour stocker les résultats
-resultats3 <- data.frame(Variable = noms_variables3, Pourcentage = pourcentages3, Total = total3)
+resultats3 <- data.frame(Variable = names_variables, Pourcentage = pourcentages3, Total = total3)
 
 # Trier le dataframe par ordre décroissant des pourcentages
 resultats3 <- resultats3[order(resultats3$Pourcentage, decreasing = TRUE), ]
@@ -3262,8 +3278,8 @@ resultats3 <- resultats3[order(resultats3$Pourcentage, decreasing = TRUE), ]
 
 # Afficher les pourcentages avec les noms des variables
 bp <- barplot(resultats3$Pourcentage, names.arg = resultats3$Variable,
-              xlab = "Variable", ylab = "Pourcentage de 'Diminution de la douleur' ",
-              main = "Pourcentage de 'Diminution de la douleur' par variable pour chaque traitement non médicamenteux seul",
+              xlab = "Variable", ylab = "Percentage of 'Pain Reduction'",
+              main = "Percentage of 'Pain Reduction' by variable for each non-drug treatment alone",
               col = brewer.pal(length(noms_variables3), "Pastel1"),
               ylim=c(0,100),
               cex.main = 0.75,

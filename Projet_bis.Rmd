@@ -1477,6 +1477,54 @@ for (var in c("D_Mob","D_Nut","D_Str","D_Phyto","D_Acup","D_Hyp","D_Bou","D_CBD"
 }
 ```
 
+## Graphe des individus pour TH : habillage = fréquence ES
+```{r}
+# Extraire les coordonnées des variables
+ind_TH_freq <- rownames(mca.combos.TH$ind$coord)
+
+# Créer un dataframe vide
+df_TH_freq <- data.frame(matrix(nrow = length(ind_TH_freq), ncol = 0))
+
+# Ajouter les coord
+coord_TH_freq <- mca.combos.TH$ind$coord
+df_TH_freq <- cbind(df_TH_freq, coord_TH_freq)
+
+# Définir les variables
+df_TH_freq$Freq_Tete <- Data_AMC_TH$Freq_Tete
+df_TH_freq$Freq_Fatigue <- Data_AMC_TH$Freq_Fatigue
+df_TH_freq$Freq_Nausee <- Data_AMC_TH$Freq_Nausee
+df_TH_freq$Freq_Humeur <- Data_AMC_TH$Freq_Humeur
+df_TH_freq$Freq_Libido <- Data_AMC_TH$Freq_Libido
+df_TH_freq$Freq_Sang <- Data_AMC_TH$Freq_Sang
+
+
+# Définir une palette de couleurs personnalisée pour chaque variable
+custom_palette_TH_freq <- list(
+  Freq_Tete = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Fatigue = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Nausee = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Humeur = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Libido = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Sang = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC")
+)
+
+# Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
+for (var in c("Freq_Tete","Freq_Fatigue","Freq_Nausee","Freq_Humeur","Freq_Libido","Freq_Sang")){
+  titre <- paste("Graphe des individus des TH avec habillage en fonction de ", var)
+  print(
+    ggplot(df_TH_freq, aes(x = `Dim 1`, y = `Dim 2`, color = df_TH_freq[[var]], label = rownames(df_TH_freq))) +
+      geom_point(size=3) +
+      geom_text(aes(color = df_TH_freq[[var]]), hjust = 0, vjust = 0, size = 3) +  # Ajouter les noms des individus avec la couleur du point correspondant
+      scale_color_manual(values = custom_palette_TH_freq[[var]], na.value = "transparent") +  # Utiliser la palette de couleurs personnalisée
+      theme_minimal() +
+      labs(title = titre,
+           x = "Dim 1",
+           y = "Dim 2",
+           color = "Frequence des ES")
+  )
+}
+```
+
 
 
 
