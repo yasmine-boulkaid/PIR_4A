@@ -251,6 +251,7 @@ data <- QuestionsDouleur2(data,c("Douleur_Mobilite_TH", "Douleur_Nutrition_TH", 
 
 data[["Douleur_Phyto_TH"]] <- factor(data[["Douleur_Phyto_TH"]], levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction de la douleur"), labels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = FALSE)
 
+
 ### Questions Evolution ###
 QuestionsEvolution <- function(data, liste){
   for (col in liste) {

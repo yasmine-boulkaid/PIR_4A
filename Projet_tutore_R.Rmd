@@ -232,7 +232,48 @@ QuestionsFrequence <- function(data, liste){
 data <- QuestionsFrequence(data,c("Frequence_Tete_TH", "Frequence_Fatigue_TH", "Frequence_Nausee_TH", "Frequence_Humeur_TH", "Frequence_Libido_TH", "Frequence_Sang_TH", "Frequence_Tete_CM", "Frequence_Fatigue_CM", "Frequence_Nausee_CM", "Frequence_Humeur_CM", "Frequence_Libido_CM", "Frequence_Sang_CM"))
 
 
+QuestionsDouleur <- function(data, liste){
+  for (col in liste) {
+    data[[col]][data[[col]] == ""] <- "0"
+    data[[col]] <- factor(data[[col]], levels = c("0", "Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = FALSE)
+  }
+  return(data)
+}
 
+data <- QuestionsDouleur(data,c("Douleur_TH", "Douleur_CM", "Douleur_Mobilite_NM", "Douleur_Nutrition_NM", "Douleur_Stress_NM", "Douleur_Phyto_NM", "Douleur_Acup_NM", "Douleur_Hypnose_NM", "Douleur_Bouillotte_NM", "Douleur_CBD_NM", "Douleur_Tens_NM"))
+
+QuestionsDouleur2 <- function(data, liste){
+  for (col in liste) {
+    data[[col]][data[[col]] == ""] <- "0"
+    data[[col]] <- factor(data[[col]], levels = c("0", "Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = FALSE)
+  }
+  return(data)
+}
+
+data <- QuestionsDouleur2(data,c("Douleur_Mobilite_TH", "Douleur_Nutrition_TH", "Douleur_Stress_TH", "Douleur_Acup_TH", "Douleur_Hypnose_TH", "Douleur_Bouillotte_TH", "Douleur_CBD_TH", "Douleur_Tens_TH", "Douleur_Mobilite_CM", "Douleur_Nutrition_CM", "Douleur_Stress_CM", "Douleur_Phyto_CM", "Douleur_Acup_CM", "Douleur_Hypnose_CM", "Douleur_Bouillotte_CM", "Douleur_CBD_CM", "Douleur_Tens_CM"))
+
+data[["Douleur_Phyto_TH"]] <- factor(data[["Douleur_Phyto_TH"]], levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction de la douleur"), labels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = FALSE)
+
+
+QuestionsEvolution <- function(data, liste){
+  for (col in liste) {
+    data[[col]][data[[col]] == ""] <- "0"
+    data[[col]] <- factor(data[[col]], levels = c("0", "Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = FALSE)
+  }
+  return(data)
+}
+
+data <- QuestionsEvolution(data,c("Evolution_TH", "Evolution_CM", "Evolution_Mobilite_NM", "Evolution_Nutrition_NM", "Evolution_Stress_NM", "Evolution_Phyto_NM", "Evolution_Acup_NM", "Evolution_Hypnose_NM", "Evolution_Bouillotte_NM", "Evolution_CBD_NM", "Evolution_Tens_NM"))
+
+QuestionsEvolution2 <- function(data, liste){
+  for (col in liste) {
+    data[[col]][data[[col]] == ""] <- "0"
+    data[[col]] <- factor(data[[col]], levels = c("0", "Augmentations des lésions", "Pas d'impact sur les lésions", "Réduction des lésions", "Ne sais pas"), ordered = FALSE)
+  }
+  return(data)
+}
+
+data <- QuestionsEvolution2(data,c("Evolution_Mobilite_TH", "Evolution_Nutrition_TH", "Evolution_Stress_TH", "Evolution_Phyto_TH", "Evolution_Acup_TH", "Evolution_Hypnose_TH", "Evolution_Bouillotte_TH", "Evolution_CBD_TH", "Evolution_Tens_TH", "Evolution_Mobilite_CM", "Evolution_Nutrition_CM", "Evolution_Stress_CM", "Evolution_Phyto_CM", "Evolution_Acup_CM", "Evolution_Hypnose_CM", "Evolution_Bouillotte_CM", "Evolution_CBD_CM", "Evolution_Tens_CM"))
 
 
 ### Questions générales TH ###
@@ -253,12 +294,6 @@ data$Cout_TH <- factor(Cout_TH, levels = c("1", "0"), labels = c("1", "0"))
 
 Autre_Cause_Fin_TH <- ifelse(data$Autre_Cause_Fin_TH == "X", "1", "0")
 data$Autre_Cause_Fin_TH <- factor(Autre_Cause_Fin_TH, levels = c("1", "0"), labels = c("1", "0"))
-
-Douleur_TH <- ifelse(data$Douleur_TH == "", "0", data$Douleur_TH)
-data$Douleur_TH <- factor(Douleur_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_TH <- ifelse(data$Evolution_TH == "", "0", data$Evolution_TH)
-data$Evolution_TH <- factor(Evolution_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Pre_op_TH <- ifelse(data$Pre_op_TH == "X", "1", "0")
 data$Pre_op_TH <- factor(Pre_op_TH, levels = c("1", "0"), labels = c("1", "0"))
@@ -284,104 +319,48 @@ data$Subi_ES_TH <- factor(Subi_ES_TH, levels = c("Oui", "Non"), ordered = TRUE)
 
 # Mobilité TH #
 
-Douleur_Mobilite_TH <- ifelse(data$Douleur_Mobilite_TH == "", "0", data$Douleur_Mobilite_TH)
-data$Douleur_Mobilite_TH <- factor(Douleur_Mobilite_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Mobilite_TH <- ifelse(data$Evolution_Mobilite_TH == "", "0", data$Evolution_Mobilite_TH)
-data$Evolution_Mobilite_TH <- factor(Evolution_Mobilite_TH, levels = c("Augmentation des lésions", "Pas d'impact sur les lésions", "Réduction des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Mobilite_TH <- ifelse(data$Prise_Mobilite_TH == "", "0", data$Prise_Mobilite_TH)
 data$Prise_Mobilite_TH <- factor(Prise_Mobilite_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Nutrition TH #
-
-Douleur_Nutrition_TH <- ifelse(data$Douleur_Nutrition_TH == "", "0", data$Douleur_Nutrition_TH)
-data$Douleur_Nutrition_TH <- factor(Douleur_Nutrition_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Nutrition_TH <- ifelse(data$Evolution_Nutrition_TH == "", "0", data$Evolution_Nutrition_TH)
-data$Evolution_Nutrition_TH <- factor(Evolution_Nutrition_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Prise_Nutrition_TH <- ifelse(data$Prise_Nutrition_TH == "", "0", data$Prise_Nutrition_TH)
 data$Prise_Nutrition_TH <- factor(Prise_Nutrition_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Stress TH #
 
-Douleur_Stress_TH <- ifelse(data$Douleur_Stress_TH == "", "0", data$Douleur_Stress_TH)
-data$Douleur_Stress_TH <- factor(Douleur_Stress_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Stress_TH <- ifelse(data$Evolution_Stress_TH == "", "0", data$Evolution_Stress_TH)
-data$Evolution_Stress_TH <- factor(Evolution_Stress_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Stress_TH <- ifelse(data$Prise_Stress_TH == "", "0", data$Prise_Stress_TH)
 data$Prise_Stress_TH <- factor(Prise_Stress_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Phyto TH #
-
-Douleur_Phyto_TH <- ifelse(data$Douleur_Phyto_TH == "", "0", data$Douleur_Phyto_TH)
-data$Douleur_Phyto_TH <- factor(Douleur_Phyto_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Phyto_TH <- ifelse(data$Evolution_Phyto_TH == "", "0", data$Evolution_Phyto_TH)
-data$Evolution_Phyto_TH <- factor(Evolution_Phyto_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Prise_Phyto_TH <- ifelse(data$Prise_Phyto_TH == "", "0", data$Prise_Phyto_TH)
 data$Prise_Phyto_TH <- factor(Prise_Phyto_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Acup TH #
 
-Douleur_Acup_TH <- ifelse(data$Douleur_Acup_TH == "", "0", data$Douleur_Acup_TH)
-data$Douleur_Acup_TH <- factor(Douleur_Acup_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Acup_TH <- ifelse(data$Evolution_Acup_TH == "", "0", data$Evolution_Acup_TH)
-data$Evolution_Acup_TH <- factor(Evolution_Acup_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Acup_TH <- ifelse(data$Prise_Acup_TH == "", "0", data$Prise_Acup_TH)
 data$Prise_Acup_TH <- factor(Prise_Acup_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Hypnose TH #
-
-Douleur_Hypnose_TH <- ifelse(data$Douleur_Hypnose_TH == "", "0", data$Douleur_Hypnose_TH)
-data$Douleur_Hypnose_TH <- factor(Douleur_Hypnose_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Hypnose_TH <- ifelse(data$Evolution_Hypnose_TH == "", "0", data$Evolution_Hypnose_TH)
-data$Evolution_Hypnose_TH <- factor(Evolution_Hypnose_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Prise_Hypnose_TH <- ifelse(data$Prise_Hypnose_TH == "", "0", data$Prise_Hypnose_TH)
 data$Prise_Hypnose_TH <- factor(Prise_Hypnose_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Bouillotte TH #
 
-Douleur_Bouillotte_TH <- ifelse(data$Douleur_Bouillotte_TH == "", "0", data$Douleur_Bouillotte_TH)
-data$Douleur_Bouillotte_TH <- factor(Douleur_Bouillotte_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Bouillotte_TH <- ifelse(data$Evolution_Bouillotte_TH == "", "0", data$Evolution_Bouillotte_TH)
-data$Evolution_Bouillotte_TH <- factor(Evolution_Bouillotte_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Bouillotte_TH <- ifelse(data$Prise_Bouillotte_TH == "", "0", data$Prise_Bouillotte_TH)
 data$Prise_Bouillotte_TH <- factor(Prise_Bouillotte_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # CBD TH #
-
-Douleur_CBD_TH <- ifelse(data$Douleur_CBD_TH == "", "0", data$Douleur_CBD_TH)
-data$Douleur_CBD_TH <- factor(Douleur_CBD_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_CBD_TH <- ifelse(data$Evolution_CBD_TH == "", "0", data$Evolution_CBD_TH)
-data$Evolution_CBD_TH <- factor(Evolution_CBD_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Prise_CBD_TH <- ifelse(data$Prise_CBD_TH == "", "0", data$Prise_CBD_TH)
 data$Prise_CBD_TH <- factor(Prise_CBD_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Tens TH #
 
-Douleur_Tens_TH <- ifelse(data$Douleur_Tens_TH == "", "0", data$Douleur_Tens_TH)
-data$Douleur_Tens_TH <- factor(Douleur_Tens_TH, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Tens_TH <- ifelse(data$Evolution_Tens_TH == "", "0", data$Evolution_Tens_TH)
-data$Evolution_Tens_TH <- factor(Evolution_Tens_TH, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Tens_TH <- ifelse(data$Prise_Tens_TH == "", "0", data$Prise_Tens_TH)
 data$Prise_Tens_TH <- factor(Prise_Tens_TH, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#print(data$Douleur_Phyto_TH)
 
 ### Questions générales CM ###
 Encore_CM <- ifelse(data$Encore_CM == "", "0", data$Encore_CM)
@@ -402,12 +381,6 @@ data$Cout_CM <- factor(Cout_CM, levels = c("1", "0"), labels = c("1", "0"))
 Autre_Cause_Fin_CM <- ifelse(data$Autre_Cause_Fin_CM == "X", "1", "0")
 data$Autre_Cause_Fin_CM <- factor(Autre_Cause_Fin_CM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_CM <- ifelse(data$Douleur_CM == "", "0", data$Douleur_CM)
-data$Douleur_CM <- factor(Douleur_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_CM <- ifelse(data$Evolution_CM == "", "0", data$Evolution_CM)
-data$Evolution_CM <- factor(Evolution_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_CM <- ifelse(data$Pre_op_CM == "X", "1", "0")
 data$Pre_op_CM <- factor(Pre_op_CM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -420,9 +393,6 @@ data$Pas_op_CM <- factor(Pas_op_CM, levels = c("1", "0"), labels = c("1", "0"))
 Prise_CM <- ifelse(data$Prise_CM == "", "0", data$Prise_CM)
 data$Prise_CM <- factor(Prise_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
-#str(Prise_CM)
-#print(Prise_CM)
-
 ### Effets secondaires CM ###
 Subi_ES_CM <- ifelse(data$Subi_ES_CM == "", "0", data$Subi_ES_CM)
 data$Subi_ES_CM <- factor(Subi_ES_CM, levels = c("Oui", "Non"), ordered = TRUE)
@@ -431,104 +401,48 @@ data$Subi_ES_CM <- factor(Subi_ES_CM, levels = c("Oui", "Non"), ordered = TRUE)
 
 # Mobilité CM #
 
-Douleur_Mobilite_CM <- ifelse(data$Douleur_Mobilite_CM == "", "0", data$Douleur_Mobilite_CM)
-data$Douleur_Mobilite_CM <- factor(Douleur_Mobilite_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Mobilite_CM <- ifelse(data$Evolution_Mobilite_CM == "", "0", data$Evolution_Mobilite_CM)
-data$Evolution_Mobilite_CM <- factor(Evolution_Mobilite_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Mobilite_CM <- ifelse(data$Prise_Mobilite_CM == "", "0", data$Prise_Mobilite_CM)
 data$Prise_Mobilite_CM <- factor(Prise_Mobilite_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Nutrition CM #
-
-Douleur_Nutrition_CM <- ifelse(data$Douleur_Nutrition_CM == "", "0", data$Douleur_Nutrition_CM)
-data$Douleur_Nutrition_CM <- factor(Douleur_Nutrition_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Nutrition_CM <- ifelse(data$Evolution_Nutrition_CM == "", "0", data$Evolution_Nutrition_CM)
-data$Evolution_Nutrition_CM <- factor(Evolution_Nutrition_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Prise_Nutrition_CM <- ifelse(data$Prise_Nutrition_CM == "", "0", data$Prise_Nutrition_CM)
 data$Prise_Nutrition_CM <- factor(Prise_Nutrition_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Stress CM #
 
-Douleur_Stress_CM <- ifelse(data$Douleur_Stress_CM == "", "0", data$Douleur_Stress_CM)
-data$Douleur_Stress_CM <- factor(Douleur_Stress_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Stress_CM <- ifelse(data$Evolution_Stress_CM == "", "0", data$Evolution_Stress_CM)
-data$Evolution_Stress_CM <- factor(Evolution_Stress_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Stress_CM <- ifelse(data$Prise_Stress_CM == "", "0", data$Prise_Stress_CM)
 data$Prise_Stress_CM <- factor(Prise_Stress_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Phyto CM #
-
-Douleur_Phyto_CM <- ifelse(data$Douleur_Phyto_CM == "", "0", data$Douleur_Phyto_CM)
-data$Douleur_Phyto_CM <- factor(Douleur_Phyto_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Phyto_CM <- ifelse(data$Evolution_Phyto_CM == "", "0", data$Evolution_Phyto_CM)
-data$Evolution_Phyto_CM <- factor(Evolution_Phyto_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Prise_Phyto_CM <- ifelse(data$Prise_Phyto_CM == "", "0", data$Prise_Phyto_CM)
 data$Prise_Phyto_CM <- factor(Prise_Phyto_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Acup CM #
 
-Douleur_Acup_CM <- ifelse(data$Douleur_Acup_CM == "", "0", data$Douleur_Acup_CM)
-data$Douleur_Acup_CM <- factor(Douleur_Acup_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Acup_CM <- ifelse(data$Evolution_Acup_CM == "", "0", data$Evolution_Acup_CM)
-data$Evolution_Acup_CM <- factor(Evolution_Acup_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Acup_CM <- ifelse(data$Prise_Acup_CM == "", "0", data$Prise_Acup_CM)
 data$Prise_Acup_CM <- factor(Prise_Acup_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Hypnose CM #
-
-Douleur_Hypnose_CM <- ifelse(data$Douleur_Hypnose_CM == "", "0", data$Douleur_Hypnose_CM)
-data$Douleur_Hypnose_CM <- factor(Douleur_Hypnose_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Hypnose_CM <- ifelse(data$Evolution_Hypnose_CM == "", "0", data$Evolution_Hypnose_CM)
-data$Evolution_Hypnose_CM <- factor(Evolution_Hypnose_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Prise_Hypnose_CM <- ifelse(data$Prise_Hypnose_CM == "", "0", data$Prise_Hypnose_CM)
 data$Prise_Hypnose_CM <- factor(Prise_Hypnose_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Bouillotte CM #
 
-Douleur_Bouillotte_CM <- ifelse(data$Douleur_Bouillotte_CM == "", "0", data$Douleur_Bouillotte_CM)
-data$Douleur_Bouillotte_CM <- factor(Douleur_Bouillotte_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Bouillotte_CM <- ifelse(data$Evolution_Bouillotte_CM == "", "0", data$Evolution_Bouillotte_CM)
-data$Evolution_Bouillotte_CM <- factor(Evolution_Bouillotte_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Bouillotte_CM <- ifelse(data$Prise_Bouillotte_CM == "", "0", data$Prise_Bouillotte_CM)
 data$Prise_Bouillotte_CM <- factor(Prise_Bouillotte_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # CBD CM #
-
-Douleur_CBD_CM <- ifelse(data$Douleur_CBD_CM == "", "0", data$Douleur_CBD_CM)
-data$Douleur_CBD_CM <- factor(Douleur_CBD_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_CBD_CM <- ifelse(data$Evolution_CBD_CM == "", "0", data$Evolution_CBD_CM)
-data$Evolution_CBD_CM <- factor(Evolution_CBD_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Prise_CBD_CM <- ifelse(data$Prise_CBD_CM == "", "0", data$Prise_CBD_CM)
 data$Prise_CBD_CM <- factor(Prise_CBD_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
 
 # Tens CM #
 
-Douleur_Tens_CM <- ifelse(data$Douleur_Tens_CM == "", "0", data$Douleur_Tens_CM)
-data$Douleur_Tens_CM <- factor(Douleur_Tens_CM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Diminution de la douleur"), ordered = TRUE)
-
-Evolution_Tens_CM <- ifelse(data$Evolution_Tens_CM == "", "0", data$Evolution_Tens_CM)
-data$Evolution_Tens_CM <- factor(Evolution_Tens_CM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Prise_Tens_CM <- ifelse(data$Prise_Tens_CM == "", "0", data$Prise_Tens_CM)
 data$Prise_Tens_CM <- factor(Prise_Tens_CM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_Tens_CM)
 
 ### Traitements non médicamenteux seuls ###
 
@@ -551,12 +465,6 @@ data$Cout_Mobilite_NM <- factor(Cout_Mobilite_NM, levels = c("1", "0"), labels =
 Autre_Cause_Fin_Mobilite_NM <- ifelse(data$Autre_Cause_Fin_Mobilite_NM == "X", "1", "0")
 data$Autre_Cause_Fin_Mobilite_NM <- factor(Autre_Cause_Fin_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_Mobilite_NM <- ifelse(data$Douleur_Mobilite_NM == "", "0", data$Douleur_Mobilite_NM)
-data$Douleur_Mobilite_NM <- factor(Douleur_Mobilite_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_Mobilite_NM <- ifelse(data$Evolution_Mobilite_NM == "", "0", data$Evolution_Mobilite_NM)
-data$Evolution_Mobilite_NM <- factor(Evolution_Mobilite_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_Mobilite_NM <- ifelse(data$Pre_op_Mobilite_NM == "X", "1", "0")
 data$Pre_op_Mobilite_NM <- factor(Pre_op_Mobilite_NM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -568,9 +476,6 @@ data$Pas_op_Mobilite_NM <- factor(Pas_op_Mobilite_NM, levels = c("1", "0"), labe
 
 Prise_Mobilite_NM <- ifelse(data$Prise_Mobilite_NM == "", "0", data$Prise_Mobilite_NM)
 data$Prise_Mobilite_NM <- factor(Prise_Mobilite_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_Mobilite_NM)
-#print(Prise_Mobilite_NM)
 
 # Nutrition NM #
 Encore_Nutrition_NM <- ifelse(data$Encore_Nutrition_NM == "", "0", data$Encore_Nutrition_NM)
@@ -590,12 +495,6 @@ data$Cout_Nutrition_NM <- factor(Cout_Nutrition_NM, levels = c("1", "0"), labels
 
 Autre_Cause_Fin_Nutrition_NM <- ifelse(data$Autre_Cause_Fin_Nutrition_NM == "X", "1", "0")
 data$Autre_Cause_Fin_Nutrition_NM <- factor(Autre_Cause_Fin_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
-
-Douleur_Nutrition_NM <- ifelse(data$Douleur_Nutrition_NM == "", "0", data$Douleur_Nutrition_NM)
-data$Douleur_Nutrition_NM <- factor(Douleur_Nutrition_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_Nutrition_NM <- ifelse(data$Evolution_Nutrition_NM == "", "0", data$Evolution_Nutrition_NM)
-data$Evolution_Nutrition_NM <- factor(Evolution_Nutrition_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
 
 Pre_op_Nutrition_NM <- ifelse(data$Pre_op_Nutrition_NM == "X", "1", "0")
 data$Pre_op_Nutrition_NM <- factor(Pre_op_Nutrition_NM, levels = c("1", "0"), labels = c("1", "0"))
@@ -631,12 +530,6 @@ data$Cout_Stress_NM <- factor(Cout_Stress_NM, levels = c("1", "0"), labels = c("
 Autre_Cause_Fin_Stress_NM <- ifelse(data$Autre_Cause_Fin_Stress_NM == "X", "1", "0")
 data$Autre_Cause_Fin_Stress_NM <- factor(Autre_Cause_Fin_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_Stress_NM <- ifelse(data$Douleur_Stress_NM == "", "0", data$Douleur_Stress_NM)
-data$Douleur_Stress_NM <- factor(Douleur_Stress_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_Stress_NM <- ifelse(data$Evolution_Stress_NM == "", "0", data$Evolution_Stress_NM)
-data$Evolution_Stress_NM <- factor(Evolution_Stress_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_Stress_NM <- ifelse(data$Pre_op_Stress_NM == "X", "1", "0")
 data$Pre_op_Stress_NM <- factor(Pre_op_Stress_NM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -648,9 +541,6 @@ data$Pas_op_Stress_NM <- factor(Pas_op_Stress_NM, levels = c("1", "0"), labels =
 
 Prise_Stress_NM <- ifelse(data$Prise_Stress_NM == "", "0", data$Prise_Stress_NM)
 data$Prise_Stress_NM <- factor(Prise_Stress_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_Stress_NM)
-#print(Prise_Stress_NM)
 
 # Phyto NM #
 Encore_Phyto_NM <- ifelse(data$Encore_Phyto_NM == "", "0", data$Encore_Phyto_NM)
@@ -671,12 +561,6 @@ data$Cout_Phyto_NM <- factor(Cout_Phyto_NM, levels = c("1", "0"), labels = c("1"
 Autre_Cause_Fin_Phyto_NM <- ifelse(data$Autre_Cause_Fin_Phyto_NM == "X", "1", "0")
 data$Autre_Cause_Fin_Phyto_NM <- factor(Autre_Cause_Fin_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_Phyto_NM <- ifelse(data$Douleur_Phyto_NM == "", "0", data$Douleur_Phyto_NM)
-data$Douleur_Phyto_NM <- factor(Douleur_Phyto_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), labels = c("Increase in pain", "No impact on pain",  "Slight reduction in pain", "Significant reduction in pain"), ordered = TRUE)
-
-Evolution_Phyto_NM <- ifelse(data$Evolution_Phyto_NM == "", "0", data$Evolution_Phyto_NM)
-data$Evolution_Phyto_NM <- factor(Evolution_Phyto_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_Phyto_NM <- ifelse(data$Pre_op_Phyto_NM == "X", "1", "0")
 data$Pre_op_Phyto_NM <- factor(Pre_op_Phyto_NM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -688,9 +572,6 @@ data$Pas_op_Phyto_NM <- factor(Pas_op_Phyto_NM, levels = c("1", "0"), labels = c
 
 Prise_Phyto_NM <- ifelse(data$Prise_Phyto_NM == "", "0", data$Prise_Phyto_NM)
 data$Prise_Phyto_NM <- factor(Prise_Phyto_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_Phyto_NM)
-#print(Prise_Phyto_NM)
 
 # Acup NM #
 Encore_Acup_NM <- ifelse(data$Encore_Acup_NM == "", "0", data$Encore_Acup_NM)
@@ -711,12 +592,6 @@ data$Cout_Acup_NM <- factor(Cout_Acup_NM, levels = c("1", "0"), labels = c("1", 
 Autre_Cause_Fin_Acup_NM <- ifelse(data$Autre_Cause_Fin_Acup_NM == "X", "1", "0")
 data$Autre_Cause_Fin_Acup_NM <- factor(Autre_Cause_Fin_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_Acup_NM <- ifelse(data$Douleur_Acup_NM == "", "0", data$Douleur_Acup_NM)
-data$Douleur_Acup_NM <- factor(Douleur_Acup_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_Acup_NM <- ifelse(data$Evolution_Acup_NM == "", "0", data$Evolution_Acup_NM)
-data$Evolution_Acup_NM <- factor(Evolution_Acup_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_Acup_NM <- ifelse(data$Pre_op_Acup_NM == "X", "1", "0")
 data$Pre_op_Acup_NM <- factor(Pre_op_Acup_NM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -728,9 +603,6 @@ data$Pas_op_Acup_NM <- factor(Pas_op_Acup_NM, levels = c("1", "0"), labels = c("
 
 Prise_Acup_NM <- ifelse(data$Prise_Acup_NM == "", "0", data$Prise_Acup_NM)
 data$Prise_Acup_NM <- factor(Prise_Acup_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_Acup_NM)
-#print(Prise_Acup_NM)
 
 # Hypnose NM #
 Encore_Hypnose_NM <- ifelse(data$Encore_Hypnose_NM == "", "0", data$Encore_Hypnose_NM)
@@ -751,12 +623,6 @@ data$Cout_Hypnose_NM <- factor(Cout_Hypnose_NM, levels = c("1", "0"), labels = c
 Autre_Cause_Fin_Hypnose_NM <- ifelse(data$Autre_Cause_Fin_Hypnose_NM == "X", "1", "0")
 data$Autre_Cause_Fin_Hypnose_NM <- factor(Autre_Cause_Fin_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_Hypnose_NM <- ifelse(data$Douleur_Hypnose_NM == "", "0", data$Douleur_Hypnose_NM)
-data$Douleur_Hypnose_NM <- factor(Douleur_Hypnose_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_Hypnose_NM <- ifelse(data$Evolution_Hypnose_NM == "", "0", data$Evolution_Hypnose_NM)
-data$Evolution_Hypnose_NM <- factor(Evolution_Hypnose_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_Hypnose_NM <- ifelse(data$Pre_op_Hypnose_NM == "X", "1", "0")
 data$Pre_op_Hypnose_NM <- factor(Pre_op_Hypnose_NM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -768,9 +634,6 @@ data$Pas_op_Hypnose_NM <- factor(Pas_op_Hypnose_NM, levels = c("1", "0"), labels
 
 Prise_Hypnose_NM <- ifelse(data$Prise_Hypnose_NM == "", "0", data$Prise_Hypnose_NM)
 data$Prise_Hypnose_NM <- factor(Prise_Hypnose_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_Hypnose_NM)
-#print(Prise_Hypnose_NM)
 
 # Bouillotte NM #
 Encore_Bouillotte_NM <- ifelse(data$Encore_Bouillotte_NM == "", "0", data$Encore_Bouillotte_NM)
@@ -791,12 +654,6 @@ data$Cout_Bouillotte_NM <- factor(Cout_Bouillotte_NM, levels = c("1", "0"), labe
 Autre_Cause_Fin_Bouillotte_NM <- ifelse(data$Autre_Cause_Fin_Bouillotte_NM == "X", "1", "0")
 data$Autre_Cause_Fin_Bouillotte_NM <- factor(Autre_Cause_Fin_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_Bouillotte_NM <- ifelse(data$Douleur_Bouillotte_NM == "", "0", data$Douleur_Bouillotte_NM)
-data$Douleur_Bouillotte_NM <- factor(Douleur_Bouillotte_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_Bouillotte_NM <- ifelse(data$Evolution_Bouillotte_NM == "", "0", data$Evolution_Bouillotte_NM)
-data$Evolution_Bouillotte_NM <- factor(Evolution_Bouillotte_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_Bouillotte_NM <- ifelse(data$Pre_op_Bouillotte_NM == "X", "1", "0")
 data$Pre_op_Bouillotte_NM <- factor(Pre_op_Bouillotte_NM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -808,9 +665,6 @@ data$Pas_op_Bouillotte_NM <- factor(Pas_op_Bouillotte_NM, levels = c("1", "0"), 
 
 Prise_Bouillotte_NM <- ifelse(data$Prise_Bouillotte_NM == "", "0", data$Prise_Bouillotte_NM)
 data$Prise_Bouillotte_NM <- factor(Prise_Bouillotte_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_Bouillotte_NM)
-#print(Prise_Bouillotte_NM)
 
 # CBD NM #
 Encore_CBD_NM <- ifelse(data$Encore_CBD_NM == "", "0", data$Encore_CBD_NM)
@@ -831,12 +685,6 @@ data$Cout_CBD_NM <- factor(Cout_CBD_NM, levels = c("1", "0"), labels = c("1", "0
 Autre_Cause_Fin_CBD_NM <- ifelse(data$Autre_Cause_Fin_CBD_NM == "X", "1", "0")
 data$Autre_Cause_Fin_CBD_NM <- factor(Autre_Cause_Fin_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_CBD_NM <- ifelse(data$Douleur_CBD_NM == "", "0", data$Douleur_CBD_NM)
-data$Douleur_CBD_NM <- factor(Douleur_CBD_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_CBD_NM <- ifelse(data$Evolution_CBD_NM == "", "0", data$Evolution_CBD_NM)
-data$Evolution_CBD_NM <- factor(Evolution_CBD_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_CBD_NM <- ifelse(data$Pre_op_CBD_NM == "X", "1", "0")
 data$Pre_op_CBD_NM <- factor(Pre_op_CBD_NM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -848,9 +696,6 @@ data$Pas_op_CBD_NM <- factor(Pas_op_CBD_NM, levels = c("1", "0"), labels = c("1"
 
 Prise_CBD_NM <- ifelse(data$Prise_CBD_NM == "", "0", data$Prise_CBD_NM)
 data$Prise_CBD_NM <- factor(Prise_CBD_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_CBD_NM)
-#print(Prise_CBD_NM)
 
 # Tens NM #
 Encore_Tens_NM <- ifelse(data$Encore_Tens_NM == "", "0", data$Encore_Tens_NM)
@@ -871,12 +716,6 @@ data$Cout_Tens_NM <- factor(Cout_Tens_NM, levels = c("1", "0"), labels = c("1", 
 Autre_Cause_Fin_Tens_NM <- ifelse(data$Autre_Cause_Fin_Tens_NM == "X", "1", "0")
 data$Autre_Cause_Fin_Tens_NM <- factor(Autre_Cause_Fin_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
 
-Douleur_Tens_NM <- ifelse(data$Douleur_Tens_NM == "", "0", data$Douleur_Tens_NM)
-data$Douleur_Tens_NM <- factor(Douleur_Tens_NM, levels = c("Augmentation de la douleur", "Pas d'impact sur la douleur", "Réduction légère de la douleur", "Réduction importante de la douleur"), ordered = TRUE)
-
-Evolution_Tens_NM <- ifelse(data$Evolution_Tens_NM == "", "0", data$Evolution_Tens_NM)
-data$Evolution_Tens_NM <- factor(Evolution_Tens_NM, levels = c("Apparition de nouvelles lésions", "Grossissement des lésions déjà présentes", "Pas d'évolution", "Réduction modérée des lésions", "Réduction importante voire disparition des lésions", "Ne sais pas"), ordered = TRUE)
-
 Pre_op_Tens_NM <- ifelse(data$Pre_op_Tens_NM == "X", "1", "0")
 data$Pre_op_Tens_NM <- factor(Pre_op_Tens_NM, levels = c("1", "0"), labels = c("1", "0"))
 
@@ -888,9 +727,6 @@ data$Pas_op_Tens_NM <- factor(Pas_op_Tens_NM, levels = c("1", "0"), labels = c("
 
 Prise_Tens_NM <- ifelse(data$Prise_Tens_NM == "", "0", data$Prise_Tens_NM)
 data$Prise_Tens_NM <- factor(Prise_Tens_NM, levels = c("Continue (toute l'année)", "Cyclique (ex : pendant 1 mois tous les ans)", "Occasionnelle"), ordered = TRUE)
-
-#str(Prise_Tens_NM)
-#print(Prise_Tens_NM)
 
 # Autres NM #
 data$Autres_NM <- factor(data$Autres_NM, levels = c("Oui", "Non"), ordered = TRUE)
@@ -922,21 +758,15 @@ for (i in 1:nrow(data)) {
 
 #Premier data frame
 
-data1 <- data[which(data$TH == 1), 11:94]
-#head(data1)
-#print(nrow(data1))
+data1 <- data[which(data$TH == "yes"), 11:94]
 
 #Second data frame
 
-data2 <- data[which(data$CM == 1), 95:178]
-#head(data2)
-#print(nrow(data2))
+data2 <- data[which(data$CM == "yes"), 95:178]
 
 #Troisième data frame
 
-data3 <- data[which(data$Aucun_NM == 0), 179:314]
-head(data3)
-print(nrow(data3))
+data3 <- data[which(data$Aucun_NM == "no"), 179:314]
 ```
 
 
