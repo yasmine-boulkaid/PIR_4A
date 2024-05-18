@@ -882,6 +882,29 @@ Data_AMC_TH = subset(Data_AMC_test, TM == "TH")
 Data_AMC_CM = subset(Data_AMC_test, TM == "CM")
 Data_AMC_NM = subset(Data_AMC_test, TM == "NM")
 
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_Mob"] <- "HT_Mob"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_Nut"] <- "HT_Nut"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_Str"] <- "HT_Str"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_Phyto"] <- "HT_Herbal"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_Acup"] <- "HT_Acup"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_Hyp"] <- "HT_Hyp"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_Bou"] <- "HT_HWB"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_CBD"] <- "HT_CBD"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "TH_Tens"] <- "HT_Tens"
+
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_Mob"] <- "AM_Mob"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_Nut"] <- "AM_Nut"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_Str"] <- "AM_Str"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_Phyto"] <- "AM_Herbal"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_Acup"] <- "AM_Acup"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_Hyp"] <- "AM_Hyp"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_Bou"] <- "AM_HWB"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_CBD"] <- "AM_CBD"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "CM_Tens"] <- "AM_Tens"
+
+Data_AMC_TM$TM <- replace(Data_AMC_TM$TM, Data_AMC_TM$TM == "TH", "HT")
+Data_AMC_TM$TM <- replace(Data_AMC_TM$TM, Data_AMC_TM$TM == "CM", "AM")
+
 # Variables utilisees pour l'AMC sans les quali sup
 colonnes_combos_TM <- which(seq_along(Data_AMC_TM) %in% c(70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95)) #83 retiree CM_Hyp car une seule modalite #97, 98
 
@@ -907,7 +930,10 @@ mca.combos.focus = MCA(Data_AMC_TM[colonnes_combos_focus_TM], quali.sup=1, graph
 fviz_mca_var(mca.combos, 
              col.var = rep(c("no","yes"),17), 
              title = "Graph of variables",
-             repel = TRUE) + ggtitle("Graphe des variables en fonction de la prise ou non des combos")
+             repel = TRUE) +
+  ggtitle("Graph of variables colored based on \n whether treatment combinations are taken or not")+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(color = "Legend")
 ```
 
 Le graphe des variables qui sépare le fait de prendre un combo d'un traitement médicamenteux en parallèle d'un non médicamenteux, semble permettre de distinguer la prise de combo ou non : avoir pris une cure de ménopause artificielle (CM) en parallèle d'un traitement NM semble corrélé positivement à la fois à la première et à le seconde dimension. Avoir pris un traitement hormonal (TH) en parallèle de traitements NM semble corrélé positivement à la seconde dimension et négativement à la première. Enfin l'absence de prise d'un combo quel qu'il soit n'est corrélé à aucune des deux dimensions.
@@ -948,13 +974,24 @@ On remarque que les individus bien représentés sont situés à différents end
 
 ## Graphe des individus en fonction du type de TM pris
 ```{r}
-fviz_mca_ind(mca.combos.focus,habillage = 1, repel = FALSE) + ggtitle("Graphe des individus en fonction du TM")
+
+fviz_mca_ind(mca.combos.focus,habillage = 1, repel = FALSE) +
+  ggtitle("Graph of individuals colored based on drug treatment") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(color = "Drug treatment")
 ```
 L'habillage en fonction du type de traitement médicamenteux pris (CM ou TH) permet clairement de distinguer les combos en deux clusters : un combo avec TH est corrélé négativement avec la première dimension tandis qu'un combo avec CM est corrélé posititvement confirmant nos observations précédentes.
 
 
 ## Graphe des individus avec habillage selon apparition ou non d'ES ##
 ```{r}
+
+colnames(data)[colnames(data) == "Nausee"] <- "Nausea"
+colnames(data)[colnames(Data_AMC_TM) == "Sang"] <- "Spotting"
+
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "Nausee"] <- "Nausea"
+colnames(Data_AMC_TM)[colnames(Data_AMC_TM) == "Sang"] <- "Spotting"
+
 # Variables utilisees pour l'AMC avec les quali sup ES
 colonnes_TM_ES <- which(seq_along(Data_AMC_TM) %in% c(11, 70, 71, 73, 74, 76, 77, 79, 80, 82, 85, 86, 88, 89, 91, 92, 94, 95, 97, 98))
 
@@ -979,9 +1016,11 @@ mosaicplot(table(Data_AMC_test$TM, Data_AMC_test$Sang))
 
 ## Graphe des individus en fonction du type d'effet secondaire
 ```{r}
-for (i in 1:9){
-  print(fviz_mca_biplot(mca.combos.ES, invisible=c("var","quali.sup"), habillage = i, repel = FALSE) + ggtitle(paste("Graphe des individus en fonction de l'ES "),names(Data_AMC_TM[colonnes_combos_TM_ES[i]])))
-}
+# for (i in 1:9){
+#   print(fviz_mca_biplot(mca.combos.ES, invisible=c("var","quali.sup"), habillage = i, repel = FALSE) + ggtitle(paste("Graph of individuals colored based on the ", names(Data_AMC_TM[colonnes_combos_TM_ES[i]]), " side effect")) + scale_color_manual(name = names(Data_AMC_TM[colonnes_combos_TM_ES[i]]),
+#                              values = brewer.pal(3, "Set1"),
+#                              labels = c("Spotting_yes", "Spotting_no")))
+# }
 ```
 
 Tous les types d'ES se retrouvent à la fois chez CM et TH.
@@ -1014,21 +1053,28 @@ df_TM_freq$Freq_Humeur <- Data_AMC_TM$Freq_Humeur
 df_TM_freq$Freq_Libido <- Data_AMC_TM$Freq_Libido
 df_TM_freq$Freq_Sang <- Data_AMC_TM$Freq_Sang
 
-print(df_TM_freq)
+
+df_TM_freq$Freq_Humeur <- ifelse(df_TM_freq$Freq_Humeur == "Plusieurs fois par jour", "Several times a day",
+       ifelse(df_TM_freq$Freq_Humeur == "Plusieurs fois par semaine", "Several times a week",
+              ifelse(df_TM_freq$Freq_Humeur == "Plusieurs fois par mois", "Several times a month",
+                     ifelse(df_TM_freq$Freq_Humeur == "Plusieurs fois par an", "Several times a year",
+                            ifelse(df_TM_freq$Freq_Humeur == "Moins d'une fois par an", "Less than once a year",df_TM_freq$Freq_Humeur)))))
+
+df_TM_freq[["Freq_Humeur"]] <- factor(df_TM_freq[["Freq_Humeur"]], levels = c("Several times a day", "Several times a week", "Several times a month", "Several times a year", "Less than once a year"), ordered = TRUE)
 
 # Définir une palette de couleurs personnalisée pour chaque variable
 custom_palette_TM_freq <- list(
   Freq_Tete = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
   Freq_Fatigue = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
   Freq_Nausee = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
-  Freq_Humeur = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
+  Freq_Humeur =c("Several times a day" = "#960018", "Several times a week" = "#ED7F10", "Several times a month" = "#FFD700", "Several times a year" = "#3AF24B", "Less than once a year" = "#26C4EC"),
   Freq_Libido = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
   Freq_Sang = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC")
 )
 
 # Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
 for (var in c("Freq_Tete","Freq_Fatigue","Freq_Nausee","Freq_Humeur","Freq_Libido","Freq_Sang")){
-  titre <- paste("Graphe des individus des TM avec habillage en fonction de ", var)
+  titre <- paste("Graph of individuals colored based on mood swings frequency") #, var 
   print(
     ggplot(df_TM_freq, aes(x = `Dim 1`, y = `Dim 2`, color = df_TM_freq[[var]], label = rownames(df_TM_freq))) +
       geom_point(size=3) +
@@ -1038,7 +1084,7 @@ for (var in c("Freq_Tete","Freq_Fatigue","Freq_Nausee","Freq_Humeur","Freq_Libid
       labs(title = titre,
            x = "Dim 1",
            y = "Dim 2",
-           color = "Frequence des ES")
+           color = "Frequency of Side Effects")
   )
 }
 ```
@@ -1121,24 +1167,33 @@ df_TM_duree <- cbind(df_TM_duree, coord_TM_duree)
 df_TM_duree$Duree_TM <- Data_AMC_TM$Duree_TM
 
 
+df_TM_duree$Duree_TM <- ifelse(df_TM_duree$Duree_TM == "Moins de 3 mois", "Less than 3 months",
+       ifelse(df_TM_duree$Duree_TM == "Entre 3 et 6 mois", "Between 3 and 6 months",
+              ifelse(df_TM_duree$Duree_TM == "Entre 6 mois et 2 ans", "Between 6 months and 2 years",
+                     ifelse(df_TM_duree$Duree_TM == "Entre 2 et 5 ans", "Between 2 and 5 years",
+                            ifelse(df_TM_duree$Duree_TM == "Plus de 5 ans", "More than 5 years",df_TM_duree$Duree_TM)))))
+
+df_TM_duree[["Duree_TM"]] <- factor(df_TM_duree[["Duree_TM"]], levels = c("Less than 3 months", "Between 3 and 6 months", "Between 6 months and 2 years", "Between 2 and 5 years", "More than 5 years"), ordered = TRUE)
+
+
 # Définir une palette de couleurs personnalisée pour chaque variable
 custom_palette_TM_duree <- list(
-  Duree_TM = c("Moins de 3 mois" = "#ED7F10", "Entre 3 et 6 mois" = "#FFD700", "Entre 6 mois et 2 ans" = "#3AF24B", "Entre 2 et 5 ans" = "#003366", "Plus de 5 ans" = "#A10684")
+  Duree_TM = c("Less than 3 months" = "#ED7F10", "Between 3 and 6 months" = "#FFD700", "Between 6 months and 2 years" = "#3AF24B", "Between 2 and 5 years" = "#003366", "More than 5 years" = "#A10684")
 )
 
 # Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
 for (var in c("Duree_TM")){
-  titre <- paste("Graphe des individus des TM avec habillage en fonction de la duree du TM ")
+  titre <- paste("Graph of individuals colored according to the duration of drug treatment")
   print(
     ggplot(df_TM_duree, aes(x = `Dim 1`, y = `Dim 2`, color = df_TM_duree[[var]], label = rownames(df_TM_duree))) +
       geom_point(size=3) +
-      geom_text(aes(color = df_TM_duree[[var]]), hjust = 0, vjust = 0, size = 3) +  # Ajouter les noms des individus avec la couleur du point correspondant
-      scale_color_manual(values = custom_palette_TM_duree[[var]], na.value = "transparent") +  # Utiliser la palette de couleurs personnalisée
+      geom_text(aes(color = df_TM_duree[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_TM_duree[[var]], na.value = "transparent") +
       theme_minimal() +
       labs(title = titre,
            x = "Dim 1",
            y = "Dim 2",
-           color = "Duree traitement")
+           color = "Duration of drug treatment")
   )
 }
 ```
@@ -1186,12 +1241,18 @@ Ne pas avoir pris le combo = centre du graphique
 
 ## Graphe des individus avec habillage = traitement (TH/CM/NM)
 ```{r}
+
+Data_AMC_test$TM <- ifelse(Data_AMC_test$TM == "TH", "Hormonal Treatment",
+       ifelse(Data_AMC_test$TM == "CM", "Artificial Menopause",
+              ifelse(Data_AMC_test$TM == "NM", "Non Drug Treatment",Data_AMC_test$TM)))
+
+
 # Variables utilisees pour l'AMC avec quali sup TH/CM/NM
 colonnes_combos_T <- which(seq_along(Data_AMC_test) %in% c(7,70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98))
 
 #AMC avec quali sup TH/CM/NM
 mca.combos.T = MCA(Data_AMC_test[colonnes_combos_T], quali.sup=c(1), graph=FALSE)
-fviz_mca_ind(mca.combos.T, habillage=1) + ggtitle("ACM de tous les combos de traitements avec l'echelle de douleur en quali sup")
+fviz_mca_ind(mca.combos.T, habillage=1) + ggtitle("Graph of individuals colored according to the drug treatment") + labs(color = "Drug treatment")
 ```
 
 ## Graphe des variables avec habillage = traitement (TH/CM/NM)
@@ -1400,19 +1461,31 @@ On ne peut pas exploiter le graphe car la plupart des individus ne connaissent p
 
 ## Graphe des variables pour les TH en fonction de combos pris / pas pris
 ```{r}
+
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_Mob"] <- "HT_Mob"
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_Nut"] <- "HT_Nut"
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_Str"] <- "HT_Str"
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_Phyto"] <- "HT_Herbal"
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_Acup"] <- "HT_Acup"
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_Hyp"] <- "HT_Hyp"
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_Bou"] <- "HT_HWB"
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_CBD"] <- "HT_CBD"
+colnames(Data_AMC_TH)[colnames(Data_AMC_TH) == "TH_Tens"] <- "HT_Tens"
+
+
 # Variables utilisees pour l'AMC avec quali.sup = combos
 colonnes_combos_TH <- which(seq_along(Data_AMC_TH) %in% c(70, 73, 76, 79, 82, 85, 88, 91, 94)) # , 97
 
 #AMC avec quali.sup = combos
 mca.combos.TH = MCA(Data_AMC_TH[colonnes_combos_TH], graph=FALSE)
-fviz_mca_var(mca.combos.TH,col.var = rep(c("no","yes"),9)) + ggtitle("ACM en fonction des combos")
+fviz_mca_var(mca.combos.TH,col.var = rep(c("no","yes"),9)) + ggtitle("Graph of variables colored based on whether treatment \n combination with Hormonal Treatment are taken or not") + theme(plot.title = element_text(hjust = 0.5)) + labs(color = "Legend")
 ```
 Avoir pris le TH en parallèle d'un TNM est corrélé positivement à la première dimension tandis que ne pas l'avoir pris est corrélé négativement à la première dimension.
 
 
 ## Graphe des variables pour les TH avec habillage = qualité de représentation
 ```{r}
-fviz_mca_var(mca.combos.TH, col.var = "cos2") + ggtitle("ACM en fonction des combos")
+fviz_mca_var(mca.combos.TH, col.var = "cos2") + ggtitle("Graph of variables colored according to the quality of representation")
 ```
 
 Globalement les variables les mieux représentées sont les combos avec la Mobilité et la Nutrition et on estimera correcte la qualité de représentation des combos avec l'Hypnose, la Phytothérapie et la Gestion du Stress.
@@ -1420,7 +1493,7 @@ Globalement les variables les mieux représentées sont les combos avec la Mobil
 ## Graphe des individus pour les TH avec habillage = combo pris/pas pris
 ```{r}
 for (i in 1:9){
-  print(fviz_mca_ind(mca.combos.TH, habillage = i, repel = FALSE) + ggtitle(paste("Graphe des individus avec habillage en fonction du combo TH et "),names(Data_AMC_TH[colonnes_combos_TH[i]]))) # , axes = c(3, 4) pour changer les dimensions
+  print(fviz_mca_ind(mca.combos.TH, habillage = i, repel = FALSE) + ggtitle(paste("Graph of individuals colored according to the combination \n of Hormonal Treatment and Hypnosis")) + theme(plot.title = element_text(hjust = 0.5)) + labs(color = "Hypnosis")) #,names(Data_AMC_TH[colonnes_combos_TH[i]])
 }
 ```
 
@@ -1498,6 +1571,15 @@ df_TH_freq$Freq_Libido <- Data_AMC_TH$Freq_Libido
 df_TH_freq$Freq_Sang <- Data_AMC_TH$Freq_Sang
 
 
+df_TH_freq$Freq_Sang <- ifelse(df_TH_freq$Freq_Sang == "Plusieurs fois par jour", "Several times a day",
+       ifelse(df_TH_freq$Freq_Sang == "Plusieurs fois par semaine", "Several times a week",
+              ifelse(df_TH_freq$Freq_Sang == "Plusieurs fois par mois", "Several times a month",
+                     ifelse(df_TH_freq$Freq_Sang == "Plusieurs fois par an", "Several times a year",
+                            ifelse(df_TH_freq$Freq_Sang == "Moins d'une fois par an", "Less than once a year",df_TH_freq$Freq_Sang)))))
+
+df_TH_freq[["Freq_Sang"]] <- factor(df_TH_freq[["Freq_Sang"]], levels = c("Several times a day", "Several times a week", "Several times a month", "Several times a year", "Less than once a year"), ordered = TRUE)
+
+
 # Définir une palette de couleurs personnalisée pour chaque variable
 custom_palette_TH_freq <- list(
   Freq_Tete = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
@@ -1505,22 +1587,22 @@ custom_palette_TH_freq <- list(
   Freq_Nausee = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
   Freq_Humeur = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
   Freq_Libido = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC"),
-  Freq_Sang = c("Plusieurs fois par jour" = "#960018", "Plusieurs fois par semaine" = "#ED7F10", "Plusieurs fois par mois" = "#FFD700", "Plusieurs fois par an" = "#3AF24B", "Moins d'une fois par an" = "#26C4EC")
+  Freq_Sang = c("Several times a day" = "#960018", "Several times a week" = "#ED7F10", "Several times a month" = "#FFD700", "Several times a year" = "#3AF24B", "Less than once a year" = "#26C4EC")
 )
 
 # Tracer les variables sur un graphe en utilisant les dimensions 1 et 2 de l'ACM
 for (var in c("Freq_Tete","Freq_Fatigue","Freq_Nausee","Freq_Humeur","Freq_Libido","Freq_Sang")){
-  titre <- paste("Graphe des individus des TH avec habillage en fonction de ", var)
+  titre <- paste("Graph of individuals colored according to \n the frequency of the Spotting side effect") #, var
   print(
     ggplot(df_TH_freq, aes(x = `Dim 1`, y = `Dim 2`, color = df_TH_freq[[var]], label = rownames(df_TH_freq))) +
       geom_point(size=3) +
-      geom_text(aes(color = df_TH_freq[[var]]), hjust = 0, vjust = 0, size = 3) +  # Ajouter les noms des individus avec la couleur du point correspondant
-      scale_color_manual(values = custom_palette_TH_freq[[var]], na.value = "transparent") +  # Utiliser la palette de couleurs personnalisée
-      theme_minimal() +
+      geom_text(aes(color = df_TH_freq[[var]]), hjust = 0, vjust = 0, size = 3) +
+      scale_color_manual(values = custom_palette_TH_freq[[var]], na.value = "transparent") +
+      theme(plot.title = element_text(hjust = 0.5)) +
       labs(title = titre,
            x = "Dim 1",
            y = "Dim 2",
-           color = "Frequence des ES")
+           color = "Frequency of the side effect")
   )
 }
 ```
@@ -1533,12 +1615,23 @@ for (var in c("Freq_Tete","Freq_Fatigue","Freq_Nausee","Freq_Humeur","Freq_Libid
 
 ## Graphe des variables pour les CM en fonction de combos pris / pas pris
 ```{r}
+
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_Mob"] <- "AM_Mob"
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_Nut"] <- "AM_Nut"
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_Str"] <- "AM_Str"
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_Phyto"] <- "AM_Herbal"
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_Acup"] <- "AM_Acup"
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_Hyp"] <- "AM_Hyp"
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_Bou"] <- "AM_HWB"
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_CBD"] <- "AM_CBD"
+colnames(Data_AMC_CM)[colnames(Data_AMC_CM) == "CM_Tens"] <- "AM_Tens"
+
 # Variables utilisees pour l'AMC
 colonnes_combos_CM <- which(seq_along(Data_AMC_CM) %in% c(71, 74, 77, 80, 86, 89, 92, 95))#, 98
 
 #AMC avec quali.sup = combos
 mca.combos.CM = MCA(Data_AMC_CM[colonnes_combos_CM], graph=FALSE)
-fviz_mca_var(mca.combos.CM, col.var = rep(c("no","yes"),8)) + ggtitle("ACM en fonction des combos avec CM")
+fviz_mca_var(mca.combos.CM, col.var = rep(c("no","yes"),8)) + ggtitle("Graph of variables colored based on whether treatment \n combination with Artificial Menopause are taken or not") + theme(plot.title = element_text(hjust = 0.5)) + labs(color = "Legend")
 ```
 
 Comme pour TH, avoir pris la CM en parallèle d'un TNM est corrélé positivement à la première dimension tandis que ne pas l'avoir pris est corrélé négativement à la première dimension.
@@ -1554,7 +1647,7 @@ Les mieux représentées sont les combos avec Mobilité, Nutrition et Acup (oui 
 ## Graphe des individus pour les CM avec habillage = combo pris/pas pris
 ```{r}
 for (i in 1:8){
-  print(fviz_mca_ind(mca.combos.CM, habillage = i, repel = FALSE) + ggtitle(paste("Graphe des individus avec habillage en fonction du combo CM et "),names(Data_AMC_CM[colonnes_combos_CM[i]]))) # , axes = c(3, 4) pour changer les dimensions
+  print(fviz_mca_ind(mca.combos.CM, habillage = i, repel = FALSE) + ggtitle(paste("Graph of individuals colored according to the \n combination of Artificial Menopause and Tens")) + theme(plot.title = element_text(hjust = 0.5)) + labs(color = "Tens")) #,names(Data_AMC_CM[colonnes_combos_CM[i]])
 }
 ```
 
